@@ -42,14 +42,15 @@ import logo from './imaginetics_logo.png'
 
     .nav-links li {
         list-style-type: none;
+        flex-wrap: wrap;
     }
 
     a {
         text-decoration: none;
-        color: black;
+        color: lightgrey;
     }
 
     a:hover {
-        color: tomato;
+        color: white;
     }
 </style>
