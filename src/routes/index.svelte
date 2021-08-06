@@ -3,7 +3,6 @@
     <li>Select the Workcenter from the menu above</li>
     <li>Wait for data to load (can take a minute)</li>
     <li>List will auto refresh, just leave window open in a convenient location</li>
-    <li>Have a good weekend</li>
 </ul>
 
 <style>

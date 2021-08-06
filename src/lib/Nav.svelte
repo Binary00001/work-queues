@@ -7,7 +7,7 @@ import logo from './imaginetics_logo.png'
 <div class='header'>
     <h1><a href='/'><img src={logo} alt="imaginetics logo"></a></h1>
     <ul class='nav-links'>
-        <li class:active={page.params === "insp%20cnc"}><a href="/dept/insp%20cnc" target="_parent">CNC Inspection</a></li>
+        <li class:active={page.params === "insp cnc"}><a href="/dept/insp%20cnc" target="_parent">CNC Inspection</a></li>
         <li class:active={page.params === "insp%20sheet"}><a href="/dept/insp%20sheet" target="_parent">Sheet Metal Inspection</a></li>
         <!-- <li class:active={page.params === "trevor"}><a href="/dept/trevor" target="_parent">Assembly</a></li> -->
         <li class:active={page.params === "insp%20prime"}><a href="/dept/insp%20prime" target="_parent">Primer Inspection</a></li>

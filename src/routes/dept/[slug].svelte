@@ -3,7 +3,7 @@
     export async function load({page, fetch}) {
         const dept = page.params.slug;
 
-        const res = await fetch(`http://192.168.0.39:5000/api/${dept}/`, 
+        const res = await fetch(`http://192.168.0.39:5000/api/${dept}`, 
         {
             method: 'GET',
             mode: 'cors',
@@ -14,6 +14,7 @@
 
         if (res.ok) {
             const data = await res.json()
+            // console.log(data.recordset)
             return {
                 props: { data, dept }
             }
@@ -28,11 +29,18 @@
 </script>
 
 <script>
+import { navigating } from "$app/stores";
+
+
 
 
     export let data = '';
     export let dept = '';
     // console.log(data)
+
+    const filterDept = (deptName) => {
+        //filter the shit
+    }
 </script>
 
 <main>

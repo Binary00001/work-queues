@@ -4,7 +4,8 @@
 </script>
 
 <main>
-    {#if dept}
+    <h1>{dept}</h1>
+    {#if parts}
         <table>
             <thead>
                 <th>Part Number</th>
