@@ -38,9 +38,7 @@ import { navigating } from "$app/stores";
     export let dept = '';
     // console.log(data)
 
-    const filterDept = (deptName) => {
-        //filter the shit
-    }
+
 </script>
 
 <main>

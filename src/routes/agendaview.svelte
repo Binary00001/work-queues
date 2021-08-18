@@ -1,4 +1,4 @@
-<script context = 'module'>
+<script context="module">
     export async function load({fetch}) {
         const res = await fetch('http://192.168.0.39:5000/api',
         {
@@ -28,6 +28,7 @@
     export let data = '';
 
     //write filter func
+  
 </script>
 
 <main>
