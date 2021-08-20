@@ -14,6 +14,10 @@ let insp = true;
                 <li><a href='/dept/insp%20cnc' target='_parent'>CNC Inspection</a></li>
             </ul>
         </li> -->
+        <li><a href="/agendaview">Agenda View</a></li>
+        <li><a href="/cnc">Machine Shop</a></li>
+        <li><a href="/dept/trevor">Assembly</a></li>
+        <li><a href="/dept/jeff">Building 2</a></li>
         <li class:active={page.params === "insp%20cnc"}><a href="/dept/insp%20cnc" target="_parent">CNC Inspection</a></li>
         <li class:active={page.params === "insp%20sheet"}><a href="/dept/insp%20sheet" target="_parent">Sheet Metal Inspection</a></li>
         <!-- <li class:active={page.params === "trevor"}><a href="/dept/trevor" target="_parent">Assembly</a></li> -->
@@ -22,7 +26,7 @@ let insp = true;
         <li class:active={page.params === "insp%20assy"}><a href="/dept/insp%20assy" target="_parent">Assembly Inspection</a></li>
         <li class:active={page.params === "part%20mark"}><a href="/dept/part%20mark" target="_parent">Part Mark</a></li>
         <li class:active={page.params === "final%20insp"}><a href="/dept/final%20insp" target="_parent">Final Inspection</a></li>
-        <!-- <li class:active={page.params === "package"}><a href="/dept/package" target="_parent">Shipping</a></li> -->
+        <li class:active={page.params === "package"}><a href="/dept/package" target="_parent">Shipping</a></li>
     </ul>
 </div>
 
@@ -31,7 +35,7 @@ let insp = true;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
-    .nav-dropdown {
+    /* .nav-dropdown {
         display: none;
         position: absolute;
         z-index: 1;
@@ -41,7 +45,7 @@ let insp = true;
 
     .dropdown:hover .nav-dropdown {
         display: block;
-    }
+    } */
 
     h1 {
         font-weight: 100;
@@ -63,6 +67,7 @@ let insp = true;
     .nav-links li {
         list-style-type: none;
         flex-wrap: wrap;
+        padding: 5px;
     }
 
     a {

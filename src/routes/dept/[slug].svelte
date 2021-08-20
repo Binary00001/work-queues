@@ -38,8 +38,15 @@ import { navigating } from "$app/stores";
     export let dept = '';
     // console.log(data)
 
+    if (dept === 'jeff') {
+        dept = 'Building 2'
+    }
 
 </script>
+
+<svelte:head>
+    <title>IMAGINETICS - {dept.toUpperCase()}</title>
+</svelte:head>
 
 <main>
     <h1 class="dept">
@@ -90,6 +97,7 @@ import { navigating } from "$app/stores";
     .dept {
         text-transform: uppercase;
         font-weight: 100;
+        margin-top: 10px;
     }
 
     table, th, td {
@@ -107,10 +115,11 @@ import { navigating } from "$app/stores";
     }
 
     .table {
-        width: 100%;
+        width: 90%;
     }
 
     table {
+        margin-top: 10px;
         width: 100%;
     }
 
