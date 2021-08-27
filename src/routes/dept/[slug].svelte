@@ -38,8 +38,12 @@ import { navigating } from "$app/stores";
     export let dept = '';
     // console.log(data)
 
+
+    //change to switch...
     if (dept === 'jeff') {
         dept = 'Building 2'
+    } else if (dept === 'trevor') {
+        dept = 'Assembly'
     }
 
 </script>
@@ -64,17 +68,26 @@ import { navigating } from "$app/stores";
             <th>Customer</th>
             <!-- <th>Must Ship Date</th> -->
             <th>Priority</th>
+            <th>Comments</th>
         </thead>
         <tbody>
-            {#each data as { part_number, run, qty, cust, ship_date, priority}}
+            {#each data as { part_number, run, qty, cust, comments, priority}}
+            <!-- <a href={`/part?number=${part_number}&run=${run}`}> -->
             <tr class:hot={priority === 5}>
-                <td>{part_number}</td>
+                <a href={`/part?number=${part_number}&run=${run}`}>
+                <td><a href={`/part?number=${part_number}&run=${run}`}>{part_number}</a></td>
                 <td>{run}</td>
                 <td>{qty}</td>
                 <td>{cust}</td>
                 <!-- <td class:past-due={(new Date(ship_date) - new Date(Date.now())) < 1}>{ship_date}</td> -->
                 <td>{priority}</td>
-            </tr>   
+                {#if comments == null}
+                  <td>{''}</td>    
+                {:else}
+                  <td>{comments}</td>
+                {/if}
+            </tr>
+            <!-- </a>    -->
             {/each}
         </tbody>
     </table>
