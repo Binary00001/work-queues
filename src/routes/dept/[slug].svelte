@@ -74,8 +74,8 @@ import { navigating } from "$app/stores";
             {#each data as { part_number, run, qty, cust, comments, priority}}
             <!-- <a href={`/part?number=${part_number}&run=${run}`}> -->
             <tr class:hot={priority === 5}>
-                <a href={`/part?number=${part_number}&run=${run}`}>
-                <td><a href={`/part?number=${part_number}&run=${run}`}>{part_number}</a></td>
+                <!-- <a href={`/part?number=${part_number}&run=${run}` target="_blank"> -->
+                <td><a href={`/part?number=${part_number}&run=${run}`} target="_blank">{part_number}</a></td>
                 <td>{run}</td>
                 <td>{qty}</td>
                 <td>{cust}</td>
@@ -136,8 +136,10 @@ import { navigating } from "$app/stores";
         width: 100%;
     }
 
-    .past-due {
-        color: red;
+    a {
+        text-decoration: none;
+        color: black;
+        
     }
 
     .hot {

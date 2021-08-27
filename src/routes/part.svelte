@@ -5,7 +5,7 @@
         const number = page.query.get('number')
         const run = page.query.get('run')
 
-        console.log({part: number, run: run})
+        console.log({part: number.trim(), run: run})
 
         const res = await fetch(`http://192.168.0.39:5000/api/part/${number}/${run}`,
         {
@@ -33,30 +33,55 @@
 </script>
 
 <script>
-    import {variables} from '$lib/variables'
 
     let submit
     export let data
 
-    async function handleSubmit() {
+    function handleSubmit() {
         let formData = new FormData(part_form)
-        let insert = {
-            part_number: formData.get('part_number'),
-            run: formData.get('run_number'),
-            po: formData.get('po_number'),
-            item: formData.get('item_line'),
-            comments: formData.get('comments'),
-            expedite: formData.get('exp')
+
+        let commentData = {
+            part_number: formData.get('part_number').trim(),
+            run: formData.get('run_number').trim(),
+            po_num: formData.get('po_number').trim(),
+            item: formData.get('item_line').trim(),
+            comments: formData.get('comments').trim(),
+            expedite: formData.get('exp').trim()
         }
 
-        submit = await fetch(`${variables.baseUrl}/test_insert`,
-           { 
-                method: 'POST',
-                body: JSON.stringify(insert),
-                headers: {'content-type': 'application/json'}
-    }).then((res) => res.json())
-      .catch(error => console.log(error.message))
-      .finally(() => setTimeout(() => (submit = null), 3000))
+        console.log(commentData)
+
+        // submit = await fetch(`http://192.168.0.39:5000/api/test_insert/`,
+        //    { 
+        //         method: 'POST',
+        //         mode: 'cors',
+        //         headers: {'content-type': 'application/x-www-form-urlencoded'},
+        //         body: {
+        //             part_number: formData.get('part_number').trim(),
+        //             run: formData.get('run_number').trim(),
+        //             po_num: formData.get('po_number').trim(),
+        //             item: formData.get('item_line').trim(),
+        //             comments: formData.get('comments').trim(),
+        //             expedite: formData.get('exp').trim()
+        //         }
+        // })
+
+        // if (submit.ok) {
+        //     const data = submit.json()
+
+        //     res.send(data)
+        // }
+
+        // const { message } = await submit.json()
+        // return {
+        //     status: submit.status,
+        //     error: new Error(message)
+        // }
+    // .then((res) => {
+    //     console.log(res.json())
+    //     res.json()})
+    //   .catch(error => console.log(error.message))
+    //   .finally(submit = null)
     }
 
     
@@ -68,7 +93,7 @@
     {#if submit}
         <p class="sending">Sending</p>
     {:else}
-    <form name="part_form" id="part_form" class="new_comment" on:submit|preventDefault={handleSubmit} method="POST">
+    <form name="part_form" id="part_form" class="new_comment" on:submit|preventDefault={() => handleSubmit()} method="post">
 
         <label for="part_number">Part Number: 
             <input type="text" id="part_number" name="part_number" bind:value={data[0].part_number}  />
@@ -84,9 +109,9 @@
         
         <label for="po_number">PO#: 
             <select id="po_number" name="po_number">
-                {#each data as {po}}
-                    <option value={po}>
-                        {po}
+                {#each data as {po_num}}
+                    <option value={po_num}>
+                        {po_num}
                     </option>
                 {/each}
             </select>
@@ -112,7 +137,7 @@
         <label for="comments">Comments:
             <textarea 
              id="comments" 
-             name="comments" 
+             name="comments"
              bind:value={data[0].comments} 
              rows="4" 
              cols="50"></textarea>
