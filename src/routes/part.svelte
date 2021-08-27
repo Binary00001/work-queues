@@ -5,7 +5,7 @@
         const number = page.query.get('number')
         const run = page.query.get('run')
 
-        console.log(page.query.get('number'))
+        console.log({part: number, run: run})
 
         const res = await fetch(`http://192.168.0.39:5000/api/part/${number}/${run}`,
         {
@@ -33,39 +33,159 @@
 </script>
 
 <script>
+    import {variables} from '$lib/variables'
 
-    export let data = '';
+    let submit
+    export let data
+
+    async function handleSubmit() {
+        let formData = new FormData(part_form)
+        let insert = {
+            part_number: formData.get('part_number'),
+            run: formData.get('run_number'),
+            po: formData.get('po_number'),
+            item: formData.get('item_line'),
+            comments: formData.get('comments'),
+            expedite: formData.get('exp')
+        }
+
+        submit = await fetch(`${variables.baseUrl}/test_insert`,
+           { 
+                method: 'POST',
+                body: JSON.stringify(insert),
+                headers: {'content-type': 'application/json'}
+    }).then((res) => res.json())
+      .catch(error => console.log(error.message))
+      .finally(() => setTimeout(() => (submit = null), 3000))
+    }
 
     
 </script>
 
 
 
-<main>{#each data as part}
-    <form type="submit">
-        <p>Part Number: {part.part_number}</p>
-        <p>Run: {part.run}</p>
-        <p>PO #: {part.po_num} Item: {part.item}</p>
-        <label for="comments">Comments 
-            <input type="text" id="comments" name="comments" bind:value={part.comments}>
+<main>
+    {#if submit}
+        <p class="sending">Sending</p>
+    {:else}
+    <form name="part_form" id="part_form" class="new_comment" on:submit|preventDefault={handleSubmit} method="POST">
+
+        <label for="part_number">Part Number: 
+            <input type="text" id="part_number" name="part_number" bind:value={data[0].part_number}  />
         </label>
-        <!-- <label for="deleteComment">Delete
-            <input type="checkbox" value="Delete">
-        </label><br /> -->
-        <button>Update</button>
+
+        <!-- <br /> -->
+
+        <label for="run_number">Run: 
+            <input type="text" id="run_number" name="run_number" bind:value={data[0].run}  />
+        </label>
+
+        <!-- <br /> -->
+        
+        <label for="po_number">PO#: 
+            <select id="po_number" name="po_number">
+                {#each data as {po}}
+                    <option value={po}>
+                        {po}
+                    </option>
+                {/each}
+            </select>
+        </label>
+
+        <label for="item_line">Item: 
+            <select id="item_line" name="item_line">
+                {#each data as {item}}
+                    <option value={item}>{item}</option>
+                {/each}
+            </select>
+        </label>
+
+        <label for="exp">Customer Expedite:{' '}
+            <select id="exp" name="exp">
+                <option value="N">N</option>
+                <option value="Y">Y</option>
+            </select>
+        </label>
+
+        <!-- <br /> -->
+        
+        <label for="comments">Comments:
+            <textarea 
+             id="comments" 
+             name="comments" 
+             bind:value={data[0].comments} 
+             rows="4" 
+             cols="50"></textarea>
+        </label>
+
+        <!-- <br /> -->
+
+        <button type="submit">Update</button>
     </form>
-    {/each}
+    {/if}
 </main>
 
 <style>
     main {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         display: flex;
         height: 550px;
         justify-content: center;
         align-items: center;
     }
-
-    form, p, input {
-        margin: 10px;
+    .sending:after {
+        content: '.';
+        animation: dots 2s steps(4, end)  infinite;
+    }
+    @keyframes dots {
+        0%, 20% {
+            color: rgba(0, 0, 0, 0);
+            text-shadow: 
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0)
+            ;
+        }
+        40% {
+            color: black;
+            text-shadow: 
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0)
+            ;
+        }
+        60% {
+            text-shadow: 
+                .25em 0 0 black,
+                .5em 0 0 rgba(0, 0, 0, 0)
+            ;
+        }
+        80%, 100% {
+            text-shadow: 
+                .25em 0 0 black,
+                .5em 0 0 black
+            ;
+        }
+    }
+    .new_comment {
+        display: flex;
+        flex-direction: column;
+        height: 350px;
+        width: 400px;
+        align-items: flex-start;
+        justify-content: space-around;
+        padding: 5px;
+        background-color: #fbfbfb;
+        border: 1px solid lightblue;
+        box-shadow: 1.5px 1.5px slategray;
+        border-radius: 15px;
+    }
+    label {
+        padding: 5px;
+    }
+    textarea {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background-color: #fff;
+    }
+    button {
+        align-self: center;
     }
 </style>
