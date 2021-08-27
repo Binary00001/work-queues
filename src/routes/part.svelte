@@ -188,4 +188,14 @@
     button {
         align-self: center;
     }
+
+    textarea {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background-color: #fff;
+    }
+
+    button {
+        align-self: center;
+    }
+
 </style>
