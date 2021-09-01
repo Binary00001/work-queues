@@ -1,8 +1,10 @@
 <script context="module">
 
-    export async function load({fetch}) {
+    export async function load({page, fetch}) {
 
-        const res = await fetch('http://192.168.0.39:5000/api/kyle',
+        const dept = page.params.slug
+
+        const res = await fetch(`http://192.168.0.39:5000/api/burndown/burndown/${dept}`,
         {
             method: 'GET',
             mode: 'cors',
@@ -15,7 +17,7 @@
             const data = await res.json()
             // console.log(data)
             return {
-                props: {data}
+                props: {data, dept}
             }
         }
 
@@ -28,44 +30,47 @@
 </script>
 
 <script>
-    // import Dept from '$lib/Dept.svelte'
-    export let data = '';
-    // console.log(data)
+    export let data = null;
+    export let dept
 </script>
 
 <main>
-        <div class="table">
-            <h1 class="dept">Machine Shop</h1>
-            <table>
-                <thead>
-                    <th>Work Center</th>
-                    <th>Part Number</th>
-                    <th>Run</th>
-                    <th>Quantity</th>
-                    <th>Set Up Time</th>
-                    <th>Run Time</th>
-                    <th>Priority</th>
-                </thead>
-                <tbody>
-                    {#each data as part}
+    <h1 class="header">Burndown List</h1>
+    {#if data.length == 0}
+        <h2>No Burndown Items</h2>
+        <a href={`/dept/${dept}`}>Return to list</a>
+    {:else}
+    <div class="table">
+        <table>
+            <thead>
+                <th>Part Number</th>
+                <th>Run</th>
+                <th>Quantity</th>
+                <th>Customer</th>
+                <th>Priority</th>
+                <th>Comments</th>
+            </thead>
+            <tbody>
+                {#each data as part}
                     <tr class:hot={part.priority === 5}>
-                        <td>{part.op_center}: {part.work_center}</td>
                         <td>{part.part_number}</td>
                         <td>{part.run}</td>
                         <td>{part.qty}</td>
-                        <td>{part.setup_hours} hrs</td>
-                        <td>{part.run_hours} hrs</td>
+                        <td>{part.cust}</td>
                         <td>{part.priority}</td>
-                    </tr>   
-                    {/each}
-                </tbody>
-            </table>
-        </div>
+                        <td>{part.comments}</td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    {/if}
 
 </main>
 
 <style>
-     main {
+
+    main {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -74,10 +79,10 @@
         font-weight: 200;
     }
 
-    .dept {
+    .header {
         text-transform: uppercase;
         font-weight: 100;
-        text-align: center;
+        margin-top: 10px;
     }
 
     table, th, td {
@@ -95,7 +100,6 @@
     }
 
     .table {
-        margin: 10px;
         width: 90%;
     }
 
@@ -104,8 +108,18 @@
         width: 100%;
     }
 
+    a {
+        text-decoration: none;
+        color: black;
+       
+    }
+
     .hot {
         background-color: yellow;
+    }
+
+    h2 {
+        font-weight: 300;
     }
 
 </style>

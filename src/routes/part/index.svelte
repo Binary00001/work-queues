@@ -38,9 +38,11 @@
     export let data
 
     function handleSubmit() {
-        let formData = new FormData(part_form)
+        // e.preventDefault()
+        try {
+            let formData = new FormData(part_form)
 
-        let commentData = {
+        let commentData =  {
             part_number: formData.get('part_number').trim(),
             run: formData.get('run_number').trim(),
             po_num: formData.get('po_number').trim(),
@@ -51,38 +53,40 @@
 
         console.log(commentData)
 
-        // submit = await fetch(`http://192.168.0.39:5000/api/test_insert/`,
-        //    { 
-        //         method: 'POST',
-        //         mode: 'cors',
-        //         headers: {'content-type': 'application/x-www-form-urlencoded'},
-        //         body: {
-        //             part_number: formData.get('part_number').trim(),
-        //             run: formData.get('run_number').trim(),
-        //             po_num: formData.get('po_number').trim(),
-        //             item: formData.get('item_line').trim(),
-        //             comments: formData.get('comments').trim(),
-        //             expedite: formData.get('exp').trim()
-        //         }
-        // })
+         submit = fetch(`http://192.168.0.39:5000/api/test_insert/`,
+           { 
+                method: 'POST',
+                mode: 'cors',
+                headers: {'content-type': 'application/x-www-form-urlencoded'},
+                body: JSON.stringify({
+                    part_number: formData.get('part_number'),
+                    run: formData.get('run'),
+                    po_number: formData.get('po_number'),
 
-        // if (submit.ok) {
-        //     const data = submit.json()
+                })
+           })
 
-        //     res.send(data)
-        // }
+           console.log(submit)
 
-        // const { message } = await submit.json()
-        // return {
-        //     status: submit.status,
-        //     error: new Error(message)
-        // }
-    // .then((res) => {
-    //     console.log(res.json())
-    //     res.json()})
-    //   .catch(error => console.log(error.message))
-    //   .finally(submit = null)
+        if (submit.ok) {
+            const sendData =  submit
+            console.log(sendData)
+            
+            res.send(sendData)
+        }
+
+        const { message } =  submit.json()
+        return {
+            status: submit.status,
+            error: new Error(message)
+        }
+        } catch (err) {
+            throw new Error(err.message)
+        }
+        
+  
     }
+
 
     
 </script>
@@ -145,7 +149,7 @@
 
         <!-- <br /> -->
 
-        <button type="submit">Update</button>
+        <input class="button" type="submit" value="Update">
     </form>
     {/if}
 </main>
@@ -219,7 +223,7 @@
         background-color: #fff;
     }
 
-    button {
+    .button {
         align-self: center;
     }
 

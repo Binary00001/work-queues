@@ -14,7 +14,7 @@ let insp = true;
                 <li><a href='/dept/insp%20cnc' target='_parent'>CNC Inspection</a></li>
             </ul>
         </li> -->
-        <li><a href="/agendaview">Agenda View</a></li>
+        <li><a href="/burndown" style="color: darkred;">Burndown</a></li>
         <li><a href="/cnc">Machine Shop</a></li>
         <li><a href="/dept/trevor">Assembly</a></li>
         <li><a href="/dept/jeff">Building 2</a></li>
@@ -56,6 +56,7 @@ let insp = true;
         flex-direction: column;
         border-bottom: .5px solid black;
         background: slategray;
+        padding: 10px;
     }
 
     .nav-links {

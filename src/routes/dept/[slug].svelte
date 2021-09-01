@@ -40,11 +40,11 @@ import { navigating } from "$app/stores";
 
 
     //change to switch...
-    if (dept === 'jeff') {
-        dept = 'Building 2'
-    } else if (dept === 'trevor') {
-        dept = 'Assembly'
-    }
+    // if (dept === 'jeff') {
+    //     dept = 'Building 2'
+    // } else if (dept === 'trevor') {
+    //     dept = 'Assembly'
+    // }
 
 </script>
 
@@ -56,6 +56,7 @@ import { navigating } from "$app/stores";
     <h1 class="dept">
         {dept}
     </h1>
+    <a href={`/burndown/${dept}`}><p>Burndown list</p></a>
     {#if !data}
         <p>loading...</p>
     {:else}
@@ -84,7 +85,7 @@ import { navigating } from "$app/stores";
                 {#if comments == null}
                   <td>{''}</td>    
                 {:else}
-                  <td>{comments}</td>
+                  <td class="comment">{comments}</td>
                 {/if}
             </tr>
             <!-- </a>    -->
@@ -140,6 +141,10 @@ import { navigating } from "$app/stores";
         text-decoration: none;
         color: black;
         
+    }
+
+    .comment {
+        font-weight: bold;
     }
 
     .hot {
