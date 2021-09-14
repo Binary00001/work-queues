@@ -38,8 +38,9 @@
     <h1 class="header">Burndown List</h1>
     {#if data.length == 0}
         <h2>No Burndown Items</h2>
-        <a href={`/dept/${dept}`}>Return to list</a>
+        <a href={`/dept/${dept}`}><h3>Return to list</h3></a>
     {:else}
+    <a class="header" href={`/dept/${dept}`}>{dept}</a>
     <div class="table">
         <table>
             <thead>

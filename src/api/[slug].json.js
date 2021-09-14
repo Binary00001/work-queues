@@ -1,5 +1,5 @@
 import sql from 'mssql'
-import config from '$lib/dbConfig'
+import config from '$lib/db
 
 
 export async function get({params}) {

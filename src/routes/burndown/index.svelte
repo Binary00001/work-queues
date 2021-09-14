@@ -29,7 +29,7 @@
 
 <script>
     // import Dept from '$lib/Dept.svelte'
-    export let data = '';
+    export let data = [];
     // console.log(data)
 </script>
 
@@ -45,6 +45,7 @@
                     <th>PO#</th>
                     <th>Item</th>
                     <th>Quantity</th>
+                    <th>DiQ</th>
                 </thead>
                 <tbody>
                     {#each data as part}
@@ -56,6 +57,7 @@
                         <td>{part.po}</td>
                         <td>{part.item}</td>
                         <td>{part.qty}</td>
+                        <td>{part.diq}</td>
                     </tr>   
                     {/each}
                 </tbody>

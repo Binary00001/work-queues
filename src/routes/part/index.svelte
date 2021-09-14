@@ -34,54 +34,42 @@
 
 <script>
 
-    let submit
+    let submit = false
+    // let formData = new FormData(part_form)
     export let data
+    let po_num = data[0].po_num
+    let item = data[0].item
+    let comments = data[0].comments
+    let part_number = data[0].part_number
+    let run = data[0].run
 
-    function handleSubmit() {
+
+    async function handleSubmit() {
         // e.preventDefault()
         try {
-            let formData = new FormData(part_form)
-
-        let commentData =  {
-            part_number: formData.get('part_number').trim(),
-            run: formData.get('run_number').trim(),
-            po_num: formData.get('po_number').trim(),
-            item: formData.get('item_line').trim(),
-            comments: formData.get('comments').trim(),
-            expedite: formData.get('exp').trim()
-        }
-
-        console.log(commentData)
-
-         submit = fetch(`http://192.168.0.39:5000/api/test_insert/`,
+            // submit = true
+         submit = fetch('http://192.168.0.39:5000/api/test_insert',
            { 
                 method: 'POST',
-                mode: 'cors',
-                headers: {'content-type': 'application/x-www-form-urlencoded'},
-                body: JSON.stringify({
-                    part_number: formData.get('part_number'),
-                    run: formData.get('run'),
-                    po_number: formData.get('po_number'),
-
-                })
+                body: {
+                    po_num,
+                    item,
+                    part_number,
+                    run,
+                    comments,
+                    expedite
+                }
+                
            })
 
-           console.log(submit)
+           let json = await submit.json()
+           return json
 
-        if (submit.ok) {
-            const sendData =  submit
-            console.log(sendData)
-            
-            res.send(sendData)
-        }
-
-        const { message } =  submit.json()
-        return {
-            status: submit.status,
-            error: new Error(message)
-        }
+      
         } catch (err) {
             throw new Error(err.message)
+        } finally {
+            submit = false
         }
         
   
@@ -97,7 +85,7 @@
     {#if submit}
         <p class="sending">Sending</p>
     {:else}
-    <form name="part_form" id="part_form" class="new_comment" on:submit|preventDefault={() => handleSubmit()} method="post">
+    <form name="part_form" id="part_form" class="new_comment" on:submit|preventDefault={handleSubmit} method="post">
 
         <label for="part_number">Part Number: 
             <input type="text" id="part_number" name="part_number" bind:value={data[0].part_number}  />
@@ -112,13 +100,7 @@
         <!-- <br /> -->
         
         <label for="po_number">PO#: 
-            <select id="po_number" name="po_number">
-                {#each data as {po_num}}
-                    <option value={po_num}>
-                        {po_num}
-                    </option>
-                {/each}
-            </select>
+            <input type="text" bind:value={data.part}/>
         </label>
 
         <label for="item_line">Item: 
@@ -142,9 +124,9 @@
             <textarea 
              id="comments" 
              name="comments"
-             bind:value={data[0].comments} 
              rows="4" 
-             cols="50"></textarea>
+             cols="50"
+             bind:value={comments}></textarea>
         </label>
 
         <!-- <br /> -->
@@ -214,7 +196,8 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         background-color: #fff;
     }
-    button {
+
+    .button {
         align-self: center;
     }
 

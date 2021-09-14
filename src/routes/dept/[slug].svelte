@@ -3,7 +3,7 @@
     export async function load({page, fetch}) {
         const dept = page.params.slug;
 
-        const res = await fetch(`http://192.168.0.39:5000/api/${dept}`, 
+        const res = await fetch(`http://192.168.0.39:5000/api/dept/${dept}`, 
         {
             method: 'GET',
             mode: 'cors',
@@ -29,10 +29,6 @@
 </script>
 
 <script>
-import { navigating } from "$app/stores";
-
-
-
 
     export let data = '';
     export let dept = '';
@@ -72,11 +68,11 @@ import { navigating } from "$app/stores";
             <th>Comments</th>
         </thead>
         <tbody>
-            {#each data as { part_number, run, qty, cust, comments, priority}}
+            {#each data as { part_number, run, qty, cust, comments, po_num, item, priority}}
             <!-- <a href={`/part?number=${part_number}&run=${run}`}> -->
             <tr class:hot={priority === 5}>
                 <!-- <a href={`/part?number=${part_number}&run=${run}` target="_blank"> -->
-                <td><a href={`/part?number=${part_number}&run=${run}`} target="_blank">{part_number}</a></td>
+                <td><a href={`/part?number=${part_number}&run=${run}&po_num=${po_num}&item=${item}`} target="_blank">{part_number}</a></td>
                 <td>{run}</td>
                 <td>{qty}</td>
                 <td>{cust}</td>

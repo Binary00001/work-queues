@@ -8,22 +8,29 @@
     {#if parts}
         <table>
             <thead>
-                <th>Work Center</th>
+                <!-- <th>Work Center</th> -->
                 <th>Part Number</th>
                 <th>Run</th>
                 <th>Quantity</th>
-                <th>Set Up Time</th>
+                <th>Customer</th>
                 <th>Priority</th>
+                <th>Comments</th>
             </thead>
             <tbody>
                 {#each parts as part}
                     <tr class:hot={part.priority === 5}>
-                        <td>{part.work_center}</td>
+                        <!-- <td>{part.work_center}</td> -->
                         <td>{part.part_number}</td>
                         <td>{part.run}</td>
-                        <td>{part.QTY}</td>
-                        <td>{part.setup_hours}</td>
+                        <td>{part.qty}</td>
+                        <td>{part.cust}</td>
                         <td>{part.priority}</td>
+                        {#if part.comments == null}
+                            <td>{''}</td>    
+                        {:else}
+                            <td class="comment">{part.comments}</td>
+                        {/if}
+                        
                     </tr>
                 {/each}
             </tbody>
@@ -37,8 +44,8 @@
     main {
         display: flex;
         flex-direction: column;
-        width: 480px;
-        margin: 5px;
+        /* width: 800; */
+        margin: 10px;
     }
 
     h1 {

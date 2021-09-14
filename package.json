@@ -19,6 +19,7 @@
   },
   "type": "module",
   "dependencies": {
+    "mssql": "^7.2.1",
     "tedious": "^11.2.0"
   }
 }

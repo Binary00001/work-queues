@@ -2,7 +2,7 @@
 
     export async function load({fetch}) {
 
-        const res = await fetch('http://192.168.0.39:5000/api/kyle',
+        const res = await fetch('http://192.168.0.39:5000/api/dept/kyle',
         {
             method: 'GET',
             mode: 'cors',

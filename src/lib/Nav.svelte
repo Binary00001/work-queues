@@ -17,13 +17,14 @@ let insp = true;
         <li><a href="/burndown" style="color: darkred;">Burndown</a></li>
         <li><a href="/cnc">Machine Shop</a></li>
         <li><a href="/dept/trevor">Assembly</a></li>
-        <li><a href="/dept/jeff">Building 2</a></li>
+        <li><a href="/finish/paint">Paint</a></li>
         <li class:active={page.params === "insp%20cnc"}><a href="/dept/insp%20cnc" target="_parent">CNC Inspection</a></li>
         <li class:active={page.params === "insp%20sheet"}><a href="/dept/insp%20sheet" target="_parent">Sheet Metal Inspection</a></li>
         <!-- <li class:active={page.params === "trevor"}><a href="/dept/trevor" target="_parent">Assembly</a></li> -->
         <li class:active={page.params === "insp%20prime"}><a href="/dept/insp%20prime" target="_parent">Primer Inspection</a></li>
         <li class:active={page.params === "insp%20tc"}><a href="/dept/insp%20tc" target="_parent">Top Coat Inspection</a></li>
         <li class:active={page.params === "insp%20assy"}><a href="/dept/insp%20assy" target="_parent">Assembly Inspection</a></li>
+        <li><a href='/dept/deburr' target="_self">Deburr</a></li>
         <li class:active={page.params === "part%20mark"}><a href="/dept/part%20mark" target="_parent">Part Mark</a></li>
         <li class:active={page.params === "final%20insp"}><a href="/dept/final%20insp" target="_parent">Final Inspection</a></li>
         <li class:active={page.params === "package"}><a href="/dept/package" target="_parent">Shipping</a></li>
