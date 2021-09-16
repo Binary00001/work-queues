@@ -66,13 +66,14 @@
             <!-- <th>Must Ship Date</th> -->
             <th>Priority</th>
             <th>Comments</th>
+            <th>Days in Queue</th>
         </thead>
         <tbody>
-            {#each data as { part_number, run, qty, cust, comments, po_num, item, priority}}
+            {#each data as { part_number, run, qty, cust, comments, diq, po_num, item, priority}}
             <!-- <a href={`/part?number=${part_number}&run=${run}`}> -->
             <tr class:hot={priority === 5}>
                 <!-- <a href={`/part?number=${part_number}&run=${run}` target="_blank"> -->
-                <td><a href={`/part?number=${part_number}&run=${run}&po_num=${po_num}&item=${item}`} target="_blank">{part_number}</a></td>
+                <td><a href={`/part?po=${po_num}&line=${item}&part=${part_number}&run=${run}`} target="_blank">{part_number}</a></td>
                 <td>{run}</td>
                 <td>{qty}</td>
                 <td>{cust}</td>
@@ -83,6 +84,7 @@
                 {:else}
                   <td class="comment">{comments}</td>
                 {/if}
+                <td class:stagnant={diq > 2}>{diq}</td>
             </tr>
             <!-- </a>    -->
             {/each}
@@ -116,6 +118,10 @@
         padding: 5px;
     }
 
+    td {
+        text-align: center;
+    }
+
     thead {
         background-color: skyblue;
     }
@@ -145,6 +151,11 @@
 
     .hot {
         background-color: yellow;
+    }
+
+    .stagnant {
+        color: red;
+        font-weight: bold;
     }
 
 </style>

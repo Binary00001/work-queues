@@ -2,12 +2,14 @@
 
     export async function load({page, fetch}) {
         // const urlParams = 
-        const number = page.query.get('number')
+        const part = page.query.get('part')
         const run = page.query.get('run')
+        const po = page.query.get('po')
+        const line = page.query.get('line')
 
-        console.log({part: number.trim(), run: run})
+        // console.log({part: part.trim(), run: run})
 
-        const res = await fetch(`http://192.168.0.39:5000/api/part/${number}/${run}`,
+        const res = await fetch(`/part/${po}-${line}-${run}-${part}.json`,
         {
             method: 'GET',
             mode: 'cors',
@@ -17,7 +19,8 @@
         })
 
         if (res.ok) {
-            const data = await res.json()
+        const data = await res.json()
+            // console.log(res)
 
             return {
                 props: {data}
@@ -33,107 +36,31 @@
 </script>
 
 <script>
-
-    let submit = false
-    // let formData = new FormData(part_form)
+    import UpdateForm from '$lib/components/UpdateForm.svelte'
     export let data
-    let po_num = data[0].po_num
-    let item = data[0].item
-    let comments = data[0].comments
-    let part_number = data[0].part_number
-    let run = data[0].run
 
-
-    async function handleSubmit() {
-        // e.preventDefault()
-        try {
-            // submit = true
-         submit = fetch('http://192.168.0.39:5000/api/test_insert',
-           { 
-                method: 'POST',
-                body: {
-                    po_num,
-                    item,
-                    part_number,
-                    run,
-                    comments,
-                    expedite
-                }
-                
-           })
-
-           let json = await submit.json()
-           return json
-
-      
-        } catch (err) {
-            throw new Error(err.message)
-        } finally {
-            submit = false
-        }
-        
-  
+    // console.log(data)
+    
+    let part = {
+        part_number: data[0].part_number,
+        run: data[0].run,
+        po_num: data[0].po_num,
+        item: data[0].item,
+        comments: data[0].comments,
+        expedite: data[0].expedite
     }
-
 
     
 </script>
 
+<svelte:head>
+    <meta />
+</svelte:head>
+
 
 
 <main>
-    {#if submit}
-        <p class="sending">Sending</p>
-    {:else}
-    <form name="part_form" id="part_form" class="new_comment" on:submit|preventDefault={handleSubmit} method="post">
-
-        <label for="part_number">Part Number: 
-            <input type="text" id="part_number" name="part_number" bind:value={data[0].part_number}  />
-        </label>
-
-        <!-- <br /> -->
-
-        <label for="run_number">Run: 
-            <input type="text" id="run_number" name="run_number" bind:value={data[0].run}  />
-        </label>
-
-        <!-- <br /> -->
-        
-        <label for="po_number">PO#: 
-            <input type="text" bind:value={data.part}/>
-        </label>
-
-        <label for="item_line">Item: 
-            <select id="item_line" name="item_line">
-                {#each data as {item}}
-                    <option value={item}>{item}</option>
-                {/each}
-            </select>
-        </label>
-
-        <label for="exp">Customer Expedite:{' '}
-            <select id="exp" name="exp">
-                <option value="N">N</option>
-                <option value="Y">Y</option>
-            </select>
-        </label>
-
-        <!-- <br /> -->
-        
-        <label for="comments">Comments:
-            <textarea 
-             id="comments" 
-             name="comments"
-             rows="4" 
-             cols="50"
-             bind:value={comments}></textarea>
-        </label>
-
-        <!-- <br /> -->
-
-        <input class="button" type="submit" value="Update">
-    </form>
-    {/if}
+    <UpdateForm {part} />
 </main>
 
 <style>
@@ -144,70 +71,6 @@
         justify-content: center;
         align-items: center;
     }
-    .sending:after {
-        content: '.';
-        animation: dots 2s steps(4, end)  infinite;
-    }
-    @keyframes dots {
-        0%, 20% {
-            color: rgba(0, 0, 0, 0);
-            text-shadow: 
-                .25em 0 0 rgba(0, 0, 0, 0),
-                .5em 0 0 rgba(0, 0, 0, 0)
-            ;
-        }
-        40% {
-            color: black;
-            text-shadow: 
-                .25em 0 0 rgba(0, 0, 0, 0),
-                .5em 0 0 rgba(0, 0, 0, 0)
-            ;
-        }
-        60% {
-            text-shadow: 
-                .25em 0 0 black,
-                .5em 0 0 rgba(0, 0, 0, 0)
-            ;
-        }
-        80%, 100% {
-            text-shadow: 
-                .25em 0 0 black,
-                .5em 0 0 black
-            ;
-        }
-    }
-    .new_comment {
-        display: flex;
-        flex-direction: column;
-        height: 350px;
-        width: 400px;
-        align-items: flex-start;
-        justify-content: space-around;
-        padding: 5px;
-        background-color: #fbfbfb;
-        border: 1px solid lightblue;
-        box-shadow: 1.5px 1.5px slategray;
-        border-radius: 15px;
-    }
-    label {
-        padding: 5px;
-    }
-    textarea {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        background-color: #fff;
-    }
-
-    .button {
-        align-self: center;
-    }
-
-    textarea {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        background-color: #fff;
-    }
-
-    .button {
-        align-self: center;
-    }
+    
 
 </style>

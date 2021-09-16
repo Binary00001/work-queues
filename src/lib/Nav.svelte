@@ -7,20 +7,15 @@ let insp = true;
 </script>
 
 <div class='header'>
-    <h1><a href='/'><img src={logo} alt="imaginetics logo"></a></h1>
+    <h1><a href='/'><img src={logo} alt="imaginetics logo" style="background-color: slategrey;"></a></h1>
     <ul class='nav-links'>
-        <!-- <li class='dropdown'><button on:click={() => insp = !insp}>Inspection</button>
-            <ul class:nav-dropdown={insp === true}>
-                <li><a href='/dept/insp%20cnc' target='_parent'>CNC Inspection</a></li>
-            </ul>
-        </li> -->
+       
         <li><a href="/burndown" style="color: darkred;">Burndown</a></li>
         <li><a href="/cnc">Machine Shop</a></li>
         <li><a href="/dept/trevor">Assembly</a></li>
         <li><a href="/finish/paint">Paint</a></li>
         <li class:active={page.params === "insp%20cnc"}><a href="/dept/insp%20cnc" target="_parent">CNC Inspection</a></li>
         <li class:active={page.params === "insp%20sheet"}><a href="/dept/insp%20sheet" target="_parent">Sheet Metal Inspection</a></li>
-        <!-- <li class:active={page.params === "trevor"}><a href="/dept/trevor" target="_parent">Assembly</a></li> -->
         <li class:active={page.params === "insp%20prime"}><a href="/dept/insp%20prime" target="_parent">Primer Inspection</a></li>
         <li class:active={page.params === "insp%20tc"}><a href="/dept/insp%20tc" target="_parent">Top Coat Inspection</a></li>
         <li class:active={page.params === "insp%20assy"}><a href="/dept/insp%20assy" target="_parent">Assembly Inspection</a></li>
@@ -35,18 +30,6 @@ let insp = true;
     * {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
-
-    /* .nav-dropdown {
-        display: none;
-        position: absolute;
-        z-index: 1;
-    }
-
-    
-
-    .dropdown:hover .nav-dropdown {
-        display: block;
-    } */
 
     h1 {
         font-weight: 100;

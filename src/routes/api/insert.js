@@ -1,18 +1,24 @@
-import sql from 'mssql'
-import { config } from '$lib/db'
+// import sql from 'mssql'
+// import { config } from '$lib/db'
 
-export async function post({params}) {
-    let {po_num, item, part_number, run, comments, exp } = params
-    await sql.connect(config)
+export async function post(req) {
+    let {part_number, run, po_num, item, comments, exp } = await req.body
+    // await sql.connect(config)
 
-    const result = await sql.query(`
-        INSERT INTO dbo.AgendaView(AGPO, AGITEM, AGPART, AGRUN, AGPMCOMMENTS, AGCPEXP)
-        VALUES(${po_num}, ${item}, ${part_number}, ${run}, ${comments}, ${exp})
-    `)
+    console.log(req)
 
-    let data = result.rowsAffected
+    // const result = await sql.query(`
+    //     INSERT INTO dbo.AgendaView(AGPO, AGITEM, AGPART, AGRUN, AGPMCOMMENTS, AGCPEXP)
+    //     VALUES(${po_num}, ${item}, ${part_number}, ${run}, ${comments}, ${exp})
+    // `)
 
+    // let data = result.rowsAffected
     return {
-        body: data
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: {
+            message: req.body
+        }
     }
 }
