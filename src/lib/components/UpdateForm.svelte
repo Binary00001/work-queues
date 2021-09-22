@@ -1,11 +1,14 @@
 <script>
     export let part
-    
+    let add = !part.comments
+
+    let mutated = part
+
     let submit = false;
 
-    async function handleSubmit() {
+    function handlePost() {
         try {
-            submit = fetch('/api/insert', {
+        fetch('/api/insert', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -16,13 +19,50 @@
             throw err
         } finally {
             submit = false
+            add = false
+            // alert('Comment successfully added')
+        }
+    }
+
+    function handleDel() {
+        try {
+            mutated.comments = null
+            fetch('/api/delete', {
+                method: 'DELETE',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(part)
+            })
+        } catch (err) {
+            throw err
+        } finally {
+            add = true
+            console.log('deleted')
+        }
+    }
+
+    function handlePut() {
+        try {
+            fetch('/api/update', {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(mutated)
+            })
+        } catch (err) {
+            alert(`Error: ${err.message}`)
+            throw err
+        } finally {
+            console.log('success')
         }
     }
 </script>
 
-<form type="submit" class="new_comment" method="post" on:submit|preventDefault={handleSubmit}>
+<form type="submit" class="new_comment" method="post" on:submit|preventDefault={handlePost}>
 
-    <label for="part_number">Part Number: 
+    <label for="part_number">Part Number:
         <input type="text" id="part_number" name="part_number" bind:value={part.part_number}  />
     </label>
 
@@ -37,34 +77,40 @@
     </label>
 
     <label for="item_line">Item: 
-        <input type="text" bind:value={part.item} />
+        <input type="text"class='box-sm' bind:value={part.item} />
     </label>
 
     <label for="exp">Customer Expedite:{' '}
-        <input type="text" bind:value={part.expedite} />
+        <input type="text"class='box-sm' bind:value={part.expedite} />
     </label>
 
     
-    <label for="comments">Comments:
+    <label for="comments">Comments: 
         <textarea 
          id="comments" 
          name="comments"
          rows="4" 
          cols="50"
-         bind:value={part.comments}></textarea>
+         bind:value={mutated.comments}></textarea>
     </label>
 
-
-    <input class="button" type="submit" value={submit ? 'sending' : 'update'} />
+    <div class="btn-group">
+        {#if add}
+            <input class='btn' type="submit" value={submit ? 'sending' : 'Add Comment'} />
+        {:else}
+            <button class='btn' on:click|preventDefault={handlePut}>Update</button>
+            <button class='btn btn-danger' on:click|preventDefault={handleDel}>Delete Comment</button>
+        {/if}
+    </div>  
 </form>
 
 <style>
 
-.sending:after {
+/* .sending:after {
         content: '.';
         animation: dots 2s steps(4, end)  infinite;
-    }
-    @keyframes dots {
+    } */
+    @keyframes dots { 
         0%, 20% {
             color: rgba(0, 0, 0, 0);
             text-shadow: 
@@ -108,12 +154,13 @@
     label {
         padding: 5px;
     }
-    textarea {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        background-color: #fff;
+    
+    .box-sm {
+        width: 2rem;
+        text-align: center;
     }
 
-    .button {
+    .btn {
         align-self: center;
     }
 
@@ -122,7 +169,11 @@
         background-color: #fff;
     }
 
-    .button {
+    .btn-danger {
+        color: red;
+    }
+
+    .btn-group {
         align-self: center;
     }
 </style>

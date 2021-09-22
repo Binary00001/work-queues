@@ -32,15 +32,8 @@
 
     export let data = '';
     export let dept = '';
-    // console.log(data)
-
-
-    //change to switch...
-    // if (dept === 'jeff') {
-    //     dept = 'Building 2'
-    // } else if (dept === 'trevor') {
-    //     dept = 'Assembly'
-    // }
+    
+    let ordered = data
 
 </script>
 
@@ -63,30 +56,25 @@
             <th>Run</th>
             <th>Quantity</th>
             <th>Customer</th>
-            <!-- <th>Must Ship Date</th> -->
             <th>Priority</th>
             <th>Comments</th>
             <th>Days in Queue</th>
         </thead>
         <tbody>
-            {#each data as { part_number, run, qty, cust, comments, diq, po_num, item, priority}}
-            <!-- <a href={`/part?number=${part_number}&run=${run}`}> -->
+            {#each ordered as { part_number, run, qty, cust, comments, diq, po_num, item, priority}}
             <tr class:hot={priority === 5}>
-                <!-- <a href={`/part?number=${part_number}&run=${run}` target="_blank"> -->
                 <td><a href={`/part?po=${po_num}&line=${item}&part=${part_number}&run=${run}`} target="_blank">{part_number}</a></td>
                 <td>{run}</td>
                 <td>{qty}</td>
                 <td>{cust}</td>
-                <!-- <td class:past-due={(new Date(ship_date) - new Date(Date.now())) < 1}>{ship_date}</td> -->
                 <td>{priority}</td>
                 {#if comments == null}
                   <td>{''}</td>    
                 {:else}
                   <td class="comment">{comments}</td>
                 {/if}
-                <td class:stagnant={diq > 2}>{diq}</td>
+                <td class:stagnant={diq > 3}>{diq}</td>
             </tr>
-            <!-- </a>    -->
             {/each}
         </tbody>
     </table>

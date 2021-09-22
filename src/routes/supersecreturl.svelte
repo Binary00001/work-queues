@@ -29,11 +29,19 @@
     <p>I wasn't able to update this at the normal time due to an office full of people </p> -->
     <h1>Bayonetta,</h1>
     <br />
-    <p>Thank you for being the one solid piece around here. You keep things from feeling completely overwhelming.</p>
-    <p>Have a wonderful Thursday and keep bringin that smile.</p>
-    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="/FeelsBadMan.png" style="width: 75px; height: 75px;" alt="FeelsBadMan.png" /></a>
-    <br />
-    <!-- <p>To make up for it I made today's page a little extra</p> -->
+    <p>You are an amazing person.</p>
+    <p>You are so incredibly smart and motivated. Your drive motivates people around you. <br />
+       You are strong, sometimes stronger than you should ever have to be.
+    </p>
+    <p>Fuck anyone who says a bad word about you. It just shows how insecure and threatened by you they feel when they believe they have to tear you down to make themselves look "good".
+      <br />
+    </p>
+    <p>Keep being you and the wonderful individual you are. There is no one like you and that is a good thing.
+      <br />
+      <br>
+      <br>
+      <p>Nerd ;)</p>
+
 </main>
 
 
