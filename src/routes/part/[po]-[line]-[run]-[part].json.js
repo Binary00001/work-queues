@@ -6,17 +6,19 @@ import {config} from '$lib/db'
 export async function get({params}) {
     let {po, line, part, run} = params
     let conn
+    console.log(params)
 
     await sql.connect(config).then(conn = new sql.Request())
 
 
     let result = await conn.query(`
-        SELECT PO as po_num, ITEM as item, [PART NUMBER] as part_number, RUN as run, [PM COMMENTS] as comments, [CP EXP] as expedite 
+        SELECT PO as po_num, LTRIM(ITEM) as item, RTRIM([PART NUMBER]) as part_number, RUN as run, [PM COMMENTS] as comments, [CP EXP] as expedite 
         FROM dbo.AgendaViewDIQ
-        WHERE PO = '${po}' AND ITEM = ${line} AND RUN = '${run}' AND [PART NUMBER] = '${part}';
+        WHERE PO = '${po}' AND ITEM = ${line} AND RUN = ${run} AND [PART NUMBER] = '${part}';
     `)
 
     let data = result.recordset
+    console.log(result)
 
 
     return {

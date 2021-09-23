@@ -3,7 +3,7 @@
     export async function load({page, fetch}) {
         const dept = page.params.slug;
 
-        const res = await fetch(`http://192.168.0.39:5000/api/dept/${dept}`, 
+        const res = await fetch(`/dept/${dept}.json`, 
         {
             method: 'GET',
             mode: 'cors',

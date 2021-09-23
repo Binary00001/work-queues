@@ -13,7 +13,7 @@
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify(part)
+                body: JSON.stringify(mutated)
             })
         } catch (err) {
             throw err
@@ -32,7 +32,7 @@
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify(part)
+                body: JSON.stringify(mutated)
             })
         } catch (err) {
             throw err
@@ -63,25 +63,25 @@
 <form type="submit" class="new_comment" method="post" on:submit|preventDefault={handlePost}>
 
     <label for="part_number">Part Number:
-        <input type="text" id="part_number" name="part_number" bind:value={part.part_number}  />
+        <input type="text" id="part_number" name="part_number" bind:value={mutated.part_number}  />
     </label>
 
 
     <label for="run_number">Run: 
-        <input type="text" id="run_number" name="run_number" bind:value={part.run}  />
+        <input type="text" id="run_number" name="run_number" bind:value={mutated.run}  />
     </label>
 
     
     <label for="po_number">PO#: 
-        <input type="text" bind:value={part.po_num} />
+        <input type="text" bind:value={mutated.po_num} />
     </label>
 
     <label for="item_line">Item: 
-        <input type="text"class='box-sm' bind:value={part.item} />
+        <input type="text"class='box-sm' bind:value={mutated.item} />
     </label>
 
     <label for="exp">Customer Expedite:{' '}
-        <input type="text"class='box-sm' bind:value={part.expedite} />
+        <input type="text"class='box-sm' bind:value={mutated.expedite} />
     </label>
 
     
