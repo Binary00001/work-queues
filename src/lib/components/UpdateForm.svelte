@@ -1,14 +1,40 @@
 <script>
     export let part
+    let mutated = part
     let add = !part.comments
 
-    let mutated = part
-
     let submit = false;
+    let url = '/api/comments'
+
+    function handleSubmit(method) {
+        try {
+            fetch(url, {
+                method,
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(mutated)
+            })
+        } catch(err) {
+            alert(`Error: ${err.message}`)
+        } finally {
+            submit = false
+            if (method == 'POST') {
+                add = false
+                alert(`Comment Added: ${mutated.comments}`)
+            } else if (method === 'PUT') {
+                alert(`Comment Updated: ${mutated.comments}`)
+            } else if (method === 'DELETE') {
+                mutated.comments = null
+                alert('Comment Deleted')
+                // add = true
+            }
+        }
+    } 
 
     function handlePost() {
         try {
-        fetch('/api/insert', {
+        fetch(url, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -16,18 +42,19 @@
                 body: JSON.stringify(mutated)
             })
         } catch (err) {
+            alert(`error: ${err.message}`)
             throw err
         } finally {
             submit = false
             add = false
-            // alert('Comment successfully added')
+            alert('Comment added')
         }
     }
 
     function handleDel() {
         try {
             mutated.comments = null
-            fetch('/api/delete', {
+            fetch(url, {
                 method: 'DELETE',
                 headers: {
                     'content-type': 'application/json'
@@ -35,16 +62,18 @@
                 body: JSON.stringify(mutated)
             })
         } catch (err) {
+            alert(`error: ${err.message}`)
             throw err
         } finally {
             add = true
-            console.log('deleted')
+            // console.log('deleted')
+            alert('Comment Deleted')
         }
     }
 
     function handlePut() {
         try {
-            fetch('/api/update', {
+            fetch('/api/comments', {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json'
@@ -55,12 +84,12 @@
             alert(`Error: ${err.message}`)
             throw err
         } finally {
-            console.log('success')
+            alert('Comment Updated')
         }
     }
 </script>
 
-<form type="submit" class="new_comment" method="post" on:submit|preventDefault={handlePost}>
+<form type="submit" class="new_comment" method="post" on:submit|preventDefault={() => handleSubmit('POST')}>
 
     <label for="part_number">Part Number:
         <input type="text" id="part_number" name="part_number" bind:value={mutated.part_number}  />
@@ -98,8 +127,8 @@
         {#if add}
             <input class='btn' type="submit" value={submit ? 'sending' : 'Add Comment'} />
         {:else}
-            <button class='btn' on:click|preventDefault={handlePut}>Update</button>
-            <button class='btn btn-danger' on:click|preventDefault={handleDel}>Delete Comment</button>
+            <button class='btn' on:click|preventDefault={() => handleSubmit('PUT')}>Update</button>
+            <button class='btn btn-danger' on:click|preventDefault={() => handleSubmit('DELETE')}>Delete Comment</button>
         {/if}
     </div>  
 </form>

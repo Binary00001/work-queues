@@ -60,6 +60,12 @@
 
 
 <main>
+    <div class='warning'>
+        <h1>WARNING!</h1>
+        <h2>BEFORE ADDING/MODIFYING A COMMENT MAKE SURE THE RUN # AND ITEM DO NOT CONTAIN LETTERS.<br />
+            IF THEY DO REMOVE THE LETTER, (EXAMPLE 1A => 1).
+        </h2>
+    </div>
     <UpdateForm {part} />
 </main>
 
@@ -68,9 +74,16 @@
     main {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         display: flex;
+        flex-direction: column;
         height: 550px;
         justify-content: center;
         align-items: center;
+    }
+
+    .warning {
+        color: red;
+        text-align: center;
+        margin-bottom: 25px;
     }
 
 </style>

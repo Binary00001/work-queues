@@ -27,7 +27,7 @@
 </script>
 
 <script>
-    import Dept from '$lib/Dept.svelte'
+    import Dept from '$lib/components/Dept.svelte'
     export let data
     // console.log(data)
     

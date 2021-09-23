@@ -17,18 +17,18 @@
                 <th>Comments</th>
             </thead>
             <tbody>
-                {#each parts as part}
-                    <tr class:hot={part.priority === 5}>
+                {#each parts as {part_number, run, qty, cust, priority, comments, po_num, item}}
+                    <tr class:hot={priority === 5}>
                         <!-- <td>{part.work_center}</td> -->
-                        <td>{part.part_number}</td>
-                        <td>{part.run}</td>
-                        <td>{part.qty}</td>
-                        <td>{part.cust}</td>
-                        <td>{part.priority}</td>
-                        {#if part.comments == null}
+                        <td><a href={`/part?po=${po_num}&line=${item}&run=${run}&part=${part_number}`} target="_blank">{part_number}</a></td>
+                        <td>{run}</td>
+                        <td>{qty}</td>
+                        <td>{cust}</td>
+                        <td>{priority}</td>
+                        {#if comments == null}
                             <td>{''}</td>    
                         {:else}
-                            <td class="comment">{part.comments}</td>
+                            <td class="comment">{comments}</td>
                         {/if}
                         
                     </tr>
@@ -68,5 +68,11 @@
 
     .hot {
         background-color: yellow;
+    }
+
+    /* move to avoid repetition */
+    a {
+        color: #1f1f13;
+        text-decoration: none;
     }
 </style>
