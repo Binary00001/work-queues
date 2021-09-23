@@ -10,6 +10,8 @@
 -- AND AGITEM = 2
 -- ;
 
+DELETE FROM dbo.AgcmTable WHERE AGITEM = '1A';
+
 -- SELECT * FROM dbo.RnopTable 
 --   WHERE OPCENTER = '1600'
 --   AND OPCOMPDATE >= CAST('2021-09-22 00:00:00' AS smalldatetime);

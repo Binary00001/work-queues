@@ -1,6 +1,6 @@
 <script>
 import { page } from "$app/stores";
-import logo from './imaginetics_logo.png'
+import logo from '/imaginetics_logo.png'
 
 let insp = true;
 

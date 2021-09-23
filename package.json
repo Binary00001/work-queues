@@ -20,6 +20,7 @@
   "type": "module",
   "dependencies": {
     "mssql": "^7.2.1",
-    "tedious": "^11.2.0"
+    "tedious": "^11.2.0",
+    "yarn": "^1.22.11"
   }
 }

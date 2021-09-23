@@ -39,7 +39,7 @@
     import UpdateForm from '$lib/components/UpdateForm.svelte'
     export let data
 
-    // console.log(data)
+    console.log(data)
     
     let part = {
         part_number: data[0].part_number,

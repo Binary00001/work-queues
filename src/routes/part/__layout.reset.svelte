@@ -3,7 +3,6 @@
 </script>
 
 <svelte:head>
-    <meta http-equiv="refresh" content="60" />
     <title>Imaginetics - WC Queue Lists</title>
 </svelte:head>
 
