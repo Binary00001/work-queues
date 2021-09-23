@@ -2,7 +2,8 @@
   "name": "~TODO~",
   "version": "0.0.1",
   "scripts": {
-    "dev": "svelte-kit dev --host 192.168.0.39",
+    "dev": "svelte-kit dev",
+    "start": "svelte-kit dev --host 192.168.0.39",
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",

@@ -1,9 +1,12 @@
 <script>
+
     let time = new Date(Date.now()).toLocaleString()
     console.log(`{visited: ${time}}`)
+
+ 
 </script>
 
-<main>
+<div class='main'>
     <!--  -->
 
     <!-- <h1 class="jt --debug">
@@ -20,42 +23,41 @@
           <span class="jt__text">BRITT</span>
         </span>
       </h1> -->
-
-    <!--  -->
-    <!-- <h2>!Brittany!</h2> -->
-    <!-- <h3 style="text-align: center;">Everyday in this place is heck, but you being around makes it a pleasure to be here.</h3><br />
-    <img src="https://media0.giphy.com/media/inyqrgp9o3NUA/giphy.gif" alt="Happy Bobs Burgers GIF" style="width: 500px; height: 280px;">
-    <br />
-    <p>I wasn't able to update this at the normal time due to an office full of people </p> -->
-    <h1>Bayonetta,</h1>
-    <br />
-    <p>You are an amazing person.</p>
-    <p>You are so incredibly smart and motivated. Your drive motivates people around you. <br />
-       You are strong, sometimes stronger than you should ever have to be.
-    </p>
-    <p>Fuck anyone who says a bad word about you. It just shows how insecure and threatened by you they feel when they believe they have to tear you down to make themselves look "good".
-      <br />
-    </p>
-    <p>Keep being you and the wonderful individual you are. There is no one like you and that is a good thing.
-      <br />
-      <br>
-      <br>
-      <p>Nerd ;)</p>
-
-</main>
+      <!-- <img src="https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif" alt="Dance Dancing GIF by moonbug" style="width: 500px; height: 281.25px; left: 0px; top: 0px; opacity: 0;"> -->
+    <div class="text">
+      <h1>Brittany</h1>
+      <p>Here is a little dance to start your day off some sort of way 😅</p>
+      <p>Hopefully you got all your statistics work done!</p>
+      <p>It's so awesome seeing you be such a badass. You have this amazing air about you that is crazy infectuous.</p>
+      <p>You bring out the best in the people around you.</p>
+      <p>I hope today is a better day than yesterday and you find all the happiness you deserve!</p>
+      <p></p>
+    </div>
+    </div>
 
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
-    main {
+    .main {
+        height: 100vh;
+        width: 100vw;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex;
         justify-content: center;
+        background-image: url("https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif");
+        background-repeat: no-repeat;
+        background-size: cover;
+        opacity: 0.8;
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
+
+    .text {
+      padding: 25px;
+      color: #f3f3f3;
+    }
     /*  */
-.jt {
+/* .jt {
   position: relative;
   font-size: 20vmin;
   font-family: 'Staatliches', sans-serif;
@@ -130,6 +132,6 @@
 .debug .jt__row:nth-child(odd) {
   color: white;
   background: black;
-}
+} */
     /*  */
 </style>
