@@ -63,7 +63,7 @@
     <div class='warning'>
         <h1>WARNING!</h1>
         <h2>BEFORE ADDING/MODIFYING A COMMENT MAKE SURE THE RUN # AND ITEM DO NOT CONTAIN LETTERS.<br />
-            IF THEY DO REMOVE THE LETTER, (EXAMPLE 1A => 1).
+            IF THEY DO, REMOVE THE LETTER, (EXAMPLE 1A => 1).
         </h2>
     </div>
     <UpdateForm {part} />

@@ -25,9 +25,8 @@
       </h1> -->
       <!-- <img src="https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif" alt="Dance Dancing GIF by moonbug" style="width: 500px; height: 281.25px; left: 0px; top: 0px; opacity: 0;"> -->
     <div class="text">
-      <h1>Brittany</h1>
-      <p>Here is a little dance to start your day off some sort of way 😅</p>
-      <p>Hopefully you got all your statistics work done!</p>
+      <h1>!You Beautiful Nerd!</h1>
+      <p>Here is a little dance to celebrate passing your statistics exam! 😅</p>
       <p>It's so awesome seeing you be such a badass. You have this amazing air about you that is crazy infectuous.</p>
       <p>You bring out the best in the people around you.</p>
       <p>I hope today is a better day than yesterday and you find all the happiness you deserve!</p>

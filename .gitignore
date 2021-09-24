@@ -3,4 +3,4 @@ node_modules
 /.svelte-kit
 /package
 .env
-.env.dev
+/src/lib/db.js

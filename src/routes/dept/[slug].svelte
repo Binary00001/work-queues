@@ -53,18 +53,19 @@
     <table>
         <thead>
             <th>Part Number</th>
-            <th>Run</th>
+            <th>Run</th>            
+            <th>Days in Queue</th>
             <th>Quantity</th>
             <th>Customer</th>
             <th>Priority</th>
             <th>Comments</th>
-            <th>Days in Queue</th>
         </thead>
         <tbody>
             {#each ordered as { part_number, run, qty, cust, comments, diq, po_num, item, priority}}
             <tr class:hot={priority === 5}>
                 <td><a href={`/part?po=${po_num}&line=${item}&run=${run}&part=${part_number}`} target="_blank">{part_number}</a></td>
                 <td>{run}</td>
+                <td class:stagnant={diq > 3}>{diq}</td>
                 <td>{qty}</td>
                 <td>{cust}</td>
                 <td>{priority}</td>
@@ -73,7 +74,7 @@
                 {:else}
                   <td class="comment">{comments}</td>
                 {/if}
-                <td class:stagnant={diq > 3}>{diq}</td>
+                
             </tr>
             {/each}
         </tbody>
