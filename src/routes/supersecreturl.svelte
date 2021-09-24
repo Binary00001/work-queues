@@ -25,12 +25,15 @@
       </h1> -->
       <!-- <img src="https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif" alt="Dance Dancing GIF by moonbug" style="width: 500px; height: 281.25px; left: 0px; top: 0px; opacity: 0;"> -->
     <div class="text">
-      <h1>!You Beautiful Nerd!</h1>
-      <p>Here is a little dance to celebrate passing your statistics exam! 😅</p>
-      <p>It's so awesome seeing you be such a badass. You have this amazing air about you that is crazy infectuous.</p>
-      <p>You bring out the best in the people around you.</p>
-      <p>I hope today is a better day than yesterday and you find all the happiness you deserve!</p>
+      <h1>Good Morning Brittany!</h1>
+      <p>It's FRIDAY!!!</p>
+      <p>You've made it through another week and come out on top</p>
+      <p>Have a fantastical day and even more magical weekend! </p>
+      <p>Take some time to enjoy yourself and bask in your awesomazingness</p>
       <p></p>
+    </div>
+    <div>
+      <img class='gif' src="https://media0.giphy.com/media/xThuWhoaNyNBjTGERa/giphy.gif" alt="Sassy Hair GIF" />
     </div>
     </div>
 
@@ -41,19 +44,22 @@
         height: 100vh;
         width: 100vw;
         display: flex;
-        flex-direction: column;
-        align-items: flex;
+        flex-direction: row-reverse;
+        align-items: center;
         justify-content: center;
-        background-image: url("https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif");
-        background-repeat: no-repeat;
-        background-size: cover;
-        opacity: 0.8;
+        background: linear-gradient(to right, #f32170, #ff6b08, #cf23cf, #eedd44);
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+        font-weight: 300;
+      }
 
     .text {
       padding: 25px;
       color: #f3f3f3;
+    }
+
+    .gif {
+      height: 375px;
+      width: 400px;
     }
     /*  */
 /* .jt {
