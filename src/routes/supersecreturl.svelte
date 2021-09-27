@@ -25,15 +25,18 @@
       </h1> -->
       <!-- <img src="https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif" alt="Dance Dancing GIF by moonbug" style="width: 500px; height: 281.25px; left: 0px; top: 0px; opacity: 0;"> -->
     <div class="text">
-      <h1>Good Morning Brittany!</h1>
-      <p>It's FRIDAY!!!</p>
-      <p>You've made it through another week and come out on top</p>
-      <p>Have a fantastical day and even more magical weekend! </p>
-      <p>Take some time to enjoy yourself and bask in your awesomazingness</p>
-      <p></p>
+      <h1>Happy Monday Your Awesomeness</h1>
+      <p>This week will be better than the last.</p>
+      <p>You are such a tough and resilient woman.</p>
+      <p>Your strength is admirable, no matter what happens you keep pushing forward.</p>
+      <p>You have so many amazing features, but your determination is at the top.</p>
+      <p>Soon all your hard work and sacrifices will pay off and you will be the one smiling on the other end.</p>
+      <p>Seriously, I say it a lot but, you are a certified badass. I really, really respect that about you.</p>
+      <p>Now, have a wonderful day!</p>
     </div>
     <div>
-      <img class='gif' src="https://media0.giphy.com/media/xThuWhoaNyNBjTGERa/giphy.gif" alt="Sassy Hair GIF" />
+
+      <img class='gif' src="https://media1.giphy.com/media/3o6ZsXOa89I7tQDHpu/giphy.gif" alt="Vintage Falling GIF by Bayerischer Rundfunk" style="width: 500px; height: 500px;">
     </div>
     </div>
 

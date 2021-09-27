@@ -1,14 +1,19 @@
 -- INSERT INTO dbo.AgcmTable (AGPO, AGITEM, AGPART, AGRUN, AGPMCOMMENTS, AGCPEXP) 
 -- VALUES
--- ('612000614022', 1, '294U2328-3', 21, 'BURNDOWN ETRAC(9/27)', 'N'),
+-- ('612000614022', 1, 294U2328-3', 21, 'BURNDOWN ETRAC(9/27)', 'N'),
 -- ('612000614022', 1, '294U2330-4 IMA3', 11, 'BURNDOWN ETRAC(9/27)', 'N'),
 -- ('612000615409', 1, '146U7734-86', 6, 'BURNDOWN ETRAC(9/28)', 'N'),
 
 
--- UPDATE dbo.AgcmTable SET AGPMCOMMENTS = 'BURNDOWN ETRAC(9/28)' 
--- WHERE AGPO = '612000615409'
+-- UPDATE dbo.AgcmTable SET AGPMCOMMENTS = 'BURNDOWN' 
+-- WHERE AGPO = '613000529971'
 -- AND AGITEM = 1
 -- ;
+
+-- select top 10 * from AgwoTable;
+
+-- select top 10 * from dbo.AgendaViewDIQ 
+-- where owner = (select AGWCOwner from dbo.AgwoTable where AGWC = 1600); 
 
 -- SELECT * FROM dbo.AgcmTable WHERE AGPO='613000524555';
 
