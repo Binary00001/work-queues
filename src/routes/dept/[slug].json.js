@@ -13,7 +13,7 @@ export async function get({params}) {
          FROM Esi2000Db.dbo.AgendaViewDIQ WITH (nolock)
          LEFT JOIN dbo.WC_QUEUE_ROB as table2 WITH (nolock)
          ON ([PART NUMBER] = table2.PARTNUM and RUN = table2.OPRUN)
-         WHERE OWNER = '${slug}'
+         WHERE OWNER = (SELECT AGWCOwner FROM AgwoTable WHERE AGWC = '${slug}')
          ORDER BY RowNum ASC;`)
 
 

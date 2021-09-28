@@ -25,18 +25,16 @@
       </h1> -->
       <!-- <img src="https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif" alt="Dance Dancing GIF by moonbug" style="width: 500px; height: 281.25px; left: 0px; top: 0px; opacity: 0;"> -->
     <div class="text">
-      <h1>Happy Monday Your Awesomeness</h1>
-      <p>This week will be better than the last.</p>
-      <p>You are such a tough and resilient woman.</p>
-      <p>Your strength is admirable, no matter what happens you keep pushing forward.</p>
-      <p>You have so many amazing features, but your determination is at the top.</p>
-      <p>Soon all your hard work and sacrifices will pay off and you will be the one smiling on the other end.</p>
-      <p>Seriously, I say it a lot but, you are a certified badass. I really, really respect that about you.</p>
-      <p>Now, have a wonderful day!</p>
+      <h1>Oh Hai Pretty Lady</h1>
+      <p>Good Morning!</p>
+      <p>You are going to absolutely dominate and</p>
+      <p>show this day who's boss!</p>
+      <p>You do every day, and you do it with a smile on your face...</p>
+      <p>Such a perfect smile.</p>
     </div>
     <div>
+      <img class='gif' src="https://media0.giphy.com/media/HYT1M1YCPI9KE/giphy.gif" alt="mario kart GIF" style="width: 500px; height: 408.621px;">
 
-      <img class='gif' src="https://media1.giphy.com/media/3o6ZsXOa89I7tQDHpu/giphy.gif" alt="Vintage Falling GIF by Bayerischer Rundfunk" style="width: 500px; height: 500px;">
     </div>
     </div>
 
@@ -50,19 +48,20 @@
         flex-direction: row-reverse;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(to right, #f32170, #ff6b08, #cf23cf, #eedd44);
+        background: linear-gradient(to bottom right, white, slategray, lightgrey, tomato);
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: 300;
       }
 
     .text {
       padding: 25px;
-      color: #f3f3f3;
+      color: #1f1f1f;
     }
 
     .gif {
       height: 375px;
       width: 400px;
+      box-shadow: -10px -10px rgba(0, 0, 0, .5)
     }
     /*  */
 /* .jt {

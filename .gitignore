@@ -4,3 +4,5 @@ node_modules
 /package
 .env
 /src/lib/db.js
+test.sql
+query_testing.sql
