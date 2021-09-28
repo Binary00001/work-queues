@@ -2,14 +2,14 @@ import sql from 'mssql'
 import { config } from '$lib/db'
 
 export async function post(req) {
-    let {part_number, run, po_num, item, comments, exp } = await req.body
+    let {PART_NUMBER, RUN, PO, ITEM, COMMENTS, EXPEDITE } = await req.body
     await sql.connect(config)
 
     console.log(req.body)
 
     let result = await sql.query(`
         INSERT INTO dbo.AgcmTable(AGPO, AGITEM, AGPART, AGRUN, AGPMCOMMENTS, AGCPEXP)
-        VALUES('${po_num}', '${item}', '${part_number}', '${run}', '${comments}', '${exp}')
+        VALUES('${PO}', '${ITEM}', '${PART_NUMBER}', '${RUN}', '${COMMENTS}', '${EXPEDITE}')
     `)
 
     let data = result.rowsAffected
@@ -24,15 +24,15 @@ export async function post(req) {
 }
 
 export async function put(req) {
-    let {part_number, run, po_num, item, comments} = await req.body
+    let {PART_NUMBER, RUN, PO, ITEM, COMMENTS } = await req.body
     await sql.connect(config)
 
     console.log(req.body)
 
     let result = await sql.query(`
-        UPDATE dbo.AgcmTable SET AGPMCOMMENTS = '${comments}'
-        WHERE AGPO = '${po_num}' AND AGITEM='${item}'
-        AND AGPART = '${part_number}' AND AGRUN = '${run}'
+        UPDATE dbo.AgcmTable SET AGPMCOMMENTS = '${COMMENTS}'
+        WHERE AGPO = '${PO}' AND AGITEM='${ITEM}'
+        AND AGPART = '${PART_NUMBER}' AND AGRUN = '${RUN}'
     `)
 
     let data = result.rowsAffected
@@ -47,15 +47,15 @@ export async function put(req) {
 }
 
 export async function del(req) {
-    let {part_number, run, po_num, item, comments, exp } = await req.body
+    let {PART_NUMBER, RUN, PO, ITEM, COMMENTS, EXPEDITE } = await req.body
     await sql.connect(config)
 
     console.log(req.body)
 
     let result = await sql.query(`
         DELETE FROM dbo.AgcmTable
-        WHERE AGPO = '${po_num}' AND AGITEM = '${item}' 
-        AND AGPART = '${part_number}' AND AGRUN = '${run}'
+        WHERE AGPO = '${PO}' AND AGITEM = '${ITEM}' 
+        AND AGPART = '${PART_NUMBER}' AND AGRUN = '${RUN}'
     `)
 
     let data = result.rowsAffected

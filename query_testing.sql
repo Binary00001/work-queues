@@ -1,0 +1,144 @@
+-- SET ANSI_NULLS ON
+-- GO
+-- SET QUOTED_IDENTIFIER ON
+-- GO
+
+-- ALTER VIEW dbo.QueueInfo AS
+SELECT
+--col RowNum
+ROW_NUMBER() OVER (ORDER BY ITCUSTREQ ASC, ITSO ASC, ITNUMBER ASC) AS RowNum,
+
+--col Part Number
+ISNULL(p1.PARTNUM, p2.PARTNUM) AS PART_NUMBER,
+
+--col RUN
+RUNNO AS RUN,
+
+RUNPRIORITY AS PRIORITY,
+
+--col not used?
+SalesPart.PALEVEL AS PT,
+
+--col S/D
+CASE WHEN p1.PARTNUM IS NULL THEN 'S'
+  ELSE 
+    CASE
+      WHEN RTRIM(p1.PARTNUM) = RTRIM(p2.PARTNUM) THEN 'S'
+      ELSE 'D'
+    END
+END AS 'S/D',
+
+--col COMMENTS
+(SELECT cm.AGPMCOMMENTS FROM AgcmTable AS cm 
+  WHERE RTRIM(cm.AGPO) = RTRIM(SOPO)
+  AND cm.AGITEM = ITNUMBER
+  AND cm.AGPART = (ISNULL(p1.PARTNUM, p2.PARTNUM))
+  AND cm.AGRUN = RUNNO) AS COMMENTS,
+
+CASE 
+  WHEN (ITCOMMENTS like '%customer expedite%') THEN 'Y'
+  ELSE 'N'
+END AS EXPEDITE,
+
+--col CUST REQ DATE
+CAST(ITCUSTREQ AS DATE) AS CUST_REQ_DATE,
+
+--col SO#
+(RTRIM(SOTYPE) + RTRIM(ITSO)) AS SO_NUM,
+
+--col PO
+RTRIM(SOPO) AS PO,
+
+--col ITEM
+STR(ITNUMBER) + RTRIM(ITREV) AS ITEM,
+
+--col CUSTOMER
+CASE
+  WHEN RTRIM(SOCUST) = 'BOECOM' THEN ('BOE' + SUBSTRING(SOPO,0,4))
+  ELSE SOCUST
+END AS CUSTOMER,
+
+--col QTY
+ITQTY AS PO_QTY,
+
+--col QOH
+ISNULL(p1.PAQOH, p2.PAQOH) AS QOH,
+
+--col BAL
+(ISNULL(p1.PAQOH, p2.PAQOH) - ITQTY) AS BAL,
+
+--col RUN STATUS
+RUNSTATUS AS RUN_STATUS,
+
+--col RUN QTY
+RUNQTY AS RUN_QTY,
+
+--col OWNER
+(SELECT AGWCNick FROM AgwoTable
+  WHERE AGWC = (SELECT OPCENTER FROM RnopTable
+    INNER JOIN PartTable ON OPREF = PARTREF
+    INNER JOIN RunsTable AS rt ON OPRUN = rt.RUNNO
+      AND OPNO = (SELECT TOP 1 OPNO FROM RnopTable AS ot2
+        INNER JOIN PartTable ON OPREF = PARTREF
+        INNER JOIN RunsTable as rt2 ON OPRUN = rt.RUNNO
+          AND OPREF = RUNREF
+          WHERE rt2.RUNREF = f1.RUNREF
+          AND ot2.OPRUN = f1.RUNNO
+          AND ot2.OPCOMPDATE IS NULL
+          ORDER BY OPNO ASC)
+      AND OPREF = RUNREF
+      WHERE rt.RUNREF = f1.RUNREF
+      AND OPRUN = f1.RUNNO)) AS WORK_CENTER,
+
+--col WC
+(SELECT AGWC FROM AgwoTable
+  WHERE AGWC = (SELECT OPCENTER FROM RnopTable
+    INNER JOIN PartTable ON OPREF = PARTREF
+    INNER JOIN RunsTable AS rt ON OPRUN = rt.RUNNO
+      AND OPNO = (SELECT TOP 1 OPNO FROM RnopTable AS ot2
+        INNER JOIN PartTable ON OPREF = PARTREF
+        INNER JOIN RunsTable AS rt2 ON OPRUN = rt.RUNNO
+          AND OPREF = RUNREF
+          WHERE rt2.RUNREF = f1.RUNREF
+          AND ot2.OPRUN = f1.RUNNO
+          AND ot2.OPCOMPDATE IS NULL
+          ORDER BY OPNO ASC)
+      AND OPREF = RUNREF
+      WHERE rt.RUNREF = f1.RUNREF
+      AND OPRUN = f1.RUNNO)) AS WC,
+
+--good lord that's a mess
+
+--col DAYS IN QUEUE
+(SELECT DATEDIFF(dd, (SELECT TOP 1 OPCOMPDATE FROM RnopTable 
+  WHERE OPREF = f1.RUNREF
+  AND OPRUN = f1.RUNNO
+  AND OPCOMPLETE IS NOT NULL
+  ORDER BY OPCOMPDATE DESC),
+  GETDATE())) AS DAYS_IN_QUEUE
+
+FROM dbo.RunsTable as f1 
+  INNER JOIN 
+	dbo.RnalTable on f1.RUNNO =  dbo.RnalTable.RARUN AND f1.RUNREF = dbo.RnalTable.RAREF 
+  RIGHT OUTER JOIN
+                   dbo.PartTable AS SalesPart 
+  INNER JOIN
+                   dbo.SoitTable ON SalesPart.PARTREF = dbo.SoitTable.ITPART AND SalesPart.PARTREF = dbo.SoitTable.ITPART ON dbo.RnalTable.RASO = dbo.SoitTable.ITSO AND dbo.RnalTable.RASOITEM = dbo.SoitTable.ITNUMBER AND dbo.RnalTable.RASOREV = dbo.SoitTable.ITREV 
+  LEFT OUTER JOIN
+                   dbo.MrplTable ON dbo.SoitTable.ITSO = dbo.MrplTable.MRP_SONUM AND dbo.SoitTable.ITNUMBER = dbo.MrplTable.MRP_SOITEM AND dbo.SoitTable.ITREV = dbo.MrplTable.MRP_SOREV 
+  LEFT OUTER JOIN
+                   dbo.SohdTable ON dbo.SoitTable.ITSO = dbo.SohdTable.SONUMBER AND SalesPart.PALEVEL = dbo.MrplTable.MRP_PARTLEVEL 
+  LEFT JOIN
+	 PARTTABLE as p1 on f1.Runref = p1.partref LEFT JOIN PARTTABLE as p2 ON MRP_PARTREF = p2.PARTREF 
+
+WHERE        
+	(dbo.SoitTable.ITCANCELED = 0) 
+	AND (dbo.SoitTable.ITINVOICE = 0) 
+	AND (dbo.SoitTable.ITPSSHIPPED = 0)
+	AND dbo.SohdTable.SOSALESMAN IS NOT NULL 
+	AND SalesPart.PACLASS IS NOT NULL 
+	AND SalesPart.PAPRODCODE IS NOT NULL 
+	AND (SalesPart.PALEVEL = 2 OR SalesPart.PALEVEL =1)  
+	AND ((RUNSTATUS <> 'CO' AND RUNSTATUS <> 'CA' AND RUNSTATUS <> 'CL') OR RUNSTATUS IS NULL);
+
+GO

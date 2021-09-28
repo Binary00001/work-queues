@@ -2,7 +2,7 @@
 
     export async function load({fetch}) {
 
-        const res = await fetch('http://192.168.0.39:5000/api/burndown/burndown',
+        const res = await fetch('/api/burndown',
         {
             method: 'GET',
             mode: 'cors',
@@ -41,7 +41,7 @@
                     <th>Work Center</th>
                     <th>Part Number</th>
                     <th>Run</th>
-                    <th>Customer Date</th>
+                    <!-- <th>Customer Date</th> -->
                     <th>PO#</th>
                     <th>Item</th>
                     <th>Quantity</th>
@@ -50,14 +50,18 @@
                 <tbody>
                     {#each data as part}
                     <tr>
-                        <td>{part.op_center}: {part.work_center}</td>
-                        <td>{part.part_number}</td>
-                        <td>{part.run}</td>
-                        <td>{part.ship_date}</td>
-                        <td>{part.po}</td>
-                        <td>{part.item}</td>
-                        <td>{part.qty}</td>
-                        <td>{part.diq}</td>
+                        <td>{part.WC_NAME}</td>
+                        <td>{part.PART_NUMBER}</td>
+                        <td>{part.RUN}</td>
+                        <!-- <td>{part.CUST_REQ_DATE}</td> -->
+                        <td>{part.PO}</td>
+                        <td>{part.ITEM}</td>
+                        <td>{part.RUN_QTY}</td>
+                        {#if part.DAYS_IN_QUEUE == null}
+                          <td>0</td>
+                        {:else}
+                          <td>{part.DAYS_IN_QUEUE}</td>
+                        {/if}
                     </tr>   
                     {/each}
                 </tbody>
