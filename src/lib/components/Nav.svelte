@@ -83,7 +83,7 @@ let insp = true;
         </div>
         <!-- Paint Shop -->
         <div class="dropdown">
-            <a href="/finish/pain" target='_parent' class="dropdown-btn">Building 2</a>
+            <a href="/finish/paint" target='_parent' class="dropdown-btn">Building 2</a>
             <div class="dropdown-menu">
                 <a href="/production/5225" target='_parent'>Penetrant Inspect</a>
                 <a href="/production/5010" target='_parent'>Chemline</a>

@@ -3,9 +3,12 @@
     export async function load({page, fetch}) {
         let dept = page.params.slug
 
-        const [countData, deptData] = await Promise.all(
-            [fetch(`/api/wc/${dept}`),
-            fetch(`/production/${dept}.json`)],
+        const [countData, deptData, goalData] = await Promise.all(
+            [
+                fetch(`/api/wc/${dept}`),
+                fetch(`/production/${dept}.json`),
+                fetch(`/api/stats/${dept}`)
+            ],
         {
             method: 'GET',
             mode: 'cors',
@@ -14,13 +17,14 @@
             }
         })
 
-        if (deptData.ok && countData.ok) {
+        if (deptData.ok && countData.ok && goalData.ok) {
             const deptList = await deptData.json()
             const deptCount = await countData.json()
+            const deptGoal = await goalData.json()
             // console.log(data)
             return {
                 props: { 
-                    deptCount, deptList
+                    deptCount, deptList, deptGoal
                 }
             }
         }
@@ -32,8 +36,11 @@
 <script>
     export let deptCount
     export let deptList
-    console.log(deptList)
-console.log(deptCount)
+    export let deptGoal
+
+    let goal = parseInt(deptGoal[0].daily_goal / 34)
+    // console.log(deptGoal)
+// console.log(deptCount)
 </script>
 
 <svelte:head>
@@ -48,12 +55,19 @@ console.log(deptCount)
    
     <!-- <a href={`/burndown/${dept}`}><p>Burndown list</p></a> -->
     {#if deptList.length === 0}
-        <p class='loading'>loading...</p>
+        <h1 class='loading'>No Data</h1>
     {:else}
     <h1 class="dept">
         {deptList[0].WC_NAME}
     </h1>
-    <h2>JOBS COMPLETED: {deptCount[0].completed}</h2>
+    <h2>DAILY GOAL: {goal}</h2>
+    <h2>JOBS COMPLETED: 
+        {#if deptGoal[0].completed_jobs == null}
+            0
+        {:else}
+            {deptGoal[0].completed_jobs}
+        {/if}
+    </h2>
     <div class="table">
     <table>
         <thead>
@@ -101,7 +115,42 @@ console.log(deptCount)
     }
 
     .loading {
+        font-weight: 300;
         margin: 50px;
+    }
+
+    .loading:after {
+        content: '.';
+        animation: dots 2s steps(4, end)  infinite;
+    } 
+
+    @keyframes dots { 
+        0%, 20% {
+            color: rgba(0, 0, 0, 0);
+            text-shadow: 
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0)
+            ;
+        }
+        40% {
+            color: black;
+            text-shadow: 
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0)
+            ;
+        }
+        60% {
+            text-shadow: 
+                .25em 0 0 black,
+                .5em 0 0 rgba(0, 0, 0, 0)
+            ;
+        }
+        80%, 100% {
+            text-shadow: 
+                .25em 0 0 black,
+                .5em 0 0 black
+            ;
+        }
     }
 
     .dept {

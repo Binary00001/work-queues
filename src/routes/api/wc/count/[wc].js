@@ -6,13 +6,10 @@ export async function get({params}) {
 
     await sql.connect(config)
 
-    const result = await sql.query(`SELECT COUNT(OPREF) as completed FROM dbo.RnopTable 
-    INNER JOIN RunsTable ON RUNREF = OPREF AND RUNNO = OPRUN 
-    WHERE RUNPKPURGED = 0 
-    AND OPCENTER = '${wc}'
-    AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
-
-    GROUP BY OPCENTER;`)
+    const result = await sql.query(`SELECT COUNT(OPREF) AS GOAL FROM dbo.RnopTable 
+    WHERE OPCENTER = '${wc}'
+    AND OPCOMPLETE = 0 
+    AND OPSCHEDDATE <= CAST(GETDATE() as DATETIME) + 30;`)
 
 
     let data = result.recordset

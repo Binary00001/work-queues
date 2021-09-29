@@ -1,18 +1,15 @@
 import sql from 'mssql'
 import { config } from '$lib/db'
 
-export async function get({params}) {
-    const { wc } = params
+export async function get() {
 
     await sql.connect(config)
 
-    const result = await sql.query(`SELECT COUNT(OPREF) as completed FROM dbo.RnopTable 
+    const result = await sql.query(`SELECT COUNT(OPREF) as jobs_completed, OPINSP AS employee FROM dbo.RnopTable 
     INNER JOIN RunsTable ON RUNREF = OPREF AND RUNNO = OPRUN 
     WHERE RUNPKPURGED = 0 
-    AND OPCENTER = '${wc}'
     AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
-
-    GROUP BY OPCENTER;`)
+    GROUP BY OPINSP;`)
 
 
     let data = result.recordset
@@ -24,4 +21,8 @@ export async function get({params}) {
         body: data
     }
 }
+
+
+
+
 

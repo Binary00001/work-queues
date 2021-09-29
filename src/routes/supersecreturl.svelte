@@ -25,22 +25,26 @@
       </h1> -->
       <!-- <img src="https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif" alt="Dance Dancing GIF by moonbug" style="width: 500px; height: 281.25px; left: 0px; top: 0px; opacity: 0;"> -->
     <div class="text">
-      <h1>Oh Hai Pretty Lady</h1>
-      <p>Good Morning!</p>
-      <p>You are going to absolutely dominate and</p>
-      <p>show this day who's boss!</p>
-      <p>You do every day, and you do it with a smile on your face...</p>
-      <p>Such a perfect smile.</p>
+      
+      <ul>
+        <h1>Good Morning Brittany!</h1>
+        <h3>Reasons you are amazing:</h3>
+        <li>You are incredibly intelligent</li>
+        <li>Your smile is infectious</li>
+        <li>You have an amazing laugh</li>
+        <li>You have such a strong spirit</li>
+        <li>You are absolutely stunning</li>
+        <li>You're a nerd</li>
+      </ul>
     </div>
     <div>
-      <img class='gif' src="https://media0.giphy.com/media/HYT1M1YCPI9KE/giphy.gif" alt="mario kart GIF" style="width: 500px; height: 408.621px;">
+      <!-- <img class='gif' src="https://media0.giphy.com/media/HYT1M1YCPI9KE/giphy.gif" alt="mario kart GIF" style="width: 500px; height: 408.621px;"> -->
 
     </div>
     </div>
 
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
     .main {
         height: 100vh;
         width: 100vw;
@@ -53,7 +57,16 @@
         font-weight: 300;
       }
 
+      ul {
+        text-align: center;
+      }
+      ul li {
+        list-style-type: none;
+        margin: none;
+      }
+
     .text {
+      text-align: center;
       padding: 25px;
       color: #1f1f1f;
     }
