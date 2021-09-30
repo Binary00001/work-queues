@@ -1,8 +1,10 @@
 <script context="module">
 
-    export async function load({fetch}) {
+    export async function load({page, fetch}) {
 
-        const res = await fetch('/api/burndown',
+        const dept = page.params.slug
+
+        const res = await fetch(`/production/burndown/${dept}.json`,
         {
             method: 'GET',
             mode: 'cors',
@@ -15,7 +17,7 @@
             const data = await res.json()
             // console.log(data)
             return {
-                props: {data}
+                props: {data, dept}
             }
         }
 
@@ -28,52 +30,49 @@
 </script>
 
 <script>
-    // import Dept from '$lib/Dept.svelte'
-    export let data = [];
-    // console.log(data)
+    export let data = null;
+    export let dept
+    console.log(data)
 </script>
 
 <main>
-        <div class="table">
-            <h1 class="dept">BURNDOWN LIST</h1>
-            <table>
-                <thead>
-                    <th>Work Center</th>
-                    <th>Part Number</th>
-                    <th>Run</th>
-                    <!-- <th>Customer Date</th> -->
-                    <th>PO#</th>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>DiQ</th>
-                    <th>Comments</th>
-                </thead>
-                <tbody>
-                    {#each data as part}
-                    <tr>
-                        <td>{part.WC_NAME}</td>
+    <h1 class="header">Burndown List</h1>
+    {#if data.length == 0}
+        <h2>No Burndown Items</h2>
+        <a href={`/production/${dept}`}><h3>Return to list</h3></a>
+    {:else}
+    <a class="header" href={`/production/${dept}`} target='_parent'>Return to List</a>
+    <div class="table">
+        <table>
+            <thead>
+                <th>Part Number</th>
+                <th>Run</th>
+                <th>Quantity</th>
+                <th>Customer</th>
+                <th>Priority</th>
+                <th>Comments</th>
+            </thead>
+            <tbody>
+                {#each data as part}
+                    <tr class:hot={part.PRIORITY === 5}>
                         <td>{part.PART_NUMBER}</td>
                         <td>{part.RUN}</td>
-                        <!-- <td>{part.CUST_REQ_DATE}</td> -->
-                        <td>{part.PO}</td>
-                        <td>{part.ITEM}</td>
                         <td>{part.RUN_QTY}</td>
-                        {#if part.DAYS_IN_QUEUE == null}
-                          <td>0</td>
-                        {:else}
-                          <td>{part.DAYS_IN_QUEUE}</td>
-                        {/if}
+                        <td>{part.CUSTOMER}</td>
+                        <td>{part.PRIORITY}</td>
                         <td>{part.COMMENTS}</td>
-                    </tr>   
-                    {/each}
-                </tbody>
-            </table>
-        </div>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    {/if}
 
 </main>
 
 <style>
-     main {
+
+    main {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -82,10 +81,10 @@
         font-weight: 200;
     }
 
-    .dept {
+    .header {
         text-transform: uppercase;
         font-weight: 100;
-        text-align: center;
+        margin-top: 10px;
     }
 
     table, th, td {
@@ -103,7 +102,6 @@
     }
 
     .table {
-        margin: 10px;
         width: 90%;
     }
 
@@ -112,6 +110,18 @@
         width: 100%;
     }
 
-    
+    a {
+        text-decoration: none;
+        color: black;
+       
+    }
+
+    .hot {
+        background-color: yellow;
+    }
+
+    h2 {
+        font-weight: 300;
+    }
 
 </style>

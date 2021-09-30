@@ -24,7 +24,7 @@
             // console.log(data)
             return {
                 props: { 
-                    deptCount, deptList, deptGoal
+                    deptCount, deptList, deptGoal, dept
                 }
             }
         }
@@ -37,6 +37,7 @@
     export let deptCount
     export let deptList
     export let deptGoal
+    export let dept
 
     let goal = parseInt(deptGoal[0].daily_goal / 34)
     // console.log(deptGoal)
@@ -60,6 +61,7 @@
     <h1 class="dept">
         {deptList[0].WC_NAME}
     </h1>
+    
     <h2>DAILY GOAL: {goal}</h2>
     <h2>JOBS COMPLETED: 
         {#if deptGoal[0].completed_jobs == null}
@@ -68,6 +70,8 @@
             {deptGoal[0].completed_jobs}
         {/if}
     </h2>
+    <a href={`/production/burndown/${dept}`} class='burndown-btn'>BURNDOWN</a>
+
     <div class="table">
     <table>
         <thead>
@@ -203,6 +207,13 @@
     .stagnant {
         color: red;
         font-weight: bold;
+    }
+
+    .burndown-btn {
+        color: #f4f4f4;
+        background-color: slategray;
+        padding: 10px;
+        border-radius: 15px;
     }
 
 </style>

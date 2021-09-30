@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-    <title>Imaginetics - WC Queue Lists</title>
+    <title>Employee Stats</title>
 </svelte:head>
 
 <Nav />
