@@ -6,16 +6,14 @@ export async function get({params}) {
 
     await sql.connect(config)
 
-    const result = await sql.query(`
-    SELECT 
-     (SELECT COUNT(OPREF) FROM dbo.RnopTable 
-        INNER JOIN RunsTable ON RUNREF = OPREF 
-        AND RUNNO = OPRUN 
-        WHERE RUNPKPURGED = 0 
-        AND RTRIM(OPINSP) = '${insp}'
-        AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
-        GROUP BY OPCENTER) AS completed_jobs 
-      ;`)
+    const result = await sql.query(
+    `SELECT COUNT(OPREF) as jobs_completed, OPINSP AS employee FROM dbo.RnopTable 
+    INNER JOIN RunsTable ON RUNREF = OPREF AND RUNNO = OPRUN 
+    WHERE RUNPKPURGED = 0 
+    AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
+    AND OPCENTER = '${insp}'
+    GROUP BY OPINSP;`
+      )
 
 
     

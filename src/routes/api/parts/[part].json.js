@@ -10,14 +10,15 @@ export async function get({params}) {
 
     let request = new sql.Request()
 
-    const result = await request.query(`SELECT * FROM dbo.AgendaViewDIQ WHERE [PART NUMBER] = '${part}'`)
+    const result = await request.query(`SELECT RTRIM(PART_NUMBER) AS PART_NUMBER, RUN, PRIORITY, COMMENTS, CUST_REQ_DATE, PO, LTRIM(ITEM) AS ITEM, CUSTOMER, PO_QTY, RUN_QTY, RTRIM(WORK_CENTER) AS WORK_CENTER, RTRIM(WC) AS WC, DAYS_IN_QUEUE 
+        FROM dbo.QueueInfo WHERE RTRIM(PART_NUMBER) = '${part}'`)
 
-    let data = result.recordset
+    let parts = result.recordset
 
     return {
         headers: {
             'content-type': 'application/json'
         },
-        body: data
+        body: parts
     }
 }

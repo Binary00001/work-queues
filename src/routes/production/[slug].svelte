@@ -3,9 +3,8 @@
     export async function load({page, fetch}) {
         let dept = page.params.slug
 
-        const [countData, deptData, goalData] = await Promise.all(
+        const [deptData, goalData] = await Promise.all(
             [
-                fetch(`/api/wc/${dept}`),
                 fetch(`/production/${dept}.json`),
                 fetch(`/api/stats/${dept}`)
             ],
@@ -17,14 +16,12 @@
             }
         })
 
-        if (deptData.ok && countData.ok && goalData.ok) {
+        if (deptData.ok && goalData.ok) {
             const deptList = await deptData.json()
-            const deptCount = await countData.json()
             const deptGoal = await goalData.json()
-            // console.log(data)
             return {
                 props: { 
-                    deptCount, deptList, deptGoal, dept
+                    deptList, deptGoal, dept
                 }
             }
         }
@@ -34,14 +31,30 @@
 </script>
 
 <script>
-    export let deptCount
+    import { onDestroy, onMount } from "svelte";
+
+
     export let deptList
     export let deptGoal
     export let dept
+    let myInterval
+    let count = 0
 
     let goal = parseInt(deptGoal[0].daily_goal / 34)
-    // console.log(deptGoal)
-// console.log(deptCount)
+
+    onMount(() => {
+        myInterval = setInterval(() => {
+            location.reload()
+        }, 60000)
+    })
+
+    onDestroy(() => {
+        count = 0
+        clearInterval(myInterval)
+    })
+
+
+
 </script>
 
 <svelte:head>
@@ -61,19 +74,42 @@
     <h1 class="dept">
         {deptList[0].WC_NAME}
     </h1>
+    <div class="daily">
+        <table>
+            <thead>
+                <th>DAILY GOAL</th>
+                <th>JOBS COMPLETED</th>
+                <th>PARTS COMPLETED</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{goal}</td>
+                    <td>
+                        {#if deptGoal[0].completed_jobs == null}
+                            0
+                        {:else}
+                            {deptGoal[0].completed_jobs}
+                        {/if}
+                    </td>
+                    <td>{deptGoal[0].daily_parts}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <h2>DAILY GOAL: {goal} - 
+            JOBS COMPLETED: 
+            {#if deptGoal[0].completed_jobs == null}
+                0 -
+            {:else}
+                {deptGoal[0].completed_jobs} -
+            {/if}
+            PARTS COMPLETED:  {deptGoal[0].daily_parts}
+        </h2> -->
+    </div>
     
-    <h2>DAILY GOAL: {goal}</h2>
-    <h2>JOBS COMPLETED: 
-        {#if deptGoal[0].completed_jobs == null}
-            0
-        {:else}
-            {deptGoal[0].completed_jobs}
-        {/if}
-    </h2>
-    <a href={`/production/burndown/${dept}`} class='burndown-btn'>BURNDOWN</a>
+    <a href={`/production/burndown/${dept}`} class='burndown-link'>BURNDOWN</a>
 
     <div class="table">
-    <table>
+    <table class='parts'>
         <thead>
             <th>Part Number</th>
             <th>Run</th>            
@@ -177,7 +213,7 @@
         background-color: skyblue;
     }
 
-    tr:hover {
+    .table tr:hover {
         background-color: yellow;
     }
 
@@ -209,11 +245,19 @@
         font-weight: bold;
     }
 
-    .burndown-btn {
-        color: #f4f4f4;
-        background-color: slategray;
-        padding: 10px;
-        border-radius: 15px;
+    .daily thead{
+        padding: 0;
+        margin: 0;
+        background-color: rgba(112, 128, 144, .5);
+    }
+
+    .daily thead, .daily th, .daily td { 
+        border: none;
+    }
+
+    .burndown-link {
+        color: #1f1f1f;
+        font-size: 1.5em;
     }
 
 </style>

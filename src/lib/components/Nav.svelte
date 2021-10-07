@@ -1,5 +1,5 @@
 <script>
-import { page } from "$app/stores";
+import Search from '$lib/components/Search.svelte'
 import logo from '/imaginetics_logo.png'
 
 let insp = true;
@@ -7,7 +7,11 @@ let insp = true;
 </script>
 
 <div class='header'>
-    <h1><a href='/'><img src={logo} alt="imaginetics logo" style="background-color: slategrey;"></a></h1>
+    <div class="nav-top">
+        <h1><a href='/' target='_parent'><img src={logo} alt="imaginetics logo" style="background-color: slategrey;" ></a></h1>
+        <Search />
+    </div>
+    
     <div class='nav-links'>
        <!-- let's make a dropdown to de-clutter this clusterfuck -->
        <div>
@@ -42,6 +46,7 @@ let insp = true;
                 <a href="/production/1200" target="_parent">Notcher</a>
                 <a href="/production/1400" target="_parent">Router</a>
                 <a href="/production/1600" target="_parent">Deburr</a>
+                <a href="/production/1700" target="_parent">Brake Press</a>
                 <a href="/production/5600" target="_parent">Abrasive Blast</a>
                 <a href="/production/1800" target="_parent">Straightening</a>
             </div>
@@ -105,6 +110,7 @@ let insp = true;
 
     h1 {
         font-weight: 100;
+        flex: 1;
     }
 
     .header {
@@ -113,6 +119,12 @@ let insp = true;
         border-bottom: .5px solid black;
         background: slategray;
         padding: 10px;
+    }
+
+    .nav-top {
+        display: flex;
+        flex-direction: row;
+        /* justify-content: space-around; */
     }
 
     .nav-links {

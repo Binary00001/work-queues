@@ -8,18 +8,22 @@ export async function get({params}) {
 
     const result = await sql.query(`
     SELECT 
-    (SELECT COUNT(OPREF) FROM RnopTable 
-       INNER JOIN RunsTable ON RUNREF = OPREF 
-       AND RUNNO = OPRUN 
-       WHERE RUNPKPURGED = 0 
-       AND OPCENTER = '${wc}'
-       AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
-       GROUP BY OPCENTER) AS completed_jobs, 
-     (SELECT COUNT(OPREF) FROM RnopTable 
-       WHERE OPCENTER = '${wc}'
-       AND OPCOMPLETE = 0 
-       AND OPSCHEDDATE <= CAST(GETDATE() as DATETIME) + 30
-       GROUP BY OPCENTER) AS daily_goal;`)
+      (SELECT COUNT(OPREF) FROM RnopTable 
+        INNER JOIN RunsTable ON RUNREF = OPREF 
+        AND RUNNO = OPRUN 
+        WHERE RUNPKPURGED = 0 
+        AND OPCENTER = '${wc}'
+        AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
+        GROUP BY OPCENTER) AS completed_jobs, 
+      (SELECT COUNT(OPREF) FROM RnopTable 
+        WHERE OPCENTER = '${wc}'
+        AND OPCOMPLETE = 0 
+        AND OPSCHEDDATE <= CAST(GETDATE() as DATETIME) + 30
+        GROUP BY OPCENTER) AS daily_goal, 
+      SUM(OPACCEPT) as daily_parts
+      
+      FROM RnopTable 
+      WHERE OPCENTER = '${wc}' AND OPCOMPDATE >= CAST(GETDATE() AS DATE);`)
 
 
     let data = result.recordset

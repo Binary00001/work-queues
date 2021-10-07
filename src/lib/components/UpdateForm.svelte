@@ -32,61 +32,6 @@
         }
     } 
 
-    function handlePost() {
-        try {
-        fetch(url, {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(mutated)
-            })
-        } catch (err) {
-            alert(`error: ${err.message}`)
-            throw err
-        } finally {
-            submit = false
-            add = false
-            alert('Comment added')
-        }
-    }
-
-    function handleDel() {
-        try {
-            mutated.comments = null
-            fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(mutated)
-            })
-        } catch (err) {
-            alert(`error: ${err.message}`)
-            throw err
-        } finally {
-            add = true
-            // console.log('deleted')
-            alert('Comment Deleted')
-        }
-    }
-
-    function handlePut() {
-        try {
-            fetch('/api/comments', {
-                method: 'PUT',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(mutated)
-            })
-        } catch (err) {
-            alert(`Error: ${err.message}`)
-            throw err
-        } finally {
-            alert('Comment Updated')
-        }
-    }
 </script>
 
 <form type="submit" class="new_comment" method="post" on:submit|preventDefault={() => handleSubmit('POST')}>

@@ -30,6 +30,19 @@
 <script>
     // import Dept from '$lib/Dept.svelte'
     export let data = [];
+    import { onDestroy, onMount } from 'svelte';
+
+    let reloadInterval
+
+    onMount(() => {
+        reloadInterval = setInterval(() => {
+            location.reload()
+        }, 60000) 
+    }) 
+
+    onDestroy(() => {
+        clearInterval(reloadInterval)
+    })
     // console.log(data)
 </script>
 

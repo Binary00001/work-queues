@@ -1,47 +1,68 @@
 <script>
 
+  import { onMount, onDestroy } from 'svelte'
+  import { fly } from 'svelte/transition'
+
     let time = new Date(Date.now()).toLocaleString()
     console.log(`{visited: ${time}}`)
 
- 
+   
+
+
+    let mounted = false
+    let view = 'choice'
+
+    const chooseView = (choice) => {
+      view = choice
+      console.log(choice)
+    }
+
+  onMount(() => {
+    mounted = true
+  })
+    
 </script>
 
-<div class='main'>
-    <!--  -->
 
-    <!-- <h1 class="jt --debug">
-        <span class="jt__row">
-          <span class="jt__text">BRITT</span>
-        </span>
-        <span class="jt__row jt__row--sibling" aria-hidden="true">
-          <span class="jt__text">BRITT</span>
-        </span>
-        <span class="jt__row jt__row--sibling" aria-hidden="true">
-          <span class="jt__text">BRITT</span>
-        </span>
-        <span class="jt__row jt__row--sibling" aria-hidden="true">
-          <span class="jt__text">BRITT</span>
-        </span>
-      </h1> -->
-      <!-- <img src="https://media2.giphy.com/media/X74dtGBjumUDtBuuF1/giphy.gif" alt="Dance Dancing GIF by moonbug" style="width: 500px; height: 281.25px; left: 0px; top: 0px; opacity: 0;"> -->
-    <div class="text">
-      
-      <ul>
-        <h1>Good Morning Brittany!</h1>
-        <h3>Reasons you are amazing:</h3>
-        <li>You are incredibly intelligent</li>
-        <li>Your smile is infectious</li>
-        <li>You have an amazing laugh</li>
-        <li>You have such a strong spirit</li>
-        <li>You are absolutely stunning</li>
-        <li>You're a nerd</li>
-      </ul>
+{#if mounted}
+  <div class="main">
+    {#if view == 'choice'}
+      <div class="choice" in:fly={{x: -200, duration: 1000}}>
+        <h4>Dislcaimer: Your choice</h4>
+        <div class="btn-container">
+          <button on:click={() => chooseView('accept')}>Accept</button>
+          <button on:click={() => chooseView('decline')}>Decline</button>
+        </div>
+      </div>
+    {:else if view == 'decline'}
+    <div style="flex-direction: column; text-align: center;"
+      in:fly={{x: -200, duration: 1000}}
+      >
+      <img src="https://media0.giphy.com/media/LrmU6jXIjwziE/giphy.gif" alt="rick roll GIF" style="width: 500px; height: 375px;">
+      <h4>Have A Good Day Brittany</h4>
     </div>
-    <div>
+    {:else if view == 'accept'}
+      <div class="text"
+        in:fly={{x: -200, duration: 1000}}
+        >
+        <h3>Good Fucking Morning!</h3>
+        <p>If you are reading this I gave you the option... :)</p>
+        <p>I was conflicted about whether or not to write another one, but I gave you an out ahead of time...</p>
+        <p>Thank you.</p>
+        <p>Thank you for being the one positive thing about coming to work.</p>
+        <p>Thank you for keeping the negativity from becoming overwhelming.</p>
+        <p>Thank you for sharing your smile and laugh and that complexity in your eyes.</p>
+        <p>Thank you for showing your strength in not backing down to the assholes and instead showing up and proving yourself every fucking day.</p>
+        <p>Thank you for making me smile</p>
+        <p>Thank you for being you.</p>
+        <p>Have another wonderful day, Brittany.</p>
+      </div>    
+    {/if}
+
+  </div>
+{/if}
       <!-- <img class='gif' src="https://media0.giphy.com/media/HYT1M1YCPI9KE/giphy.gif" alt="mario kart GIF" style="width: 500px; height: 408.621px;"> -->
 
-    </div>
-    </div>
 
 
 <style>
@@ -55,6 +76,13 @@
         background: linear-gradient(to bottom right, white, slategray, lightgrey, tomato);
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: 300;
+      }
+
+      .btn-container {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
       }
 
       ul {
@@ -76,82 +104,5 @@
       width: 400px;
       box-shadow: -10px -10px rgba(0, 0, 0, .5)
     }
-    /*  */
-/* .jt {
-  position: relative;
-  font-size: 20vmin;
-  font-family: 'Staatliches', sans-serif;
-  text-transform: uppercase;
-  font-display: swap;
-  text-shadow: 0 0 10px tomato;
-}
-.jt__row {
-  display: block;
-}
-.jt__row:nth-child(1) {
-  clip-path: polygon(-10% 75%, 110% 75%, 110% 110%, -10% 110%);
-}
-.jt__row:nth-child(2) {
-  clip-path: polygon(-10% 50%, 110% 50%, 110% 75.3%, -10% 75.3%);
-}
-.jt__row:nth-child(3) {
-  clip-path: polygon(-10% 25%, 110% 25%, 110% 50.3%, -10% 50.3%);
-}
-.jt__row:nth-child(4) {
-  clip-path: polygon(-10% 0%, 110% 0%, 110% 25.3%, -10% 25.3%);
-}
-.jt__row.jt__row--sibling {
-  position: absolute;
-  top: 0;
-  left: 0;
-  user-select: none;
-  witdh:800px;
-}
-.jt__text {
-    color: tomato;
-  display: block;
-  transform-origin: bottom left;
-  animation: moveIn 2s 0s cubic-bezier(.36,0,.06,1) alternate infinite ;
-}
-.jt__row:nth-child(1) .jt__text {
-  transform: translateY(-0.1em);
-}
-.jt__row:nth-child(2) .jt__text {
-  transform: translateY(-0.3em) scaleY(1.1);
-}
-.jt__row:nth-child(3) .jt__text {
-  transform: translateY(-0.5em) scaleY(1.2) ;
-}
-.jt__row:nth-child(4) .jt__text {
-  transform: translateY(-0.7em) scaleY(1.3) ;
-}
-.jt__row:nth-child(5) .jt__text {
-  transform: translateY(-0.9em) scaleY(1.4) ;
-}
-.jt__row:nth-child(6) .jt__text {
-  transform: translateY(-1.1em) scaleY(1.5) ;
-}
-@keyframes moveIn {
-  50%, 100% { 
-    transform: translateY(0em)
-  }
-  0%   { 
-  opacity: 0; 
-  filter: blur(10px);
-  
-  }
-  100% { 
-  opacity: 1; 
-  filter: blur(0px);
-  }
-}
-.debug .jt__row:nth-child(even) {
-  color: black;
-  background: white;
-}
-.debug .jt__row:nth-child(odd) {
-  color: white;
-  background: black;
-} */
-    /*  */
+   
 </style>
