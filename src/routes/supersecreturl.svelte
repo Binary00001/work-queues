@@ -6,11 +6,18 @@
     let time = new Date(Date.now()).toLocaleString()
     console.log(`{visited: ${time}}`)
 
+    //temp future content
+    let first = [
+      "Good morning adventurer.",
+      "I see you're finally awake",
+      "You have been asleep for quite some time."
+    ]
+
    
 
 
     let mounted = false
-    let view = 'choice'
+    let spoiler = true
 
     const chooseView = (choice) => {
       view = choice
@@ -26,39 +33,23 @@
 
 {#if mounted}
   <div class="main">
-    {#if view == 'choice'}
-      <div class="choice" in:fly={{x: -200, duration: 1000}}>
-        <h4>Dislcaimer: Your choice</h4>
-        <div class="btn-container">
-          <button on:click={() => chooseView('accept')}>Accept</button>
-          <button on:click={() => chooseView('decline')}>Decline</button>
-        </div>
-      </div>
-    {:else if view == 'decline'}
-    <div style="flex-direction: column; text-align: center;"
-      in:fly={{x: -200, duration: 1000}}
-      >
-      <img src="https://media0.giphy.com/media/LrmU6jXIjwziE/giphy.gif" alt="rick roll GIF" style="width: 500px; height: 375px;">
-      <h4>Have A Good Day Brittany</h4>
-    </div>
-    {:else if view == 'accept'}
-      <div class="text"
-        in:fly={{x: -200, duration: 1000}}
-        >
-        <h3>Good Fucking Morning!</h3>
-        <p>If you are reading this I gave you the option... :)</p>
-        <p>I was conflicted about whether or not to write another one, but I gave you an out ahead of time...</p>
-        <p>Thank you.</p>
-        <p>Thank you for being the one positive thing about coming to work.</p>
-        <p>Thank you for keeping the negativity from becoming overwhelming.</p>
-        <p>Thank you for sharing your smile and laugh and that complexity in your eyes.</p>
-        <p>Thank you for showing your strength in not backing down to the assholes and instead showing up and proving yourself every fucking day.</p>
-        <p>Thank you for making me smile</p>
-        <p>Thank you for being you.</p>
-        <p>Have another wonderful day, Brittany.</p>
-      </div>    
+    {#if spoiler}
+      <h2>It's fucking Friday</h2>
+      <button on:click={()=> spoiler = false}>Spoiler</button>
+    {:else}
+    <p>You have made another week enjoyable.</p>
+    <p>It's almost time for you to enjoy yourself and forget about this place for a minute.</p>
+    <p>You do so much and go so far above what any normal person does, it's crazy.</p>
+    <p>The way you are working to get through school, take care of your kids and work a full time job...</p>
+    <p>You are a superhero. </p>
+    <p>So many sacrifices you make and all the selfless choices to take care of everything is amazing.</p>
+    <p>You are just a straight up badass. And a hot one at that.</p>
+    <p>You are the real deal, the full package, the deluxe edition with the lifesize statue and signed poster.</p>
+    <p>And my analogies suck.</p>
+    <p>Enjoy your day and hopefully it is as amazing for you as you are yourself.</p>
+    <img src="https://media2.giphy.com/media/JdCz7YXOZAURq/giphy.gif" alt="Party Band GIF" style="width: 500px; height: 281.25px;">
+    <p>P.S. If i don't come around as much it is only because I don't want to keep you from working/get you in trouble.</p>
     {/if}
-
   </div>
 {/if}
       <!-- <img class='gif' src="https://media0.giphy.com/media/HYT1M1YCPI9KE/giphy.gif" alt="mario kart GIF" style="width: 500px; height: 408.621px;"> -->
@@ -70,7 +61,7 @@
         height: 100vh;
         width: 100vw;
         display: flex;
-        flex-direction: row-reverse;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         background: linear-gradient(to bottom right, white, slategray, lightgrey, tomato);

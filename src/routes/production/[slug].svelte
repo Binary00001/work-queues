@@ -3,10 +3,11 @@
     export async function load({page, fetch}) {
         let dept = page.params.slug
 
-        const [deptData, goalData] = await Promise.all(
+        const [deptData, goalData, burndownData] = await Promise.all(
             [
                 fetch(`/production/${dept}.json`),
-                fetch(`/api/stats/${dept}`)
+                fetch(`/api/stats/${dept}`),
+                fetch(`/production/burndown/${dept}.json`)
             ],
         {
             method: 'GET',
@@ -16,12 +17,16 @@
             }
         })
 
-        if (deptData.ok && goalData.ok) {
+        if (deptData.ok && goalData.ok && burndownData.ok) {
             const deptList = await deptData.json()
             const deptGoal = await goalData.json()
+            const burndownList = await burndownData.json()
             return {
                 props: { 
-                    deptList, deptGoal, dept
+                    dept,
+                    deptList, 
+                    deptGoal, 
+                    burndownList
                 }
             }
         }
@@ -33,10 +38,10 @@
 <script>
     import { onDestroy, onMount } from "svelte";
 
-
+    export let dept
     export let deptList
     export let deptGoal
-    export let dept
+    export let burndownList
     let myInterval
     let count = 0
 
@@ -69,7 +74,7 @@
    
     <!-- <a href={`/burndown/${dept}`}><p>Burndown list</p></a> -->
     {#if deptList.length === 0}
-        <h1 class='loading'>No Data</h1>
+        <h1 class='loading'>No Jobs In Queue</h1>
     {:else}
     <h1 class="dept">
         {deptList[0].WC_NAME}

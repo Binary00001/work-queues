@@ -32,7 +32,7 @@
 <script>
     export let data = null;
     export let dept
-    console.log(data)
+    // console.log(data)
 </script>
 
 <main>

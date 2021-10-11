@@ -11,6 +11,7 @@
                 <!-- <th>Work Center</th> -->
                 <th>Part Number</th>
                 <th>Run</th>
+                <!-- <th>Days In Queue</th> -->
                 <th>Quantity</th>
                 <th>Customer</th>
                 <th>Priority</th>
@@ -22,6 +23,7 @@
                         <!-- <td>{part.work_center}</td> -->
                         <td><a href={`/part?po=${po_num}&line=${item}&run=${run}&part=${part_number}`} target="_blank">{part_number}</a></td>
                         <td>{run}</td>
+                        <!-- <td>{}</td> -->
                         <td>{qty}</td>
                         <td>{cust}</td>
                         <td>{priority}</td>

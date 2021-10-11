@@ -2,11 +2,12 @@
      export async function load({page, fetch}) {
         let dept = page.params.slug
 
-        const [deptData, goalData, employeeData] = await Promise.all(
+        const [deptData, goalData, employeeData, burndownData] = await Promise.all(
             [
                 fetch(`/production/${dept}.json`),
                 fetch(`/api/stats/${dept}`),
-                fetch(`/api/asdf/${dept}`)
+                fetch(`/api/asdf/${dept}`),
+                fetch(`/production/burndown/${dept}.json`)
             ],
         {
             method: 'GET',
@@ -16,13 +17,14 @@
             }
         })
 
-        if (deptData.ok && goalData.ok && employeeData.ok) {
+        if (deptData.ok && goalData.ok && employeeData.ok && burndownData.ok) {
             const deptList = await deptData.json()
             const deptGoal = await goalData.json()
             const employeeList = await employeeData.json()
+            const burndown = await burndownData.json()
             return {
                 props: { 
-                    deptList, deptGoal, dept, employeeList
+                    deptList, deptGoal, dept, employeeList, burndown
                 }
             }
         }
@@ -33,10 +35,11 @@
 
 <script>
     import { onMount, onDestroy} from 'svelte'
-    export let dept
     export let deptList
     export let deptGoal
     export let employeeList
+    export let burndown
+
 
     let goal = parseInt(deptGoal[0].daily_goal / 34)
     let date = new Date(Date.now()).toDateString()
@@ -55,12 +58,15 @@
 </script>
 
 <div class='grid-container'>
-    <!-- <h1>{deptList[0].WC_NAME}</h1> -->
+    {#if deptList.length > 0}
+        <h1>{deptList[0].WC_NAME}</h1>
+    {/if}
     <table class='goals-table'>
         <thead>
             <th>DAILY GOAL</th>
             <th>TOTAL COMPLETED JOBS</th>
             <th>TOTAL COMPLETED PARTS</th>
+            <!-- th NEGATIVE JOBS FOR THE WEEK PER PAT -->
         </thead>
         <tbody>
             <tr>
@@ -95,7 +101,27 @@
                 </tbody>
             </table>
         <!-- {/if} -->
+
+        <!-- BURNDOWN DATA -->
+        {#if burndown.length > 0}
+            <h4>BURNDOWN JOBS</h4>
+            <table>
+                <thead>
+                    <th>PART NUMBER</th>
+                    <th>RUN</th>
+                </thead>
+                <tbody>
+                    {#each burndown as {PART_NUMBER, RUN}}
+                    <tr>
+                        <td>{PART_NUMBER}</td>
+                        <td>{RUN}</td>
+                    </tr>
+                    {/each}
+                </tbody>
+            </table>
+        {/if}
         </div>
+     
 
         <!-- <a href={`/production/burndown/${dept}`} class='burndown-link'>BURNDOWN</a> -->
         {#if deptList.length == 0}
@@ -114,7 +140,7 @@
             </thead>
             <tbody>
                 {#each deptList as { PART_NUMBER, RUN, RUN_QTY, CUSTOMER, COMMENTS, DAYS_IN_QUEUE, PO, ITEM, PRIORITY}}
-                <tr class:hot={PRIORITY <= 5}>
+                <tr class:hot={PRIORITY == 5} class:p4={PRIORITY == 4}>
                     <td><a href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`} target="_blank">{PART_NUMBER}</a></td>
                     <td>{RUN}</td>
                     <td class:stagnant={DAYS_IN_QUEUE > 3}>{DAYS_IN_QUEUE}</td>
@@ -169,6 +195,12 @@
         background-color: lightgray;
     }
 
+    .sidebar table {
+        margin-bottom: 15px;
+        width: 100%;
+        text-align: center;
+    }
+
     .parts-table {
         display: grid;
         background-color: white;
@@ -195,6 +227,10 @@
 
     .hot {
         background-color: lightgoldenrodyellow;
+    }
+
+    .p4 {
+        background-color: yellowgreen;
     }
 
     .stagnant {

@@ -1,6 +1,13 @@
 <script>
     export let part
-    let mutated = part
+
+    let mutated = {
+        part_number: part.part_number,
+        run: String(part.run).replace(/\D/g, ''),
+        po_num: part.po_num,
+        item: String(part.item).replace(/\D/g, ''),
+        comments: part.comments
+    }
     let add = !part.comments
 
     let submit = false;
