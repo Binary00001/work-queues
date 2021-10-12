@@ -42,6 +42,7 @@
     export let primerBD
     export let topCoatParts
     export let topCoatBD
+    
 
     let burndown = [...primerBD, ...topCoatBD]
     // console.log(burndown)
@@ -100,6 +101,8 @@
 
 <style>
     :root {
+        margin: 0;
+        padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
@@ -131,6 +134,7 @@
     .card-view {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: space-evenly;
+        align-items: flex-start;
     }
 </style>

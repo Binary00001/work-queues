@@ -51,6 +51,9 @@
     let myInterval
     let dates = chartStats.map(day => new Date(day.DAY).toLocaleDateString())
     let dailyParts = chartStats.map(parts => parts.DAILY_JOBS)
+    //do something with this to get the goal line
+    // let dailyGoal = deptGoal.map(i => i.daily_goal)
+    // let lineData = [...dailyParts, ...dailyGoal]
 
     let goal = parseInt(deptGoal[0].daily_goal / 34)
 
@@ -64,7 +67,7 @@
         clearInterval(myInterval)
     })
 
-    console.log(chartStats)
+    // console.log(lineData)
 
 </script>
 

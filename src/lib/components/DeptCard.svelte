@@ -58,12 +58,8 @@
     }
 
     table {
-        width: 90%;
-    }
-
-    table {
-        margin-top: 10px;
-        width: 100%;
+        width: 95%;
+        margin: 10px;
     }
     /*  */
 

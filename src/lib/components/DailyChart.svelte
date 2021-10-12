@@ -26,13 +26,18 @@
                 pointRadius: 1,
                 pointHitRadius: 10,
                 data
+            }, 
+            {
+                label: '',
+                fill: false,
+                borderColor: "rgba(0, 0, 0, 0)",
+                data: [0, 80]
             }
         ]
     }
 </script>
-
-    <Line data={dataLine} options={{ responsive: true }} />
+        <Line data={dataLine} options={{ responsive: true }} />
 
 <style>
-    
+
 </style>
