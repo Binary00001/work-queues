@@ -3,11 +3,12 @@
     export async function load({page, fetch}) {
         let dept = page.params.slug
 
-        const [deptData, goalData, burndownData] = await Promise.all(
+        const [deptData, goalData, burndownData, chartData] = await Promise.all(
             [
                 fetch(`/production/${dept}.json`),
                 fetch(`/api/stats/${dept}`),
-                fetch(`/production/burndown/${dept}.json`)
+                fetch(`/production/burndown/${dept}.json`),
+                fetch(`/api/wc/stats/linedata/${dept}`)
             ],
         {
             method: 'GET',
@@ -17,16 +18,18 @@
             }
         })
 
-        if (deptData.ok && goalData.ok && burndownData.ok) {
+        if (deptData.ok && goalData.ok && burndownData.ok && chartData.ok) {
             const deptList = await deptData.json()
             const deptGoal = await goalData.json()
             const burndownList = await burndownData.json()
+            const chartStats = await chartData.json()
             return {
                 props: { 
                     dept,
                     deptList, 
                     deptGoal, 
-                    burndownList
+                    burndownList,
+                    chartStats
                 }
             }
         }
@@ -37,13 +40,17 @@
 
 <script>
     import { onDestroy, onMount } from "svelte";
+    import DailyChart from "$lib/components/DailyChart.svelte";
 
     export let dept
     export let deptList
     export let deptGoal
     export let burndownList
+    export let chartStats
+
     let myInterval
-    let count = 0
+    let dates = chartStats.map(day => new Date(day.DAY).toLocaleDateString())
+    let dailyParts = chartStats.map(parts => parts.DAILY_JOBS)
 
     let goal = parseInt(deptGoal[0].daily_goal / 34)
 
@@ -54,11 +61,10 @@
     })
 
     onDestroy(() => {
-        count = 0
         clearInterval(myInterval)
     })
 
-
+    console.log(chartStats)
 
 </script>
 
@@ -146,6 +152,7 @@
     </div>
         
     {/if}
+    <DailyChart labels={dates} data={dailyParts} />
 </main>
 
 <style>
@@ -224,6 +231,7 @@
 
     .table {
         width: 90%;
+        margin-bottom: 15px;
     }
 
     table {

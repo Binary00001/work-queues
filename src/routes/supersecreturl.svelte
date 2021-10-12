@@ -33,23 +33,14 @@
 
 {#if mounted}
   <div class="main">
-    {#if spoiler}
-      <h2>It's fucking Friday</h2>
-      <button on:click={()=> spoiler = false}>Spoiler</button>
-    {:else}
-    <p>You have made another week enjoyable.</p>
-    <p>It's almost time for you to enjoy yourself and forget about this place for a minute.</p>
-    <p>You do so much and go so far above what any normal person does, it's crazy.</p>
-    <p>The way you are working to get through school, take care of your kids and work a full time job...</p>
-    <p>You are a superhero. </p>
-    <p>So many sacrifices you make and all the selfless choices to take care of everything is amazing.</p>
-    <p>You are just a straight up badass. And a hot one at that.</p>
-    <p>You are the real deal, the full package, the deluxe edition with the lifesize statue and signed poster.</p>
-    <p>And my analogies suck.</p>
-    <p>Enjoy your day and hopefully it is as amazing for you as you are yourself.</p>
-    <img src="https://media2.giphy.com/media/JdCz7YXOZAURq/giphy.gif" alt="Party Band GIF" style="width: 500px; height: 281.25px;">
-    <p>P.S. If i don't come around as much it is only because I don't want to keep you from working/get you in trouble.</p>
-    {/if}
+      <img src="https://media1.giphy.com/media/Azaj7mTthLESMKL9s1/giphy.gif" alt="Chibi GIF" style="width: 487.05px; height: 573px;">
+    <h1>BRITTANY!!!!!!</h1>
+    <p>Hey there amazing woman!</p>
+    <p>Today is another day for you to be the shining star you are.</p>
+    <p>I hope you got a chance to relax and enjoy yourself last night!</p>
+    <p>This will be a better day for you than yesterday.</p>
+    <p>Just remember, you will be out of this hell shortly and they will be sorry they didn't treat you better.</p>
+    <p>Have a wonderful day you wonderful nerd.</p>
   </div>
 {/if}
       <!-- <img class='gif' src="https://media0.giphy.com/media/HYT1M1YCPI9KE/giphy.gif" alt="mario kart GIF" style="width: 500px; height: 408.621px;"> -->
