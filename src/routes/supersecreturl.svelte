@@ -1,10 +1,14 @@
+<script context='module'>
+  let time = new Date(Date.now()).toLocaleString()
+  console.log(`{visited: ${time}}`)
+</script>
+
 <script>
 
   import { onMount, onDestroy } from 'svelte'
   import { fly } from 'svelte/transition'
 
-    let time = new Date(Date.now()).toLocaleString()
-    console.log(`{visited: ${time}}`)
+    
 
     //temp future content
     let first = [
@@ -13,7 +17,16 @@
       "You have been asleep for quite some time."
     ]
 
-   
+    let text = [
+      'First things first, Good Morning Beautiful!',
+      'I hope you were able to get some amazing sleep last night.',
+      'Talking to you about your schooling makes me so happy for you.',
+      'You are out there doing big things and taking huge steps in your life.',
+      'There so many amazing things about you and that\'s just one of them.',
+      'Working next to you yesterday was a lot of fun.',
+      'Thanks for putting up with me :)',
+      'All the positive vibes for you today'
+    ]
 
 
     let mounted = false
@@ -24,6 +37,8 @@
       console.log(choice)
     }
 
+   
+
   onMount(() => {
     mounted = true
   })
@@ -33,14 +48,18 @@
 
 {#if mounted}
   <div class="main">
-      <img src="https://media1.giphy.com/media/Azaj7mTthLESMKL9s1/giphy.gif" alt="Chibi GIF" style="width: 487.05px; height: 573px;">
-    <h1>BRITTANY!!!!!!</h1>
-    <p>Hey there amazing woman!</p>
-    <p>Today is another day for you to be the shining star you are.</p>
-    <p>I hope you got a chance to relax and enjoy yourself last night!</p>
-    <p>This will be a better day for you than yesterday.</p>
-    <p>Just remember, you will be out of this hell shortly and they will be sorry they didn't treat you better.</p>
-    <p>Have a wonderful day you wonderful nerd.</p>
+    <img src="https://media1.giphy.com/media/10hO3rDNqqg2Xe/giphy.gif" alt="running man party hard GIF" style="width: 500px; height: 262.5px;">
+    <div class="text">
+      <h1>This time it really is Friday!!!!</h1>
+      <p>Not sure if you're gonna come in today and see this :|</p>
+      <p>Either way, hopefully today is a great day for you.</p>
+      <p>It seems like this week has been unkind to you and you could really use a normal fucking day.</p>
+      <p>Selfishly I missed seeing your face around here yesterday after lunch.</p>
+      <!-- <p>Soon enough you will be onto bigger and better things and this place will be lonely</p> -->
+      <p>Sending you all the good vibes I can :)</p>
+      <p>Have a wonderful day!</p>
+      <p></p>
+    </div>
   </div>
 {/if}
       <!-- <img class='gif' src="https://media0.giphy.com/media/HYT1M1YCPI9KE/giphy.gif" alt="mario kart GIF" style="width: 500px; height: 408.621px;"> -->
@@ -52,7 +71,7 @@
         height: 100vh;
         width: 100vw;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         justify-content: center;
         background: linear-gradient(to bottom right, white, slategray, lightgrey, tomato);

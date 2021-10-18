@@ -10,10 +10,10 @@
 
 
 
--- UPDATE dbo.AgcmTable SET AGPMCOMMENTS = 'OCTOBER LOAD'
--- WHERE AGPO = '640000111132'
--- AND AGITEM = 1
--- AND AGRUN =  4
+-- UPDATE dbo.AgcmTable SET AGPMCOMMENTS = 'H/F BACB28AP12Z059 (PO 252179 due 10/15)'
+-- WHERE AGPO = '613000444678'
+-- AND AGITEM = 10
+-- AND AGRUN =  20
 -- ;
 
 -- SELECT 
@@ -73,7 +73,7 @@
 
 
 
--- DELETE FROM dbo.AgcmTable WHERE AGITEM = '1A';
+-- select * FROM dbo.AgcmTable WHERE AGPMCOMMENTS = '';
 
 -- select * from RunsTable where RUNREF = '831z8100319';
 
@@ -105,6 +105,20 @@
 
 
 
-select * from TchdTable 
-where TMDAY >= CAST(GETDATE() AS datetime) - 2
-;
+-- select * from TchdTable 
+-- where TMDAY >= CAST(GETDATE() AS datetime) - 2
+-- ;
+
+
+SELECT        dbo.EmplTable.PREMNUMBER, CONCAT(RTRIM(dbo.EmplTable.PREMFSTNAME), ' ',RTRIM(dbo.EmplTable.PREMLSTNAME)) AS EMPLOYEE, dbo.PartTable.PARTNUM, dbo.IstcTable.ISRUN, dbo.IstcTable.ISOP
+FROM            dbo.EmplTable INNER JOIN
+                         dbo.IstcTable ON dbo.EmplTable.PREMNUMBER = dbo.IstcTable.ISEMPLOYEE
+                         INNER JOIN dbo.PartTable ON dbo.IstcTable.ISMO = dbo.PartTable.PARTREF
+WHERE        (dbo.IstcTable.ISRUN <> 0);
+
+-- select top 1 * from IstcTable;
+
+-- select * from PartTable
+--   WHERE PARTREF = '446w165034B';
+
+

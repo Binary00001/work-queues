@@ -8,7 +8,7 @@
         item: String(part.item).replace(/\D/g, ''),
         comments: part.comments
     }
-    let add = !part.comments
+    let add = part.comments == null
 
     let submit = false;
     let url = '/api/comments'

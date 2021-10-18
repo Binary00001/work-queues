@@ -49,7 +49,7 @@
     export let chartStats
 
     let myInterval
-    let dates = chartStats.map(day => new Date(day.DAY).toLocaleDateString())
+    let dates = chartStats.map(day => new Date(day.DAY.replace(/-/g, '\/').replace(/T.+/, '')).toLocaleDateString())
     let dailyParts = chartStats.map(parts => parts.DAILY_JOBS)
     //do something with this to get the goal line
     // let dailyGoal = deptGoal.map(i => i.daily_goal)
@@ -130,17 +130,19 @@
             <th>Days in Queue</th>
             <th>Quantity</th>
             <th>Customer</th>
+            <th>Due Date</th>
             <th>Priority</th>
             <th>Comments</th>
         </thead>
         <tbody>
-            {#each deptList as { PART_NUMBER, RUN, RUN_QTY, CUSTOMER, COMMENTS, DAYS_IN_QUEUE, PO, ITEM, PRIORITY}}
+            {#each deptList as { PART_NUMBER, RUN, RUN_QTY, CUSTOMER, CUST_REQ_DATE, COMMENTS, DAYS_IN_QUEUE, PO, ITEM, PRIORITY}}
             <tr class:hot={PRIORITY <= 5}>
                 <td><a href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`} target="_blank">{PART_NUMBER}</a></td>
                 <td>{RUN}</td>
                 <td class:stagnant={DAYS_IN_QUEUE > 3}>{DAYS_IN_QUEUE}</td>
                 <td>{RUN_QTY}</td>
                 <td>{CUSTOMER}</td>
+                <td>{new Date(CUST_REQ_DATE.replace(/-/g, '\/').replace(/T.+/, '')).toLocaleDateString()}</td>
                 <td>{PRIORITY}</td>
                 {#if COMMENTS == null}
                   <td>{''}</td>    
@@ -155,7 +157,7 @@
     </div>
         
     {/if}
-    <DailyChart labels={dates} data={dailyParts} />
+    <DailyChart labels={dates} data={dailyParts} dailyGoal={[goal, goal, goal, goal, goal, goal, goal, goal]} />
 </main>
 
 <style>

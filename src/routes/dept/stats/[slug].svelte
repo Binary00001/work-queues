@@ -2,12 +2,13 @@
      export async function load({page, fetch}) {
         let dept = page.params.slug
 
-        const [deptData, goalData, employeeData, burndownData] = await Promise.all(
+        const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
             [
                 fetch(`/production/${dept}.json`),
-                fetch(`/api/stats/${dept}`),
+                fetch(`/api/stats/dept/${dept}`),
                 fetch(`/api/asdf/${dept}`),
-                fetch(`/production/burndown/${dept}.json`)
+                fetch(`/production/burndown/${dept}.json`),
+                fetch(`/api/wc/stats/linedata/${dept}`)
             ],
         {
             method: 'GET',
@@ -17,37 +18,72 @@
             }
         })
 
-        if (deptData.ok && goalData.ok && employeeData.ok && burndownData.ok) {
+        if (deptData.ok && goalData.ok && employeeData.ok && burndownData.ok && chartData.ok) {
             const deptList = await deptData.json()
             const deptGoal = await goalData.json()
             const employeeList = await employeeData.json()
             const burndown = await burndownData.json()
+            const chartStats = await chartData.json()
             return {
                 props: { 
-                    deptList, deptGoal, dept, employeeList, burndown
+                    deptList, deptGoal, dept, employeeList, burndown, chartStats 
                 }
             }
         }
 
-        console.log('nothing')
+        // console.log('nothing')
     }
 </script>
 
 <script>
     import { onMount, onDestroy} from 'svelte'
+    // import { page } from '$app/stores'
+    import SmallChart from '$lib/components/SmallChart.svelte'
+    import PartTable from '$lib/components/PartTable.svelte'
     export let deptList
     export let deptGoal
     export let employeeList
     export let burndown
+    export let chartStats
 
 
     let goal = parseInt(deptGoal[0].daily_goal / 34)
     let date = new Date(Date.now()).toDateString()
+    let dates = chartStats.map(day => new Date(day.DAY.replace(/-/g, '\/').replace(/T.+/, '')).toLocaleDateString())
+    let dailyParts = chartStats.map(parts => parts.DAILY_JOBS)
     let reloadInterval
+
+    // async function loadData() {
+    //     let dept = $page
+
+    //     const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
+    //         [
+    //             fetch(`/production/${dept}.json`),
+    //             fetch(`/api/stats/${dept}`),
+    //             fetch(`/api/asdf/${dept}`),
+    //             fetch(`/production/burndown/${dept}.json`),
+    //             fetch(`/api/wc/stats/linedata/${dept}`)
+    //         ],
+    //     {
+    //         method: 'GET',
+    //         mode: 'cors',
+    //         headers: {
+    //             'content-type': 'application/json'
+    //         }
+    //     })
+
+    //     if (deptData.ok && goalData.ok && employeeData.ok && burndownData.ok && chartData.ok) {
+    //          deptList = await deptData.json()
+    //          deptGoal = await goalData.json()
+    //          employeeList = await employeeData.json()
+    //          burndown = await burndownData.json()
+    //          chartStats = await chartData.json()
+    // }}
 
     onMount(() => {
         reloadInterval = setInterval(() => {
             location.reload()
+            // loadData()
         }, 60000)
     })
 
@@ -120,44 +156,19 @@
                 </tbody>
             </table>
         {/if}
+        
+        <SmallChart labels={dates} data={dailyParts} dailyGoal={[goal, goal, goal, goal, goal, goal, goal, goal]} />
+
         </div>
      
 
         <!-- <a href={`/production/burndown/${dept}`} class='burndown-link'>BURNDOWN</a> -->
         {#if deptList.length == 0}
+        <div class="empty">
             <p>Queue Empty</p>
+        </div>
         {:else}
-    <div class="parts-table">
-        <table class='parts' >
-            <thead>
-                <th>Part Number</th>
-                <th>Run</th>            
-                <th>Days in Queue</th>
-                <th>Quantity</th>
-                <th>Customer</th>
-                <th>Priority</th>
-                <th>Comments</th>
-            </thead>
-            <tbody>
-                {#each deptList as { PART_NUMBER, RUN, RUN_QTY, CUSTOMER, COMMENTS, DAYS_IN_QUEUE, PO, ITEM, PRIORITY}}
-                <tr class:hot={PRIORITY == 5} class:p4={PRIORITY == 4}>
-                    <td><a href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`} target="_blank">{PART_NUMBER}</a></td>
-                    <td>{RUN}</td>
-                    <td class:stagnant={DAYS_IN_QUEUE > 3}>{DAYS_IN_QUEUE}</td>
-                    <td>{RUN_QTY}</td>
-                    <td>{CUSTOMER}</td>
-                    <td>{PRIORITY}</td>
-                    {#if COMMENTS == null}
-                    <td>{''}</td>    
-                    {:else}
-                    <td class="comment">{COMMENTS}</td>
-                    {/if}
-                    
-                </tr>
-                {/each}
-            </tbody>
-        </table>
-    </div>
+        <PartTable parts={deptList} />
     {/if}
     </div>
 </div>
@@ -200,41 +211,4 @@
         width: 100%;
         text-align: center;
     }
-
-    .parts-table {
-        display: grid;
-        background-color: white;
-    }
-
-    .parts {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-
-    .parts th {
-        border: 1px solid black;
-        background-color: dodgerblue;
-    }
-
-    .parts td {
-        border: 1px solid black;
-    }
-
-    a {
-        color: black;
-        text-decoration: none;
-    }
-
-    .hot {
-        background-color: lightgoldenrodyellow;
-    }
-
-    .p4 {
-        background-color: yellowgreen;
-    }
-
-    .stagnant {
-        color: red;
-    }
-
 </style>

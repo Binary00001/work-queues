@@ -20,7 +20,7 @@ let insp = true;
         <!-- dropdowns -->
         <!-- Assembly -->
         <div class="dropdown">
-            <a class='dropdown-btn' href='#'>Assembly</a>
+            <a class='dropdown-btn' href='/'>Assembly</a>
             <div class="dropdown-menu">
                 <a href="/production/0301" target='_parent'>Stores ID & Issue</a>
                 <a href="/production/0302" target='_parent'>Assembly ID & Issue</a>
@@ -32,7 +32,7 @@ let insp = true;
         </div>
         <!-- Sheet Metal -->
         <div class="dropdown">
-            <a class="dropdown-btn" href='#'>Sheet Metal</a>
+            <a class="dropdown-btn" href='/'>Sheet Metal</a>
             <div class="dropdown-menu">
                 <a href="/production/0300" target='_parent'>Material ID & Issue</a>
                 <a href="/production/0401" target='_parent'>Shear</a>
@@ -53,7 +53,7 @@ let insp = true;
         </div>
         <!-- Inspection -->
         <div class="dropdown">
-            <a class="dropdown-btn" href='#'>Inspection</a>
+            <a class="dropdown-btn" href='/'>Inspection</a>
             <div class="dropdown-menu">
                 <a href="/production/2000" target="_parent">Insp Sheet Metal</a>
                 <a href="/production/2005" target="_parent">Insp CNC</a>

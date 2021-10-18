@@ -44,8 +44,16 @@
         ]
     }
 </script>
-        <Line data={dataLine} options={{ responsive: true }} />
+    <div>
+        <Line data={dataLine} options={{ responsive: true, scales: { yAxes: [{ticks: {display: false}}], xAxes: [{ticks: {display: false}}]}, legend: {display: false} }} />
+    </div>
 
 <style>
+    * {
+        text-align: center;
+    }
 
+    div {
+        background-color: white;
+    }
 </style>
