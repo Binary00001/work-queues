@@ -1,121 +1,140 @@
 <script context="module">
-    
     export async function load({fetch}) {
+        const [primerData, primerBurndown, topCoatData, topCoatBurndown] = await Promise.all(
+            [
+                fetch('/production/5045.json'),
+                fetch('/production/burndown/5045.json'),
+                fetch('/production/5050.json'),
+                fetch('/production/burndown/5050.json')
+            ],
 
-        const res = await fetch(`http://192.168.0.39:5000/api/finish/`, 
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'content-type': 'application/json'
-            }
-        })
+            {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
 
-        if (res.ok) {
-            const data = await res.json()
+        if (primerData.ok && primerBurndown.ok && topCoatData.ok && topCoatBurndown.ok) {
+            const primerParts = await primerData.json()
+            const primerBD = await primerBurndown.json()
+            const topCoatParts = await topCoatData.json()
+            const topCoatBD = await topCoatBurndown.json()
+
             return {
-                props: { data }
+                props: {
+                    primerParts, 
+                    primerBD,
+                    topCoatParts,
+                    topCoatBD
+                }
             }
-        }
-
-        const { message } = await res.json()
-        return {
-            status: res.status,
-            error: new Error(message)
         }
     }
 </script>
 
 <script>
-    import Dept from '$lib/components/Dept.svelte'
-    export let data
-    // console.log(data)
+    import {onMount, onDestroy} from 'svelte'
+    import DeptCard from "$lib/components/DeptCard.svelte";
+
+    export let primerParts 
+    export let primerBD
+    export let topCoatParts
+    export let topCoatBD
     
+
+    let burndown = [...primerBD, ...topCoatBD]
+    // console.log(burndown)
+    let myInterval
+
+    onMount(() => {
+        myInterval = setInterval(() => {
+            location.reload()
+        }, 60000)
+    })
+
+    onDestroy(() => {
+        count = 0
+        clearInterval(myInterval)
+    })
+
 </script>
 
-<svelte:head>
-    <title>IMAGINETICS - FINISH</title>
-</svelte:head>
 
-<main>
-    <h1 class="dept">
-        primer/topcoat
-    </h1>
-    <a href={`/burndown/jeff`}><p>Burndown list</p></a>
-    {#if !data}
+<div class="finish-container">
+    <h1>PAINT</h1>
 
-        <p>loading...</p>
+    <!-- burndown table -->
+    <div class="burndown-table">
+        {#if burndown.length == 0}
+            <p></p>
+        {:else}
+            <h2>BURNDOWN</h2>
+            <table>
+                <thead>
+                    <th>Part Number</th>
+                    <th>Run</th>
+                    <th>Days In Queue</th>
+                    <th>Work Center</th>
+                </thead>
+                <tbody>
+                    {#each burndown as {PART_NUMBER, RUN, DAYS_IN_QUEUE, WORK_CENTER}}
+                        <tr>
+                            <td>{PART_NUMBER}</td>
+                            <td>{RUN}</td>
+                            <td>{DAYS_IN_QUEUE}</td>
+                            <td>{WORK_CENTER.toUpperCase()}</td>
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        {/if}
+    </div>
 
-    {:else}
-        <div class="dept-tables">
-
-            <Dept dept={'Primer'} parts={data.filter(dept => dept.op_center == '5045        ').slice(0,10)}/>
-            <Dept dept={'Topcoat'} parts={data.filter(dept => dept.op_center == '5050        ').slice(0, 10)} />
-       
-        </div>
-    {/if}
-</main>
+    <!-- Department tables -->
+    <div class="card-view">
+        <DeptCard parts={primerParts} dept={'primer'} />
+        <DeptCard parts={topCoatParts} dept={'topcoat'} />
+    </div>
+</div>
 
 <style>
-
-    main {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+    :root {
+        margin: 0;
+        padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-weight: 200;
     }
 
-    .dept {
-        text-transform: uppercase;
-        font-weight: 100;
-        margin-top: 10px;
+    .finish-container {
+        text-align: center;
     }
 
-    .dept-tables {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+    h1 {
+        background-color: tomato;
     }
 
-    a {
-        text-decoration: none;
-        color: black;
-        
+    .burndown-table {
+        margin: 10px;
     }
 
-    /* table, th, td {
+    table {
+        width: 100%;
+    }
+
+    table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
-        padding: 5px;
     }
 
     thead {
         background-color: skyblue;
     }
 
-    tr:hover {
-        background-color: yellow;
+    .card-view {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: flex-start;
     }
-
-    .table {
-        width: 90%;
-    }
-
-    table {
-        margin-top: 10px;
-        width: 100%;
-    }
-
-    
-
-    .comment {
-        font-weight: bold;
-    }
-
-    .hot {
-        background-color: yellow;
-    } */
-
 </style>

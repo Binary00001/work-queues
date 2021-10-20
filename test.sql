@@ -110,15 +110,10 @@
 -- ;
 
 
-SELECT        dbo.EmplTable.PREMNUMBER, CONCAT(RTRIM(dbo.EmplTable.PREMFSTNAME), ' ',RTRIM(dbo.EmplTable.PREMLSTNAME)) AS EMPLOYEE, dbo.PartTable.PARTNUM, dbo.IstcTable.ISRUN, dbo.IstcTable.ISOP
-FROM            dbo.EmplTable INNER JOIN
-                         dbo.IstcTable ON dbo.EmplTable.PREMNUMBER = dbo.IstcTable.ISEMPLOYEE
-                         INNER JOIN dbo.PartTable ON dbo.IstcTable.ISMO = dbo.PartTable.PARTREF
-WHERE        (dbo.IstcTable.ISRUN <> 0);
-
--- select top 1 * from IstcTable;
-
--- select * from PartTable
---   WHERE PARTREF = '446w165034B';
+SELECT * 
+     FROM AVAIL_LOTS 
+     WHERE RTRIM(LOC) != 'MRB'
+     AND QOH >= QTY 
+     ORDER BY REQD ASC;
 
 

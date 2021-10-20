@@ -1,5 +1,5 @@
 <script>
-import Search from '$lib/components/Search.svelte'
+import SearchBar from '$lib/components/SearchBar.svelte'
 import logo from '/imaginetics_logo.png'
 
 let insp = true;
@@ -9,7 +9,7 @@ let insp = true;
 <div class='header'>
     <div class="nav-top">
         <h1><a href='/' target='_parent'><img src={logo} alt="imaginetics logo" style="background-color: slategrey;" ></a></h1>
-        <Search />
+        <SearchBar />
     </div>
     
     <div class='nav-links'>

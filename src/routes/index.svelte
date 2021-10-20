@@ -1,10 +1,10 @@
 <script>
-    import Search from '$lib/components/Search.svelte'
+    import SearchBar from '$lib/components/SearchBar.svelte'
     import { partList, searching } from '$lib/sessionStore'
 </script>
 
 <h1>Live Queue Lists</h1>
-<Search />
+<SearchBar />
 {#if $searching}
     <h2 class="search">Searching</h2>
 {:else}
