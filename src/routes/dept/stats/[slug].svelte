@@ -237,4 +237,10 @@
 		width: 100%;
 		text-align: center;
 	}
+
+	@media print {
+		@page {
+			size: landscape;
+		}
+	}
 </style>

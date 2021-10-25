@@ -5,10 +5,19 @@
 	export let size = '60';
 </script>
 
-<div class="circle" style="--size: {size}{unit}; --color: {color}; --duration: {duration}" />
+<div class="loading-container">
+	<div class="spinner" style="--size: {size}{unit}; --color: {color}; --duration: {duration}" />
+</div>
 
 <style>
-	.circle {
+	.loading-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 300px;
+		width: 300px;
+	}
+	.spinner {
 		height: 60px;
 		width: 60px;
 		border-color: tomato transparent tomato tomato;
@@ -16,9 +25,9 @@
 		border-style: solid;
 		border-image: initial;
 		border-radius: 50%;
-		animation: 0.75s linear 0s infinite normal none running rotate;
+		animation: 0.75s linear 0s infinite normal none running spin;
 	}
-	@keyframes rotate {
+	@keyframes spin {
 		0% {
 			transform: rotate(0);
 		}

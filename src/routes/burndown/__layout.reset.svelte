@@ -1,20 +1,31 @@
 <script>
-    import Nav from '$lib/components/Nav.svelte'
+	import Nav from '$lib/components/Nav.svelte';
 </script>
 
 <svelte:head>
-    <!-- <meta http-equiv="refresh" content="60" /> -->
-    <title>Imaginetics - WC Queue Lists</title>
+	<!-- <meta http-equiv="refresh" content="60" /> -->
+	<title>Imaginetics - WC Queue Lists</title>
 </svelte:head>
 
-<Nav />
+<div class="navigation">
+	<Nav />
+</div>
 
 <main>
-    <slot />
+	<slot />
 </main>
 
 <style>
-    * {
-        margin: 0;
-    }
+	* {
+		margin: 0;
+	}
+
+	@media print {
+		.navigation {
+			display: none;
+		}
+		@page {
+			size: landscape;
+		}
+	}
 </style>
