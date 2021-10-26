@@ -1,27 +1,24 @@
-import sql from 'mssql'
-import { config } from '$lib/db'
+import sql from 'mssql';
+import { config } from '$lib/db';
 
-export async function get({params}) {
-    const { wc } = params
+export async function get({ params }) {
+	const { wc } = params;
 
-    await sql.connect(config)
+	await sql.connect(config);
 
-    const result = await sql.query(`SELECT COUNT(OPREF) as completed FROM dbo.RnopTable 
-    INNER JOIN RunsTable ON RUNREF = OPREF AND RUNNO = OPRUN 
-    WHERE RUNPKPURGED = 0 
-    AND OPCENTER = '${wc}'
-    AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
+	//get Top 20 jobs from dept(slug)
+	const result = await sql.query(`SELECT TOP 20 PART_NUMBER, RUN, PO, RTRIM(LTRIM(ITEM)) AS ITEM, DAYS_IN_QUEUE, CUSTOMER, PRIORITY, COMMENTS, EXPEDITE, CAST(CUST_REQ_DATE AS DATETIME) AS CUST_REQ_DATE, RUN_QTY, WORK_CENTER, WC, t2.WCNDESC as WC_NAME
+      FROM dbo.QueueInfo WITH (nolock)
+      INNER JOIN WcntTable AS t2 ON WC = t2.WCNNUM
+         WHERE WC = '${wc}'
+         ORDER BY CUST_REQ_DATE ASC;`);
 
-    GROUP BY OPCENTER;`)
+	let data = result.recordset;
 
-
-    let data = result.recordset
-
-    return {
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: data
-    }
+	return {
+		headers: {
+			'content-type': 'application/json'
+		},
+		body: data
+	};
 }
-
