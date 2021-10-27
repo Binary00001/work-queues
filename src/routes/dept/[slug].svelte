@@ -59,7 +59,7 @@
 	let goal = parseInt(deptGoal[0].daily_goal / 34);
 
 	async function getData() {
-		let dept = page.params.slug;
+		let dept = $page.params.slug;
 
 		const [deptData, goalData, burndownData, chartData] = await Promise.all(
 			[

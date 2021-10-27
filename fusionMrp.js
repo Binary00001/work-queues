@@ -13,7 +13,7 @@ async function sqlCmd(sqlQuery) {
 }
 
 export async function getPartsList() {
-	let query = `SELECT DISTINCT PARTREF, PARTNUM
+	const query = `SELECT DISTINCT PARTREF, PARTNUM
 							 	FROM PartTable
 								INNER JOIN MrplTable ON MrplTable.MRP_PARTREF = PartTable.PARTREF
 								WHERE PAINACTIVE = 0 AND PAOBSOLETE = 0
