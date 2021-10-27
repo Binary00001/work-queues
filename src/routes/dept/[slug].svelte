@@ -1,311 +1,150 @@
-<!-- <script context="module">
-	export async function load({ page, fetch }) {
-		let dept = page.params.slug;
+<script context="module">
+    
+    export async function load({page, fetch}) {
+        const dept = page.params.slug;
 
-		const [deptData, goalData, burndownData, chartData] = await Promise.all(
-			[
-				fetch(`/api/dept/${dept}`),
-				fetch(`/api/dept/stats/daily/${dept}`),
-				fetch(`/api/dept/burndown/${dept}`),
-				fetch(`/api/wc/stats/linedata/${dept}`)
-			],
-			{
-				method: 'GET',
-				mode: 'cors',
-				headers: {
-					'content-type': 'application/json'
-				}
-			}
-		);
+        const res = await fetch(`/dept/${dept}.json`, 
+        {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
 
-		if (deptData.ok && goalData.ok && burndownData.ok && chartData.ok) {
-			const deptList = await deptData.json();
-			const deptGoal = await goalData.json();
-			const burndownList = await burndownData.json();
-			const chartStats = await chartData.json();
-			return {
-				props: {
-					dept,
-					deptList,
-					deptGoal,
-					burndownList,
-					chartStats
-				}
-			};
-		}
+        if (res.ok) {
+            const data = await res.json()
+            // console.log(data.recordset)
+            return {
+                props: { data, dept }
+            }
+        }
 
-		console.log('nothing');
-	}
-</script> -->
+        const { message } = await res.json()
+        return {
+            status: res.status,
+            error: new Error(message)
+        }
+    }
+</script>
+
 <script>
-	import { onDestroy, onMount } from 'svelte';
-	import { page } from '$app/stores';
-	import DailyChart from '$lib/components/DailyChart.svelte';
 
-	let deptList;
-	let deptGoal;
-	let burndownList;
-	let chartStats;
+    export let data = '';
+    export let dept = '';
+    
+    let ordered = data
 
-	let myInterval;
-	let dates = chartStats.map((day) =>
-		new Date(day.DAY.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
-	);
-	let dailyParts = chartStats.map((parts) => parts.DAILY_JOBS);
-	//do something with this to get the goal line
-	// let dailyGoal = deptGoal.map(i => i.daily_goal)
-	// let lineData = [...dailyParts, ...dailyGoal]
-
-	let goal = parseInt(deptGoal[0].daily_goal / 34);
-
-	async function getData() {
-		let dept = $page.params.slug;
-
-		const [deptData, goalData, burndownData, chartData] = await Promise.all(
-			[
-				fetch(`/api/dept/${dept}`),
-				fetch(`/api/dept/stats/daily/${dept}`),
-				fetch(`/api/dept/burndown/${dept}`),
-				fetch(`/api/wc/stats/linedata/${dept}`)
-			],
-			{
-				method: 'GET',
-				mode: 'cors',
-				headers: {
-					'content-type': 'application/json'
-				}
-			}
-		);
-
-		if (deptData.ok && goalData.ok && burndownData.ok && chartData.ok) {
-			deptList = await deptData.json();
-			deptGoal = await goalData.json();
-			burndownList = await burndownData.json();
-			chartStats = await chartData.json();
-		}
-	}
-
-	onMount(() => {
-		getData();
-		myInterval = setInterval(() => {
-			getData();
-		}, 60000);
-	});
-
-	onDestroy(() => {
-		clearInterval(myInterval);
-	});
-
-	// console.log(lineData)
 </script>
 
 <svelte:head>
-	{#if deptList.length === 0}
-		<title>IMAGINETICS</title>
-	{:else}
-		<title>IMAGINETICS - {deptList[0].WORK_CENTER.toUpperCase()}</title>
-	{/if}
+    <title>IMAGINETICS - {dept.toUpperCase()}</title>
 </svelte:head>
 
 <main>
-	<!-- <a href={`/burndown/${dept}`}><p>Burndown list</p></a> -->
-	{#if deptList.length === 0}
-		<h1 class="loading">No Jobs In Queue</h1>
-	{:else}
-		<h1 class="dept">
-			{deptList[0].WC_NAME}
-		</h1>
-		<div class="daily">
-			<table>
-				<thead>
-					<th>DAILY GOAL</th>
-					<th>JOBS COMPLETED</th>
-					<th>PARTS COMPLETED</th>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{goal}</td>
-						<td>
-							{#if deptGoal[0].completed_jobs == null}
-								0
-							{:else}
-								{deptGoal[0].completed_jobs}
-							{/if}
-						</td>
-						<td>{deptGoal[0].daily_parts}</td>
-					</tr>
-				</tbody>
-			</table>
-			<!-- <h2>DAILY GOAL: {goal} - 
-            JOBS COMPLETED: 
-            {#if deptGoal[0].completed_jobs == null}
-                0 -
-            {:else}
-                {deptGoal[0].completed_jobs} -
-            {/if}
-            PARTS COMPLETED:  {deptGoal[0].daily_parts}
-        </h2> -->
-		</div>
-
-		<a href={`/production/burndown/${dept}`} class="burndown-link">BURNDOWN</a>
-
-		<div class="table">
-			<table class="parts">
-				<thead>
-					<th>Part Number</th>
-					<th>Run</th>
-					<th>Days in Queue</th>
-					<th>Quantity</th>
-					<th>Customer</th>
-					<th>Due Date</th>
-					<th>Priority</th>
-					<th>Comments</th>
-				</thead>
-				<tbody>
-					{#each deptList as { PART_NUMBER, RUN, RUN_QTY, CUSTOMER, CUST_REQ_DATE, COMMENTS, DAYS_IN_QUEUE, PO, ITEM, PRIORITY }}
-						<tr class:hot={PRIORITY <= 5}>
-							<td
-								><a
-									href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`}
-									target="_blank">{PART_NUMBER}</a
-								></td
-							>
-							<td>{RUN}</td>
-							<td class:stagnant={DAYS_IN_QUEUE > 3}>{DAYS_IN_QUEUE}</td>
-							<td>{RUN_QTY}</td>
-							<td>{CUSTOMER}</td>
-							<td
-								>{new Date(
-									CUST_REQ_DATE.replace(/-/g, '/').replace(/T.+/, '')
-								).toLocaleDateString()}</td
-							>
-							<td>{PRIORITY}</td>
-							{#if COMMENTS == null}
-								<td>{''}</td>
-							{:else}
-								<td class="comment">{COMMENTS}</td>
-							{/if}
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
-	{/if}
-	<DailyChart
-		labels={dates}
-		data={dailyParts}
-		dailyGoal={[goal, goal, goal, goal, goal, goal, goal, goal]}
-	/>
+    <h1 class="dept">
+        {dept}
+    </h1>
+    <a href={`/burndown/${dept}`}><p>Burndown list</p></a>
+    {#if !data}
+        <p>loading...</p>
+    {:else}
+    <div class="table">
+    <table>
+        <thead>
+            <th>Part Number</th>
+            <th>Run</th>            
+            <th>Days in Queue</th>
+            <th>Quantity</th>
+            <th>Customer</th>
+            <th>Priority</th>
+            <th>Comments</th>
+        </thead>
+        <tbody>
+            {#each ordered as { part_number, run, qty, cust, comments, diq, po_num, item, priority}}
+            <tr class:hot={priority === 5}>
+                <td><a href={`/part?po=${po_num}&line=${item}&run=${run}&part=${part_number}`} target="_blank">{part_number}</a></td>
+                <td>{run}</td>
+                <td class:stagnant={diq > 3}>{diq}</td>
+                <td>{qty}</td>
+                <td>{cust}</td>
+                <td>{priority}</td>
+                {#if comments == null}
+                  <td>{''}</td>    
+                {:else}
+                  <td class="comment">{comments}</td>
+                {/if}
+                
+            </tr>
+            {/each}
+        </tbody>
+    </table>
+    </div>
+        
+    {/if}
 </main>
 
 <style>
-	main {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-			'Open Sans', 'Helvetica Neue', sans-serif;
-		font-weight: 200;
-	}
 
-	.loading {
-		font-weight: 300;
-		margin: 50px;
-	}
+    main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-weight: 200;
+    }
 
-	.loading:after {
-		content: '.';
-		animation: dots 2s steps(4, end) infinite;
-	}
+    .dept {
+        text-transform: uppercase;
+        font-weight: 100;
+        margin-top: 10px;
+    }
 
-	@keyframes dots {
-		0%,
-		20% {
-			color: rgba(0, 0, 0, 0);
-			text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
-		}
-		40% {
-			color: black;
-			text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
-		}
-		60% {
-			text-shadow: 0.25em 0 0 black, 0.5em 0 0 rgba(0, 0, 0, 0);
-		}
-		80%,
-		100% {
-			text-shadow: 0.25em 0 0 black, 0.5em 0 0 black;
-		}
-	}
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+    }
 
-	.dept {
-		text-transform: uppercase;
-		font-weight: 100;
-		margin-top: 10px;
-	}
+    td {
+        text-align: center;
+    }
 
-	table,
-	th,
-	td {
-		border: 1px solid black;
-		border-collapse: collapse;
-		padding: 5px;
-	}
+    thead {
+        background-color: skyblue;
+    }
 
-	td {
-		text-align: center;
-	}
+    tr:hover {
+        background-color: yellow;
+    }
 
-	thead {
-		background-color: skyblue;
-	}
+    .table {
+        width: 90%;
+    }
 
-	.table tr:hover {
-		background-color: yellow;
-	}
+    table {
+        margin-top: 10px;
+        width: 100%;
+    }
 
-	.table {
-		width: 90%;
-		margin-bottom: 15px;
-	}
+    a {
+        text-decoration: none;
+        color: black;
+        
+    }
 
-	table {
-		margin-top: 10px;
-		width: 100%;
-	}
+    .comment {
+        font-weight: bold;
+    }
 
-	a {
-		text-decoration: none;
-		color: black;
-	}
+    .hot {
+        background-color: yellow;
+    }
 
-	.comment {
-		font-weight: bold;
-	}
+    .stagnant {
+        color: red;
+        font-weight: bold;
+    }
 
-	.hot {
-		background-color: yellow;
-	}
-
-	.stagnant {
-		color: red;
-		font-weight: bold;
-	}
-
-	.daily thead {
-		padding: 0;
-		margin: 0;
-		background-color: rgba(112, 128, 144, 0.5);
-	}
-
-	.daily thead,
-	.daily th,
-	.daily td {
-		border: none;
-	}
-
-	.burndown-link {
-		color: #1f1f1f;
-		font-size: 1.5em;
-	}
 </style>

@@ -2,15 +2,15 @@ import sql from 'mssql'
 import { config } from '$lib/db'
 
 export async function get({params}) {
-    const { wc } = params
+    const { slug } = params
 
     await sql.connect(config)
 
-    const result = await sql.query(`SELECT PART_NUMBER, RUN, PO, RTRIM(LTRIM(ITEM)) AS ITEM, DAYS_IN_QUEUE, CUSTOMER, PRIORITY, COMMENTS, EXPEDITE, CAST(CUST_REQ_DATE AS DATETIME) AS CUST_REQ_DATE, RUN_QTY, WORK_CENTER, WC, t2.WCNDESC as WC_NAME
+    //get Top 20 jobs from dept(slug)
+    const result = await sql.query(`SELECT TOP 20 PART_NUMBER, RUN, PO, RTRIM(LTRIM(ITEM)) AS ITEM, DAYS_IN_QUEUE, CUSTOMER, PRIORITY, COMMENTS, EXPEDITE, CAST(CUST_REQ_DATE AS DATETIME) AS CUST_REQ_DATE, RUN_QTY, WORK_CENTER, WC, t2.WCNDESC as WC_NAME
       FROM dbo.QueueInfo WITH (nolock)
       INNER JOIN WcntTable AS t2 ON WC = t2.WCNNUM
-         WHERE WC = '${wc}'
-         AND SUBSTRING(COMMENTS, 1, 8) = 'BURNDOWN'
+         WHERE WC = '${slug}'
          ORDER BY CUST_REQ_DATE ASC;`)
 
 
