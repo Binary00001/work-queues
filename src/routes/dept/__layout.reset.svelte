@@ -11,9 +11,7 @@
 
 <main>
 	<div class="container">
-		<div class="left-bar">
-			<div />
-		</div>
+		<slot />
 	</div>
 </main>
 

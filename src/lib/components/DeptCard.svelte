@@ -23,10 +23,14 @@
 		</thead>
 
 		<tbody>
-			{#each parts as { PART_NUMBER, RUN, DAYS_IN_QUEUE, RUN_QTY, CUSTOMER, PRIORITY, COMMENTS }}
+			{#each parts as { PART_NUMBER, RUN, DAYS_IN_QUEUE, RUN_QTY, CUSTOMER, PRIORITY, COMMENTS, PO, ITEM }}
 				<!-- {#if } -->
 				<tr>
-					<td>{PART_NUMBER}</td>
+					<td
+						><a href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`} target="_blank"
+							>{PART_NUMBER}</a
+						></td
+					>
 					<td>{RUN}</td>
 					<td class:stagnant={DAYS_IN_QUEUE > 3}>{DAYS_IN_QUEUE}</td>
 					<td>{RUN_QTY}</td>
@@ -74,5 +78,10 @@
 
 	.stagnant {
 		color: red;
+	}
+
+	a {
+		text-decoration: none;
+		color: black;
 	}
 </style>

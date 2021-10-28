@@ -95,9 +95,14 @@
 					<th>Work Center</th>
 				</thead>
 				<tbody>
-					{#each burndown as { PART_NUMBER, RUN, DAYS_IN_QUEUE, WORK_CENTER }}
+					{#each burndown as { PART_NUMBER, RUN, DAYS_IN_QUEUE, WORK_CENTER, PO, ITEM }}
 						<tr>
-							<td>{PART_NUMBER}</td>
+							<td
+								><a
+									href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`}
+									target="_blank">{PART_NUMBER}</a
+								></td
+							>
 							<td>{RUN}</td>
 							<td>{DAYS_IN_QUEUE}</td>
 							<td>{WORK_CENTER.toUpperCase()}</td>

@@ -60,10 +60,10 @@
 		try {
 			const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
 				[
-					fetch(`/production/${dept}.json`),
+					fetch(`/api/dept/${dept}`),
 					fetch(`/api/stats/${dept}`),
 					fetch(`/api/asdf/${dept}`),
-					fetch(`/production/burndown/${dept}.json`),
+					fetch(`/api/dept/burndown/${dept}`),
 					fetch(`/api/wc/stats/linedata/${dept}`)
 				],
 				{
@@ -98,7 +98,6 @@
 	onMount(() => {
 		loadData();
 		reloadInterval = setInterval(() => {
-			// location.reload();
 			loadData();
 		}, 60000);
 	});
