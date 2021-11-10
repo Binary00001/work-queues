@@ -18,7 +18,7 @@ export const config = {
 	pool: {
 		max: 100,
 		min: 0,
-		idleTimeoutMillis: 50000
+		idleTimeoutMillis: 10000
 	}
 };
 

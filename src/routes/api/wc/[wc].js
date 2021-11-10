@@ -17,6 +17,8 @@ export async function get({params}) {
 
     let data = result.recordset
 
+    s
+
     return {
         headers: {
             'content-type': 'application/json'

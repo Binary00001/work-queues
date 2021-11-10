@@ -1,33 +1,4 @@
-<!-- <script context="module">
-
-    export async function load({fetch}) {
-
-        const res = await fetch('/api/burndown',
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'content-type': 'application/json'
-            }
-        })
-
-        if (res.ok) {
-            const data = await res.json()
-            // console.log(data)
-            return {
-                props: {data}
-            }
-        }
-
-        const {message} = await res.json()
-        return {
-            status: res.status,
-            error: new Error(message)
-        }
-    }
-</script> -->
 <script>
-	// import Dept from '$lib/Dept.svelte'
 	import { onDestroy, onMount } from 'svelte';
 	import Loader from '$lib/components/Loader.svelte';
 
@@ -36,7 +7,7 @@
 	let reloadInterval;
 
 	const getData = async () => {
-		const res = await fetch('/api/burndown', {
+		const res = await fetch('http://10.25.1.73:4004/api/burndown', {
 			method: 'GET',
 			mode: 'cors',
 			headers: {
@@ -47,7 +18,6 @@
 		if (res.ok) {
 			data = await res.json();
 			loading = false;
-			// console.log(data)
 		}
 	};
 
@@ -61,7 +31,6 @@
 	onDestroy(() => {
 		clearInterval(reloadInterval);
 	});
-	// console.log(data)
 </script>
 
 <main>
@@ -78,7 +47,6 @@
 						<th>Work Center</th>
 						<th>Part Number</th>
 						<th>Run</th>
-						<!-- <th>Customer Date</th> -->
 						<th>PO#</th>
 						<th>Item</th>
 						<th>Quantity</th>
@@ -88,19 +56,18 @@
 					<tbody>
 						{#each data as part}
 							<tr>
-								<td>{part.WC_NAME}</td>
-								<td>{part.PART_NUMBER}</td>
-								<td>{part.RUN}</td>
-								<!-- <td>{part.CUST_REQ_DATE}</td> -->
+								<td>{part.WC_Name}</td>
+								<td>{part.Part_Number}</td>
+								<td>{part.Run}</td>
 								<td>{part.PO}</td>
-								<td>{part.ITEM}</td>
-								<td>{part.RUN_QTY}</td>
-								{#if part.DAYS_IN_QUEUE == null}
+								<td>{part.Item}</td>
+								<td>{part.Run_Qty}</td>
+								{#if part.Queue_Days == null}
 									<td>0</td>
 								{:else}
-									<td>{part.DAYS_IN_QUEUE}</td>
+									<td>{part.Queue_Days}</td>
 								{/if}
-								<td>{part.COMMENTS}</td>
+								<td>{part.Comments}</td>
 							</tr>
 						{/each}
 					</tbody>
