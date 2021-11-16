@@ -60,7 +60,7 @@
 		try {
 			const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
 				[
-					fetch(`/api/dept/${dept}`),
+					fetch(`http://10.25.1.73:4004/api/dept/${dept}`),
 					fetch(`/api/stats/${dept}`),
 					fetch(`/api/asdf/${dept}`),
 					fetch(`/api/dept/burndown/${dept}`),
@@ -116,7 +116,7 @@
 {:else}
 	<div class="grid-container">
 		{#if deptList.length > 0}
-			<h1>{deptList[0].WC_NAME}</h1>
+			<h1>{deptList[0].Work_Center}</h1>
 		{/if}
 		<table class="goals-table">
 			<thead>

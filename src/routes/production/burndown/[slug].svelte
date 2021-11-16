@@ -34,7 +34,7 @@
 
 <main>
 	<h1 class="header">Burndown List</h1>
-	{#if data.length == 0}
+	{#if data.length == 0 || data == null}
 		<h2>No Burndown Items</h2>
 		<a href={`/production/${dept}`}><h3>Return to list</h3></a>
 	{:else}
