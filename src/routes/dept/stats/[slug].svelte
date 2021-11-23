@@ -116,7 +116,7 @@
 {:else}
 	<div class="grid-container">
 		{#if deptList.length > 0}
-			<h1>{deptList[0].Work_Center}</h1>
+			<h1>{deptList[0].WC_Name}</h1>
 		{/if}
 		<table class="goals-table">
 			<thead>

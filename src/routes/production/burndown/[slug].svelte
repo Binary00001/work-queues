@@ -27,14 +27,19 @@
 </script>
 
 <script>
+	import { onMount } from 'svelte';
+
 	export let data = null;
 	export let dept;
-	// console.log(data)
+
+	onMount(() => {
+		console.log(data);
+	});
 </script>
 
 <main>
 	<h1 class="header">Burndown List</h1>
-	{#if data.length == 0 || data == null}
+	{#if data == null}
 		<h2>No Burndown Items</h2>
 		<a href={`/production/${dept}`}><h3>Return to list</h3></a>
 	{:else}

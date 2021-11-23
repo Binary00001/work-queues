@@ -160,7 +160,29 @@
         </h2> -->
 			</div>
 
-			<a href={`/production/burndown/${dept}`} class="burndown-link">BURNDOWN</a>
+			<div class="table" style="margin-top: 5px;">
+				{#if burndownList.length > 0}
+					<h3 style="text-align: center;">Burndown Jobs</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>PART NUMBER</th>
+								<th>RUN</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each burndownList as { PART_NUMBER, RUN }}
+								<tr>
+									<td>{PART_NUMBER}</td>
+									<td>{RUN}</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				{:else}
+					<p />
+				{/if}
+			</div>
 
 			<div class="table">
 				<table class="parts">
@@ -316,10 +338,5 @@
 	.daily th,
 	.daily td {
 		border: none;
-	}
-
-	.burndown-link {
-		color: #1f1f1f;
-		font-size: 1.5em;
 	}
 </style>

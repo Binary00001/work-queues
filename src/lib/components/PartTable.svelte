@@ -5,17 +5,17 @@
 		// calculate days
 		const days = Math.floor(diffInMilliSeconds / 86400);
 		diffInMilliSeconds -= days * 86400;
-		console.log('calculated days', days);
+		// console.log('calculated days', days);
 
 		// calculate hours
 		const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
 		diffInMilliSeconds -= hours * 3600;
-		console.log('calculated hours', hours);
+		// console.log('calculated hours', hours);
 
 		// calculate minutes
 		const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
 		diffInMilliSeconds -= minutes * 60;
-		console.log('minutes', minutes);
+		// console.log('minutes', minutes);
 
 		let difference = '';
 		if (days > 0) {
@@ -37,23 +37,23 @@
 		<thead>
 			<th>Part Number</th>
 			<th>Run</th>
-			<th>Days In Queue</th>
-			<th>Quantity</th>
-			<!-- <th>Due Date</th> -->
 			<th>Priority</th>
-			<th>Testing</th>
+			<th>Quantity</th>
+			<th>Time In Queue</th>
+			<!-- <th>Due Date</th> -->
+			<!-- <th>Testing</th> -->
 			<!-- <th>Comments</th> -->
 		</thead>
 		<tbody>
-			{#each parts as { Run_Num, Run, Date_DiffNow, Run_Qty, OP_SchedDate, Prev_CompDate, Run_Priority, OP_SchedDate }}
+			{#each parts as { Run_Num, Run, Date_DiffNow, Run_Qty, Prev_CompDate, Run_Priority, WC_NAME, OP_SchedDate }}
 				<tr class:p5={Run_Priority == 5} class:p2={Run_Priority == 2}>
 					<td>{Run_Num}</td>
 					<td>{Run}</td>
-					<td class:stagnant={Date_DiffNow > 3}>{Date_DiffNow}</td>
-					<td>{parseInt(Run_Qty)}</td>
-					<!-- <td>{new Date(OP_SchedDate).toLocaleDateString()}</td> -->
 					<td>{Run_Priority}</td>
+					<td>{parseInt(Run_Qty)}</td>
 					<td>{timeDiffCalc(new Date(Date.now()), new Date(Prev_CompDate))}</td>
+					<!-- <td class:stagnant={Date_DiffNow > 3}>{Date_DiffNow}</td> -->
+					<!-- <td>{new Date(OP_SchedDate).toLocaleDateString()}</td> -->
 					<!-- {#if COMMENTS == null}
                         <td>{''}</td>    
                     {:else}
