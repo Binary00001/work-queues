@@ -1,39 +1,3 @@
-<!-- <script context='module'>
-     export async function load({page, fetch}) {
-        let dept = page.params.slug
-
-        const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
-            [
-                fetch(`/production/${dept}.json`),
-                fetch(`/api/stats/dept/${dept}`),
-                fetch(`/api/asdf/${dept}`),
-                fetch(`/production/burndown/${dept}.json`),
-                fetch(`/api/wc/stats/linedata/${dept}`)
-            ],
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'content-type': 'application/json'
-            }
-        })
-
-        if (deptData.ok && goalData.ok && employeeData.ok && burndownData.ok && chartData.ok) {
-            const deptList = await deptData.json()
-            const deptGoal = await goalData.json()
-            const employeeList = await employeeData.json()
-            const burndown = await burndownData.json()
-            const chartStats = await chartData.json()
-            return {
-                props: { 
-                    deptList, deptGoal, dept, employeeList, burndown, chartStats 
-                }
-            }
-        }
-
-        // console.log('nothing')
-    }
-</script> -->
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { page } from '$app/stores';
@@ -60,7 +24,7 @@
 		try {
 			const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
 				[
-					fetch(`http://10.25.1.73:4004/api/dept/${dept}`),
+					fetch(`http://imaginetics193.imagineticsinc.local:4004/api/testing/dept/num/${dept}`),
 					fetch(`/api/stats/${dept}`),
 					fetch(`/api/asdf/${dept}`),
 					fetch(`/api/dept/burndown/${dept}`),
@@ -141,7 +105,6 @@
 		</table>
 		<div class="data">
 			<div class="sidebar">
-				<!-- {#if dept == 1600} -->
 				<h3>{date}</h3>
 				<table>
 					<thead>
@@ -157,7 +120,6 @@
 						{/each}
 					</tbody>
 				</table>
-				<!-- {/if} -->
 
 				<!-- BURNDOWN DATA -->
 				{#if burndown.length > 0}
@@ -185,7 +147,6 @@
 				/>
 			</div>
 
-			<!-- <a href={`/production/burndown/${dept}`} class='burndown-link'>BURNDOWN</a> -->
 			{#if deptList.length == 0}
 				<div class="empty">
 					<p>Queue Empty</p>
@@ -216,7 +177,6 @@
 	}
 
 	.goals-table {
-		/* gap: 12px; */
 		background-color: tomato;
 		text-align: center;
 		border-bottom: 1px solid black;

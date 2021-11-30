@@ -1,32 +1,19 @@
 <script>
-	function timeDiffCalc(dateFuture, dateNow) {
-		let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
-
-		// calculate days
-		const days = Math.floor(diffInMilliSeconds / 86400);
-		diffInMilliSeconds -= days * 86400;
-		// console.log('calculated days', days);
-
-		// calculate hours
-		const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-		diffInMilliSeconds -= hours * 3600;
-		// console.log('calculated hours', hours);
-
-		// calculate minutes
-		const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-		diffInMilliSeconds -= minutes * 60;
-		// console.log('minutes', minutes);
+	function convertTime(time) {
+		let days = Math.floor(time / 1440);
+		let hours = Math.floor(time / 60);
+		let mins = time % 60;
 
 		let difference = '';
+
 		if (days > 0) {
-			difference += days === 1 ? `${days} day, ` : `${days} days, `;
+			difference += days === 1 ? `${days} day` : `${days} days`;
+			return difference;
+		} else if (hours > 0) {
+			difference = hours === 1 ? `${hours} hour` : `${hours} hours`;
+			return difference;
 		}
-
-		difference += hours === 0 || hours === 1 ? `${hours} hour, ` : `${hours} hours, `;
-
-		difference += minutes === 0 || hours === 1 ? `${minutes} minutes` : `${minutes} minutes`;
-
-		return difference;
+		return `${mins} minutes`;
 	}
 
 	export let parts;
@@ -40,18 +27,20 @@
 			<th>Priority</th>
 			<th>Quantity</th>
 			<th>Time In Queue</th>
+			<th>Comments</th>
 			<!-- <th>Due Date</th> -->
 			<!-- <th>Testing</th> -->
 			<!-- <th>Comments</th> -->
 		</thead>
 		<tbody>
-			{#each parts as { Run_Num, Run, Date_DiffNow, Run_Qty, Prev_CompDate, Run_Priority, WC_NAME, OP_SchedDate }}
-				<tr class:p5={Run_Priority == 5} class:p2={Run_Priority == 2}>
-					<td>{Run_Num}</td>
+			{#each parts as { Part_Num, Run, Queue_Diff, Qty, Priority, Comments }}
+				<tr class:p5={Priority == 5} class:p2={Priority == 2}>
+					<td>{Part_Num}</td>
 					<td>{Run}</td>
-					<td>{Run_Priority}</td>
-					<td>{parseInt(Run_Qty)}</td>
-					<td>{timeDiffCalc(new Date(Date.now()), new Date(Prev_CompDate))}</td>
+					<td>{Priority}</td>
+					<td>{parseInt(Qty)}</td>
+					<td>{convertTime(Queue_Diff)}</td>
+					<td>{Comments}</td>
 					<!-- <td class:stagnant={Date_DiffNow > 3}>{Date_DiffNow}</td> -->
 					<!-- <td>{new Date(OP_SchedDate).toLocaleDateString()}</td> -->
 					<!-- {#if COMMENTS == null}

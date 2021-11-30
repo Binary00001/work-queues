@@ -94,7 +94,7 @@
 								<td>{part.Run}</td>
 								<td>{part.PO}</td>
 								<td>{part.Item}</td>
-								<td>{part.Run_Qty}</td>
+								<td>{parseInt(part.Run_Qty)}</td>
 								{#if part.Queue_Days == null}
 									<td>0</td>
 								{:else}
