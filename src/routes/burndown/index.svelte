@@ -6,41 +6,31 @@
 	let loading = true;
 	let reloadInterval;
 
-	//
-	function timeDiffCalc(dateFuture, dateNow) {
-		let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
+	function convertMins(mins) {
+		const days = Math.floor(mins/1440)
+		const hours = Math.floor((mins - (days * 1440)) / 60)
+		const minutes = Math.round(mins%60)
 
-		// calculate days
-		const days = Math.floor(diffInMilliSeconds / 86400);
-		diffInMilliSeconds -= days * 86400;
-		console.log('calculated days', days);
+		let diff = ''
 
-		// calculate hours
-		const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-		diffInMilliSeconds -= hours * 3600;
-		console.log('calculated hours', hours);
-
-		// calculate minutes
-		const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-		diffInMilliSeconds -= minutes * 60;
-		console.log('minutes', minutes);
-
-		let difference = '';
 		if (days > 0) {
-			difference += days === 1 ? `${days} day, ` : `${days} days, `;
+			diff += days === 1 ? `${days} day, ` : `${days} days,`
+		}
+		if (hours > 0) {
+			diff += hours ===1 ? `${hours} hour,` : `${hours} hours,`
 		}
 
-		difference += hours === 0 || hours === 1 ? `${hours} hour, ` : `${hours} hours, `;
+		diff += minutes === 0 || 1 ? `${minutes} min` : `${minutes} minutes`
 
-		difference += minutes === 0 || hours === 1 ? `${minutes} minutes` : `${minutes} minutes`;
-
-		return difference;
+		return `${days} days, ${hours} hours, ${minutes} minutes`
 	}
+
+
 
 	//
 
 	const getData = async () => {
-		const res = await fetch('http://10.25.1.73:4004/api/burndown', {
+		const res = await fetch('http://192.168.0.24:4004/api/burndown', {
 			method: 'GET',
 			mode: 'cors',
 			headers: {
@@ -80,8 +70,8 @@
 						<th>Work Center</th>
 						<th>Part Number</th>
 						<th>Run</th>
-						<th>PO#</th>
-						<th>Item</th>
+						<!-- <th>PO#</th>
+						<th>Item</th> -->
 						<th>Quantity</th>
 						<th>DiQ</th>
 						<th>Comments</th>
@@ -92,13 +82,13 @@
 								<td>{part.WC_Name}</td>
 								<td>{part.Part_Number}</td>
 								<td>{part.Run}</td>
-								<td>{part.PO}</td>
-								<td>{part.Item}</td>
-								<td>{parseInt(part.Run_Qty)}</td>
-								{#if part.Queue_Days == null}
+								<!-- <td>{part.PO}</td>
+								<td>{part.Item}</td> -->
+								<td>{parseInt(part.Qty)}</td>
+								{#if part.Queue_Time == null}
 									<td>0</td>
 								{:else}
-									<td>{part.Queue_Days}</td>
+									<td>{convertMins(part.Queue_Time)}</td>
 								{/if}
 								<td>{part.Comments}</td>
 							</tr>
