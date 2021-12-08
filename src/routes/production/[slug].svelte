@@ -126,7 +126,7 @@
 			<h1 class="loading">No Jobs In Queue</h1>
 		{:else}
 			<h1 class="dept">
-				{deptList[0].WC_NAME}
+				{deptList[0].WCNDESC}
 			</h1>
 			<div class="daily">
 				<table>
@@ -197,24 +197,24 @@
 						<th>Comments</th>
 					</thead>
 					<tbody>
-						{#each deptList as { PART_NUMBER, RUN, RUN_QTY, CUSTOMER, CUST_REQ_DATE, COMMENTS, DAYS_IN_QUEUE, PO, ITEM, PRIORITY }}
-							<tr class:hot={PRIORITY <= 5}>
+						{#each deptList as { RUNRTNUM, RUNNO, RUNQTY, SOCUST, ITCUSTREQ, COMMENTS, QUEUEDIFF, SOPO, ITNUMBER, RUNPRIORITY }}
+							<tr class:hot={RUNPRIORITY <= 5}>
 								<td
 									><a
-										href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`}
-										target="_blank">{PART_NUMBER}</a
+										href={`/part?po=${SOPO}&line=${ITNUMBER}&run=${RUNNO}&part=${RUNRTNUM}`}
+										target="_blank">{RUNRTNUM}</a
 									></td
 								>
-								<td>{RUN}</td>
-								<td class:stagnant={DAYS_IN_QUEUE > 3}>{DAYS_IN_QUEUE}</td>
-								<td>{RUN_QTY}</td>
-								<td>{CUSTOMER}</td>
+								<td>{RUNNO}</td>
+								<td class:stagnant={QUEUEDIFF > 3}>{QUEUEDIFF}</td>
+								<td>{RUNQTY}</td>
+								<td>{SOCUST}</td>
 								<td
 									>{new Date(
-										CUST_REQ_DATE.replace(/-/g, '/').replace(/T.+/, '')
+										ITCUSTREQ.replace(/-/g, '/').replace(/T.+/, '')
 									).toLocaleDateString()}</td
 								>
-								<td>{PRIORITY}</td>
+								<td>{RUNPRIORITY}</td>
 								{#if COMMENTS == null}
 									<td>{''}</td>
 								{:else}

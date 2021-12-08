@@ -27,22 +27,22 @@
 			<th>Priority</th>
 			<th>Quantity</th>
 			<th>Time In Queue</th>
+			<th>Due Date</th>
 			<th>Comments</th>
-			<!-- <th>Due Date</th> -->
 			<!-- <th>Testing</th> -->
 			<!-- <th>Comments</th> -->
 		</thead>
 		<tbody>
-			{#each parts as { Part_Num, Run, Queue_Diff, Qty, Priority, Comments }}
+			{#each parts as { Part_Num, Run, Queue_Diff, Qty, Priority, Cust_Date, Comments }}
 				<tr class:p5={Priority == 5} class:p2={Priority == 2}>
 					<td>{Part_Num}</td>
 					<td>{Run}</td>
 					<td>{Priority}</td>
 					<td>{parseInt(Qty)}</td>
 					<td>{convertTime(Queue_Diff)}</td>
+					<td>{new Date(Cust_Date).toLocaleDateString()}</td>
 					<td>{Comments}</td>
 					<!-- <td class:stagnant={Date_DiffNow > 3}>{Date_DiffNow}</td> -->
-					<!-- <td>{new Date(OP_SchedDate).toLocaleDateString()}</td> -->
 					<!-- {#if COMMENTS == null}
                         <td>{''}</td>    
                     {:else}

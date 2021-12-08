@@ -24,7 +24,7 @@
 		try {
 			const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
 				[
-					fetch(`http://imaginetics193.imagineticsinc.local:4004/api/testing/dept/num/${dept}`),
+					fetch(`/api/stats/dept/${dept}`),
 					fetch(`/api/stats/${dept}`),
 					fetch(`/api/asdf/${dept}`),
 					fetch(`/api/dept/burndown/${dept}`),

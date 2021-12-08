@@ -16,24 +16,27 @@
 			<th>Days In Queue</th>
 			<th>Quantity</th>
 			<th>Customer</th>
+			<th>Cust Date</th>
 			<th>Priority</th>
 			<th>Comments</th>
 		</thead>
 
 		<tbody>
-			{#each parts as { PART_NUMBER, RUN, DAYS_IN_QUEUE, RUN_QTY, CUSTOMER, PRIORITY, COMMENTS, PO, ITEM }}
+			{#each parts as { RUNRTNUM, RUNNO, QUEUEDIFF, RUNQTY, SOCUST, ITCUSTREQ, RUNPRIORITY, COMMENTS, SOPO, ITNUMBER }}
 				<!-- {#if } -->
 				<tr>
 					<td
-						><a href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`} target="_blank"
-							>{PART_NUMBER}</a
+						><a
+							href={`/part?po=${SOPO}&line=${ITNUMBER}&run=${RUNNO}&part=${RUNRTNUM}`}
+							target="_blank">{RUNRTNUM}</a
 						></td
 					>
-					<td>{RUN}</td>
-					<td class:stagnant={DAYS_IN_QUEUE > 3}>{DAYS_IN_QUEUE}</td>
-					<td>{RUN_QTY}</td>
-					<td>{CUSTOMER}</td>
-					<td>{PRIORITY}</td>
+					<td>{RUNNO}</td>
+					<td class:stagnant={QUEUEDIFF > 3}>{QUEUEDIFF}</td>
+					<td>{RUNQTY}</td>
+					<td>{SOCUST}</td>
+					<td>{new Date(ITCUSTREQ).toLocaleDateString()}</td>
+					<td>{RUNPRIORITY}</td>
 					{#if COMMENTS == null}
 						<td>{''}</td>
 					{:else}
