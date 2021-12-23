@@ -1,95 +1,79 @@
-<!-- <script context="module">
-	export async function load({ page, fetch }) {
-		let dept = page.params.slug;
-
-		const [deptData, goalData, burndownData, chartData] = await Promise.all(
-			[
-				fetch(`/production/${dept}.json`),
-				fetch(`/api/stats/${dept}`),
-				fetch(`/production/burndown/${dept}.json`),
-				fetch(`/api/wc/stats/linedata/${dept}`)
-			],
-			{
-				method: 'GET',
-				mode: 'cors',
-				headers: {
-					'content-type': 'application/json'
-				}
-			}
-		);
-
-		if (deptData.ok && goalData.ok && burndownData.ok && chartData.ok) {
-			const deptList = await deptData.json();
-			const deptGoal = await goalData.json();
-			const burndownList = await burndownData.json();
-			const chartStats = await chartData.json();
-			return {
-				props: {
-					dept,
-					deptList,
-					deptGoal,
-					burndownList,
-					chartStats
-				}
-			};
-		}
-
-		console.log('nothing');
-	}
-</script> -->
 <script>
 	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
 
+	import { convertTime } from '$lib/utils';
 	import Loader from '$lib/components/Loader.svelte';
 	import DailyChart from '$lib/components/DailyChart.svelte';
 
+	const api = import.meta.env.VITE_API_URL;
 	let dept;
 	let deptList;
-	let deptGoal;
 	let burndownList;
 	let chartStats;
 	let goal;
+	let dailyGoal;
+	let completedJobs;
+	let completedParts;
 
 	let myInterval;
 	let loading = true;
 
 	let dates;
 	let dailyParts;
-	//do something with this to get the goal line
-	// let dailyGoal = deptGoal.map(i => i.daily_goal)
-	// let lineData = [...dailyParts, ...dailyGoal]
 
 	async function getData() {
 		dept = $page.params.slug;
-
-		const [deptData, goalData, burndownData, chartData] = await Promise.all(
-			[
-				fetch(`/production/${dept}.json`),
-				fetch(`/api/stats/${dept}`),
-				fetch(`/production/burndown/${dept}.json`),
-				fetch(`/api/wc/stats/linedata/${dept}`)
-			],
-			{
-				method: 'GET',
-				mode: 'cors',
-				headers: {
-					'content-type': 'application/json'
+		try {
+			const [
+				deptData,
+				burndownData,
+				chartData,
+				dailyGoalData,
+				completedJobsData,
+				completedPartsData
+			] = await Promise.all(
+				[
+					fetch(`/api/dept/${dept}`),
+					fetch(`/api/dept/burndown/${dept}`),
+					fetch(`/api/wc/stats/linedata/${dept}`),
+					fetch(`/api/dept/stats/dailyGoal/${dept}`),
+					fetch(`/api/dept/stats/completedJobs/${dept}`),
+					fetch(`/api/dept/stats/completedParts/${dept}`)
+				],
+				{
+					method: 'GET',
+					mode: 'cors',
+					headers: {
+						'content-type': 'application/json'
+					}
 				}
-			}
-		);
-
-		if (deptData.ok && goalData.ok && burndownData.ok && chartData.ok) {
-			deptList = await deptData.json();
-			deptGoal = await goalData.json();
-			burndownList = await burndownData.json();
-			chartStats = await chartData.json();
-
-			dates = chartStats.map((day) =>
-				new Date(day.DAY.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
 			);
-			dailyParts = chartStats.map((parts) => parts.DAILY_JOBS);
-			goal = parseInt(deptGoal[0].daily_goal / 34);
+
+			if (
+				deptData.ok &&
+				burndownData.ok &&
+				chartData.ok &&
+				dailyGoalData.ok &&
+				completedJobsData.ok &&
+				completedPartsData.ok
+			) {
+				deptList = await deptData.json();
+				burndownList = await burndownData.json();
+				chartStats = await chartData.json();
+				dailyGoal = await dailyGoalData.json();
+				completedJobs = await completedJobsData.json();
+				completedParts = await completedPartsData.json();
+
+				dates = chartStats.map((day) =>
+					new Date(day.DAY.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
+				);
+				dailyParts = chartStats.map((parts) => parts.DAILY_JOBS);
+				goal = parseInt(dailyGoal[0].daily_goal / 34);
+			}
+		} catch (err) {
+			throw new Error(err.message);
+		} finally {
 			loading = false;
 		}
 	}
@@ -99,34 +83,23 @@
 		myInterval = setInterval(() => {
 			// location.reload();
 			getData();
-		}, 60000);
+		}, 120000);
 	});
 
 	onDestroy(() => {
 		clearInterval(myInterval);
 	});
-
-	// console.log(lineData)
 </script>
-
-<!-- <svelte:head>
-	{#if deptList.length === 0}
-		<title>IMAGINETICS</title>
-	{:else}
-		<title>IMAGINETICS - {deptList[0].WORK_CENTER.toUpperCase()}</title>
-	{/if}
-</svelte:head> -->
 
 <main>
 	{#if loading}
 		<Loader />
 	{:else}
-		<!-- <a href={`/burndown/${dept}`}><p>Burndown list</p></a> -->
-		{#if deptList.length === 0}
+		{#if deptList === null}
 			<h1 class="loading">No Jobs In Queue</h1>
 		{:else}
 			<h1 class="dept">
-				{deptList[0].WCNDESC}
+				{deptList[0].WC_Name}
 			</h1>
 			<div class="daily">
 				<table>
@@ -139,25 +112,16 @@
 						<tr>
 							<td>{goal}</td>
 							<td>
-								{#if deptGoal[0].completed_jobs == null}
+								{#if completedJobs[0].completed_jobs == null}
 									0
 								{:else}
-									{deptGoal[0].completed_jobs}
+									{completedJobs[0].completed_jobs}
 								{/if}
 							</td>
-							<td>{deptGoal[0].daily_parts}</td>
+							<td>{completedParts[0].daily_parts}</td>
 						</tr>
 					</tbody>
 				</table>
-				<!-- <h2>DAILY GOAL: {goal} - 
-            JOBS COMPLETED: 
-            {#if deptGoal[0].completed_jobs == null}
-                0 -
-            {:else}
-                {deptGoal[0].completed_jobs} -
-            {/if}
-            PARTS COMPLETED:  {deptGoal[0].daily_parts}
-        </h2> -->
 			</div>
 
 			<div class="table" style="margin-top: 5px;">
@@ -168,13 +132,15 @@
 							<tr>
 								<th>PART NUMBER</th>
 								<th>RUN</th>
+								<th>QUANTITY</th>
 							</tr>
 						</thead>
 						<tbody>
-							{#each burndownList as { PART_NUMBER, RUN }}
+							{#each burndownList as { Part_Num, Run, Qty }}
 								<tr>
-									<td>{PART_NUMBER}</td>
-									<td>{RUN}</td>
+									<td>{Part_Num}</td>
+									<td>{Run}</td>
+									<td>{Qty}</td>
 								</tr>
 							{/each}
 						</tbody>
@@ -189,7 +155,7 @@
 					<thead>
 						<th>Part Number</th>
 						<th>Run</th>
-						<th>Days in Queue</th>
+						<th>Time in Queue</th>
 						<th>Quantity</th>
 						<th>Customer</th>
 						<th>Due Date</th>
@@ -197,28 +163,24 @@
 						<th>Comments</th>
 					</thead>
 					<tbody>
-						{#each deptList as { RUNRTNUM, RUNNO, RUNQTY, SOCUST, ITCUSTREQ, COMMENTS, QUEUEDIFF, SOPO, ITNUMBER, RUNPRIORITY }}
-							<tr class:hot={RUNPRIORITY <= 5}>
+						{#each deptList as part}
+							<tr class:hot={part.Priority <= 5}>
 								<td
 									><a
-										href={`/part?po=${SOPO}&line=${ITNUMBER}&run=${RUNNO}&part=${RUNRTNUM}`}
-										target="_blank">{RUNRTNUM}</a
+										href={`/part?po=${part.PO}&line=${part.Item}&run=${part.Run}&part=${part.Part_Num}`}
+										target="_blank">{part.Part_Num}</a
 									></td
 								>
-								<td>{RUNNO}</td>
-								<td class:stagnant={QUEUEDIFF > 3}>{QUEUEDIFF}</td>
-								<td>{RUNQTY}</td>
-								<td>{SOCUST}</td>
-								<td
-									>{new Date(
-										ITCUSTREQ.replace(/-/g, '/').replace(/T.+/, '')
-									).toLocaleDateString()}</td
-								>
-								<td>{RUNPRIORITY}</td>
-								{#if COMMENTS == null}
-									<td>{''}</td>
+								<td>{part.Run}</td>
+								<td>{convertTime(part.Queue_Diff)}</td>
+								<td>{parseInt(part.Qty)}</td>
+								<td>{part.Customer}</td>
+								<td>{new Date(part.Cust_Date).toLocaleDateString()}</td>
+								<td>{part.Priority}</td>
+								{#if part.Comments === null}
+									<td />
 								{:else}
-									<td class="comment">{COMMENTS}</td>
+									<td class="comment">{part.Comments}</td>
 								{/if}
 							</tr>
 						{/each}
@@ -321,11 +283,6 @@
 
 	.hot {
 		background-color: yellow;
-	}
-
-	.stagnant {
-		color: red;
-		font-weight: bold;
 	}
 
 	.daily thead {

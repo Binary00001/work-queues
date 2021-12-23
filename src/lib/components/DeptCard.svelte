@@ -1,10 +1,8 @@
 <script>
+	import { convertTime } from '$lib/utils';
+
 	export let dept;
 	export let parts;
-
-	// onMount(() => {
-	// 	console.log(list);
-	// });
 </script>
 
 <div class="container">
@@ -13,7 +11,7 @@
 		<thead>
 			<th>Part Number</th>
 			<th>Run</th>
-			<th>Days In Queue</th>
+			<th>Time In Queue</th>
 			<th>Quantity</th>
 			<th>Customer</th>
 			<th>Cust Date</th>
@@ -22,26 +20,25 @@
 		</thead>
 
 		<tbody>
-			{#each parts as { RUNRTNUM, RUNNO, QUEUEDIFF, RUNQTY, SOCUST, ITCUSTREQ, RUNPRIORITY, COMMENTS, SOPO, ITNUMBER }}
+			{#each parts as { Part_Num, Run, Queue_Diff, Qty, Customer, Cust_Date, Priority, Comments, PO, Item }}
 				<!-- {#if } -->
 				<tr>
 					<td
-						><a
-							href={`/part?po=${SOPO}&line=${ITNUMBER}&run=${RUNNO}&part=${RUNRTNUM}`}
-							target="_blank">{RUNRTNUM}</a
+						><a href={`/part?po=${PO}&line=${Item}&run=${Run}&part=${Part_Num}`} target="_blank"
+							>{Part_Num}</a
 						></td
 					>
-					<td>{RUNNO}</td>
-					<td class:stagnant={QUEUEDIFF > 3}>{QUEUEDIFF}</td>
-					<td>{RUNQTY}</td>
-					<td>{SOCUST}</td>
-					<td>{new Date(ITCUSTREQ).toLocaleDateString()}</td>
-					<td>{RUNPRIORITY}</td>
-					{#if COMMENTS == null}
-						<td>{''}</td>
-					{:else}
-						<td>{COMMENTS}</td>
-					{/if}
+					<td>{Run}</td>
+					<td class:stagnant={Queue_Diff >= 4320}>{convertTime(Queue_Diff)}</td>
+					<td>{Qty}</td>
+					<td>{Customer}</td>
+					<td>{new Date(Cust_Date).toLocaleDateString()}</td>
+					<td>{Priority}</td>
+					<!-- {#if Comments == null} -->
+					<!-- <td>{''}</td> -->
+					<!-- {:else} -->
+					<td>{Comments}</td>
+					<!-- {/if} -->
 				</tr>
 				<!-- {/if} -->
 			{/each}
@@ -50,6 +47,16 @@
 </div>
 
 <style>
+	.container {
+		font-weight: 400;
+		width: 45%;
+	}
+
+	h2 {
+		font-weight: 400;
+		margin: 5px;
+	}
+
 	/*  */
 	table,
 	th,
@@ -57,6 +64,11 @@
 		border: 1px solid black;
 		border-collapse: collapse;
 		padding: 5px;
+		/* font-weight: 400; */
+	}
+
+	th {
+		font-weight: 500;
 	}
 
 	td {
@@ -64,7 +76,7 @@
 	}
 
 	thead {
-		background-color: skyblue;
+		background-color: rgba(0, 128, 128, 0.5);
 	}
 
 	table tr:hover {
@@ -72,17 +84,17 @@
 	}
 
 	table {
-		width: 95%;
+		width: 100%;
 		margin: 10px;
 	}
 	/*  */
 
-	.stagnant {
-		color: red;
-	}
-
 	a {
 		text-decoration: none;
 		color: black;
+	}
+
+	.stagnant {
+		color: red;
 	}
 </style>

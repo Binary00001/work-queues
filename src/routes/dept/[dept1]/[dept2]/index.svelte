@@ -1,12 +1,18 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
+	import { page } from '$app/stores';
 	import DeptCard from '$lib/components/DeptCard.svelte';
 	import Loader from '$lib/components/Loader.svelte';
 
-	let primerParts;
-	let primerBurndown;
-	let topCoatParts;
-	let topCoatBurndown;
+	import { convertTime } from '$lib/utils';
+
+	let { dept1, dept2 } = $page.params;
+	const api = 'http://imaginetics193.imagineticsinc.local:4004/api';
+
+	let dept1Parts;
+	let dept1Burndown;
+	let dept2Parts;
+	let dept2Burndown;
 	let loading = true;
 	let burndown = [];
 	let myInterval;
@@ -14,16 +20,16 @@
 	async function getData() {
 		try {
 			const [
-				primerPartsData,
-				primerBurndownData,
-				topCoatPartsData,
-				topCoatBurndownData
+				dept1PartsData,
+				dept1BurndownData,
+				dept2PartsData,
+				dept2BurndownData
 			] = await Promise.all(
 				[
-					fetch('/dept/5030.json'),
-					fetch('/dept/burndown/5030.json'),
-					fetch('/dept/5035.json'),
-					fetch('/dept/burndown/5035.json')
+					fetch(`${api}/dept/num/${dept1}`),
+					fetch(`${api}/dept/burndown/${dept1}`),
+					fetch(`${api}/dept/num/${dept2}`),
+					fetch(`${api}/dept/burndown/${dept2}`)
 				],
 				{
 					method: 'GET',
@@ -34,17 +40,13 @@
 				}
 			);
 
-			if (
-				primerPartsData.ok &&
-				primerBurndownData.ok &&
-				topCoatPartsData.ok &&
-				topCoatBurndownData.ok
-			) {
-				primerParts = await primerPartsData.json();
-				primerBurndown = await primerBurndownData.json();
-				topCoatParts = await topCoatPartsData.json();
-				topCoatBurndown = await topCoatBurndownData.json();
-				burndown = [...primerBurndown, ...topCoatBurndown];
+			if (dept1PartsData.ok && dept1BurndownData.ok && dept2PartsData.ok && dept2BurndownData.ok) {
+				dept1Parts = await dept1PartsData.json();
+				dept1Burndown = await dept1BurndownData.json();
+				dept2Parts = await dept2PartsData.json();
+				dept2Burndown = await dept2BurndownData.json();
+				burndown = [...dept1Burndown, ...dept2Burndown];
+				console.log(dept1PartsData);
 			}
 		} catch (err) {
 			throw new Error(err.message);
@@ -67,12 +69,20 @@
 
 {#if loading}
 	<div class="loader">
-		<h1>FINISH INSPECTION</h1>
+		<!-- <h1>{dept1Parts[0].WC_Name} | {dept2Parts[0].WC_Name}</h1> -->
 		<Loader />
 	</div>
 {:else}
 	<div class="finish-container">
-		<h1>FINISH INSPECTION</h1>
+		<h1>
+			{#if dept1Parts.length > 0 && dept2Parts.length > 0}
+				{dept1Parts[0].WC_Name} | {dept2Parts[0].WC_Name}
+			{:else if dept1Parts.length > 0}
+				{dept1Parts[0].WC_Name}
+			{:else if dept2Parts.length > 0}
+				{dept2Parts[0].WC_Name}
+			{/if}
+		</h1>
 		<!-- burndown table -->
 		<div class="burndown-table">
 			{#if burndown.length == 0}
@@ -96,7 +106,7 @@
 									></td
 								>
 								<td>{Run}</td>
-								<td>{Queue_Diff}</td>
+								<td>{convertTime(Queue_Diff)}</td>
 								<td>{WC_Name.toUpperCase()}</td>
 							</tr>
 						{/each}
@@ -107,8 +117,12 @@
 
 		<!-- Department tables -->
 		<div class="card-view">
-			<DeptCard parts={primerParts} dept={'primer inspection'} />
-			<DeptCard parts={topCoatParts} dept={'topcoat inspection'} />
+			{#if dept1Parts.length > 0}
+				<DeptCard parts={dept1Parts} dept={dept1Parts[0].WC_Name} />
+			{/if}
+			{#if dept2Parts.length > 0}
+				<DeptCard parts={dept2Parts} dept={dept2Parts[0].WC_Name} />
+			{/if}
 		</div>
 	</div>
 {/if}
@@ -139,10 +153,12 @@
 		background-color: rgba(0, 128, 128, 0.5);
 		font-weight: 200;
 		text-align: center;
+		padding: 5px;
 	}
 
 	h2 {
 		font-weight: 400;
+		margin: 5px;
 	}
 
 	.burndown-table {

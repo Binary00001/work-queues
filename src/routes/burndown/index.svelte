@@ -6,31 +6,28 @@
 	let loading = true;
 	let reloadInterval;
 
-	function convertMins(mins) {
-		const days = Math.floor(mins/1440)
-		const hours = Math.floor((mins - (days * 1440)) / 60)
-		const minutes = Math.round(mins%60)
+	function convertTime(time) {
+		let days = Math.floor(time / 1440);
+		let hours = Math.floor(time / 60);
+		let mins = time % 60;
 
-		let diff = ''
+		let difference = '';
 
 		if (days > 0) {
-			diff += days === 1 ? `${days} day, ` : `${days} days,`
+			difference += days === 1 ? `${days} day` : `${days} days`;
+			return difference;
+		} else if (hours > 0) {
+			difference = hours === 1 ? `${hours} hour` : `${hours} hours`;
+			return difference;
 		}
-		if (hours > 0) {
-			diff += hours ===1 ? `${hours} hour,` : `${hours} hours,`
-		}
-
-		diff += minutes === 0 || 1 ? `${minutes} min` : `${minutes} minutes`
-
-		return `${days} days, ${hours} hours, ${minutes} minutes`
+		return `${mins} minutes`;
 	}
-
-
 
 	//
 
 	const getData = async () => {
 		const res = await fetch('http://imaginetics193.imagineticsinc.local:4004/api/burndown', {
+			// const res = await fetch('/api/burndown', {
 			method: 'GET',
 			mode: 'cors',
 			headers: {
@@ -80,15 +77,15 @@
 						{#each data as part}
 							<tr>
 								<td>{part.WC_Name}</td>
-								<td>{part.Part_Number}</td>
+								<td>{part.Part_Num}</td>
 								<td>{part.Run}</td>
 								<!-- <td>{part.PO}</td>
 								<td>{part.Item}</td> -->
 								<td>{parseInt(part.Qty)}</td>
-								{#if part.Queue_Time == null}
+								{#if part.Queue_Diff == null}
 									<td>0</td>
 								{:else}
-									<td>{convertMins(part.Queue_Time)}</td>
+									<td>{convertTime(part.Queue_Diff)}</td>
 								{/if}
 								<td>{part.Comments}</td>
 							</tr>
@@ -133,8 +130,11 @@
 		padding: 5px;
 	}
 
-	thead {
-		background-color: skyblue;
+	thead,
+	th {
+		background-color: rgba(0, 128, 128, 1);
+		position: sticky;
+		top: 0;
 	}
 
 	tr:hover {

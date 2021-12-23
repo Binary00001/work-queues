@@ -1,29 +1,29 @@
-import sql from 'mssql'
-import { config } from '$lib/db'
+import sql from 'mssql';
+import { config } from '$lib/db';
 
-export async function get({params}) {
-    const { dept } = params
+export async function get({ params }) {
+	const { dept } = params;
 
-    await sql.connect(config)
-    //rewrite to also get the part numbers of jobs
-    const result = await sql.query(
-    `SELECT COUNT(OPREF) as jobs_completed, OPINSP AS employee FROM dbo.RnopTable 
-    INNER JOIN RunsTable ON RUNREF = OPREF AND RUNNO = OPRUN 
-    WHERE RUNPKPURGED = 0 
-    AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
-    AND OPCENTER = '${dept}'
-    GROUP BY OPINSP;`
-      )
+	await sql.connect(config);
+	//rewrite to also get the part numbers of jobs
+	const result = await sql.query(
+		`SELECT OPINSP employee, 
+             MAX(OPTOTAL) jobs_completed 
+             FROM(
+                SELECT OPINSP,
+                ROW_NUMBER() OVER (PARTITION BY OPINSP ORDER BY OPINSP) AS OPTOTAL
+                FROM RnopTable 
+                    WHERE OPCOMPDATE >= CAST(GETDATE() AS DATE) 
+                    AND OPCENTER='${dept}')a 
+                GROUP BY OPINSP`
+	);
 
+	// console.log(result)
 
-    
-    // console.log(result)
-
-    return {
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: result.recordset
-    }
+	return {
+		headers: {
+			'content-type': 'application/json'
+		},
+		body: result.recordset
+	};
 }
-

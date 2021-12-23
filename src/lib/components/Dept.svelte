@@ -1,80 +1,103 @@
 <script>
-    export let dept;
-    export let parts;
+	// dept possibly not needed
+	// export let dept;
+	export let parts;
+
+	function convertTime(time) {
+		let days = Math.floor(time / 1440);
+		let hours = Math.floor(time / 60);
+		let mins = time % 60;
+
+		let difference = '';
+
+		if (days > 0) {
+			difference += days === 1 ? `${days} day` : `${days} days`;
+			return difference;
+		} else if (hours > 0) {
+			difference = hours === 1 ? `${hours} hour` : `${hours} hours`;
+			return difference;
+		}
+		return `${mins} minutes`;
+	}
 </script>
 
-<main>
-    <h1>{dept}</h1>
-    {#if parts}
-        <table>
-            <thead>
-                <!-- <th>Work Center</th> -->
-                <th>Part Number</th>
-                <th>Run</th>
-                <!-- <th>Days In Queue</th> -->
-                <th>Quantity</th>
-                <th>Customer</th>
-                <th>Priority</th>
-                <th>Comments</th>
-            </thead>
-            <tbody>
-                {#each parts as {part_number, run, qty, cust, priority, comments, po_num, item}}
-                    <tr class:hot={priority === 5}>
-                        <!-- <td>{part.work_center}</td> -->
-                        <td><a href={`/part?po=${po_num}&line=${item}&run=${run}&part=${part_number}`} target="_blank">{part_number}</a></td>
-                        <td>{run}</td>
-                        <!-- <td>{}</td> -->
-                        <td>{qty}</td>
-                        <td>{cust}</td>
-                        <td>{priority}</td>
-                        {#if comments == null}
-                            <td>{''}</td>    
-                        {:else}
-                            <td class="comment">{comments}</td>
-                        {/if}
-                        
-                    </tr>
-                {/each}
-            </tbody>
-        </table>
-    {:else}
-    <p>No Data To Load...</p>
-    {/if}
-</main>
+<div class="container">
+	<h2>{parts[0].WC_Name.toUpperCase()}</h2>
+	<table>
+		<thead>
+			<th>Part Number</th>
+			<th>Run</th>
+			<th>Cust Date</th>
+			<th>Priority</th>
+			<th>Customer</th>
+			<th>Quantity</th>
+			<th>Queue Time</th>
+			<th>Comments</th>
+		</thead>
+
+		<tbody>
+			{#each parts as { Part_Num, Run, Qty, Comments, Customer, WC_Num, Cust_Date, WC_Name, Queue_Diff, Priority }}
+				<tr>
+					<!-- <td
+						><a
+							href={`/part?po=${SOPO}&line=${ITNUMBER}&run=${RUNNO}&part=${RUNRTNUM}`}
+							target="_blank">{RUNRTNUM}</a
+						></td
+					> -->
+					<td>{Part_Num}</td>
+					<td>{Run}</td>
+					<td>{new Date(Cust_Date).toLocaleDateString()}</td>
+					<td class:hot={Priority <= 5}>{Priority}</td>
+					<td>{Customer}</td>
+					<td>{parseInt(Qty)}</td>
+					<td>{convertTime(Queue_Diff)}</td>
+					<td>{Comments}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style>
-    main {
-        display: flex;
-        flex-direction: column;
-        /* width: 800; */
-        margin: 10px;
-    }
+	.container {
+		margin-top: 10px;
+		width: 48%;
+	}
 
-    h1 {
-        font-weight: 200;
-        text-align: center;
-        background-color: slategray;
-        border: 1px solid black;
-        border-bottom: none;
-    }
+	/*  */
+	table,
+	th,
+	td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+	}
 
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-        padding: 5px;
-    }
+	td {
+		text-align: center;
+	}
 
-    thead {
-        background-color: skyblue;
-    }
+	thead {
+		background-color: skyblue;
+	}
 
-    .hot {
-        background-color: yellow;
-    }
+	table tr:hover {
+		background-color: yellow;
+	}
 
-    /* move to avoid repetition */
-    a {
-        color: #1f1f13;
-        text-decoration: none;
-    }
+	table {
+		width: 95%;
+		margin: 10px;
+	}
+	/*  */
+
+	.hot {
+		background-color: rgba(255, 0, 0, 0.6);
+		color: #eee;
+	}
+
+	/* a {
+		text-decoration: none;
+		color: black;
+	} */
 </style>

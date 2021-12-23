@@ -37,14 +37,17 @@
 		<div class="dropdown">
 			<a class="dropdown-btn" href="/">Sheet Metal</a>
 			<div class="dropdown-menu">
-				<a href="/production/0300" target="_parent">Material ID & Issue</a>
+				<!-- <a href="/production/0300" target="_parent">Material ID & Issue</a> -->
+				<a sveltekit:prefetch href="/dept/0300/0500" target="_parent">ID & Issue | Saw</a>
 				<a href="/production/0401" target="_parent">Shear</a>
-				<a href="/production/0500" target="_parent">Saw</a>
-				<a href="/production/0700" target="_parent">CNC PUNCH</a>
-				<a href="/production/0750" target="_parent">AMADA 2510NT</a>
-				<a href="/production/0900" target="_parent">Punch Press</a>
+				<!-- <a href="/production/0500" target="_parent">Saw</a> -->
+				<a sveltekit:prefetch href="/dept/0700/0750" target="_parent">CNC Punch | AMADA 2510NT</a>
+				<a sveltekit:prefetch href="/dept/0900/1000" target="_parent">Punch Press | Hydroform</a>
+				<!-- <a href="/production/0700" target="_parent">CNC PUNCH</a> -->
+				<!-- <a href="/production/0750" target="_parent">AMADA 2510NT</a> -->
+				<!-- <a href="/production/0900" target="_parent">Punch Press</a> -->
 				<a href="/production/0950" target="_parent">Hot Joggle</a>
-				<a href="/production/1000" target="_parent">Hydroform</a>
+				<!-- <a href="/production/1000" target="_parent">Hydroform</a> -->
 				<a href="/production/1100" target="_parent">Roll Form</a>
 				<a href="/production/1200" target="_parent">Notcher</a>
 				<a href="/production/1400" target="_parent">Router</a>
@@ -62,9 +65,9 @@
 				<a href="/production/2005" target="_parent">Insp CNC</a>
 				<a href="/production/2020" target="_parent">Insp Heat Treat</a>
 				<a href="/production/2040" target="_parent">Insp Finish</a>
-				<a href="/production/5030" target="_parent">Insp Prime</a>
-				<a href="/production/5035" target="_parent">Insp Topcoat</a>
-				<a href="/insp/finish">Insp Prime/TC</a>
+				<!-- <a href="/production/5030" target="_parent">Insp Prime</a> -->
+				<!-- <a href="/production/5035" target="_parent">Insp Topcoat</a> -->
+				<a sveltekit:prefetch href="/dept/5030/5035" target="_parent">Insp Prime | TC</a>
 				<a href="/production/5099" target="_parent">IMAG CERT</a>
 				<a href="/production/2050" target="_parent">Insp Assembly</a>
 				<a href="/production/2060" target="_parent">Insp Final</a>
@@ -94,11 +97,14 @@
 		<div class="dropdown">
 			<a href="/finish/paint" target="_parent" class="dropdown-btn">Building 2</a>
 			<div class="dropdown-menu">
-				<a href="/production/5225" target="_parent">Penetrant Inspect</a>
-				<a href="/production/5010" target="_parent">Chemline</a>
+				<a sveltekit:prefetch href="/dept/5225/5010" target="_parent"
+					>Penetrant Inspect | Chemline</a
+				>
+				<!-- <a href="/production/5010" target="_parent">Chemline</a> -->
 				<a href="/production/5020" target="_parent">Masking</a>
-				<a href="/production/5045" target="_parent">Primer</a>
-				<a href="/production/5050" target="_parent">Topcoat</a>
+				<a sveltekit:prefetch href="/dept/5045/5050">Primer | Topcoat</a>
+				<!-- <a href="/production/5045" target="_parent">Primer</a> -->
+				<!-- <a href="/production/5050" target="_parent">Topcoat</a> -->
 				<a href="/production/5080" target="_parent">Rework</a>
 				<a href="/production/5085" target="_parent">Minor Touch Up</a>
 			</div>
@@ -169,5 +175,6 @@
 
 	.dropdown-menu {
 		display: none;
+		z-index: 2;
 	}
 </style>

@@ -1,14 +1,15 @@
 <script context="module">
+	const api = import.meta.env.VITE_API_URL;
 	export async function load({ page, fetch }) {
 		// const urlParams =
 		const part = page.query.get('part');
-		const run = page.query.get('run');
+		const run = page.query.get('run').replace(/\D/g, '');
 		const po = page.query.get('po');
-		const line = page.query.get('line');
+		const line = page.query.get('line').replace(/\D/g, '');
 
 		// console.log({part: part.trim(), run: run})
 
-		const res = await fetch(`/part/${po}-${line}-${run}-${part}.json`, {
+		const res = await fetch(`${api}/testing/part?po=${po}&line=${line}&run=${run}&part=${part}`, {
 			method: 'GET',
 			mode: 'cors',
 			headers: {
@@ -40,11 +41,11 @@
 	// console.log(data)
 
 	let part = {
-		part_number: data[0].RUNRTNUM,
-		run: data[0].RUNNO,
-		po_num: data[0].SOPO,
-		item: data[0].ITNUMBER,
-		comments: data[0].COMMENTS,
+		part_number: data[0].Part_Num,
+		run: data[0].Run,
+		po_num: data[0].PO,
+		item: data[0].Item,
+		comments: data[0].Comments,
 		expedite: 'N'
 	};
 </script>

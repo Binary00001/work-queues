@@ -16,6 +16,7 @@
 		align-items: center;
 		height: 300px;
 		width: 300px;
+		z-index: -1;
 	}
 	.spinner {
 		height: 60px;

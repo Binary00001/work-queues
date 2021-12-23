@@ -1,38 +1,33 @@
-import sql from 'mssql'
-import { config } from '$lib/db'
+import sql from 'mssql';
+import { config } from '$lib/db';
 
-export async function get({params}) {
-    const { wc } = params
+export async function get({ params }) {
+	const { wc } = params;
 
-    await sql.connect(config)
+	sql.connect(config);
 
-    const result = await sql.query(`
+	const result = await sql.query(`
     SELECT 
-      (SELECT COUNT(OPREF) FROM RnopTable 
-        INNER JOIN RunsTable ON RUNREF = OPREF 
-        AND RUNNO = OPRUN 
-        WHERE RUNPKPURGED = 0 
-        AND OPCENTER = '${wc}'
-        AND OPCOMPDATE >= CAST(GETDATE() AS DATE)
-        GROUP BY OPCENTER) AS completed_jobs, 
-      (SELECT COUNT(OPREF) FROM RnopTable 
-        WHERE OPCENTER = '${wc}'
-        AND OPCOMPLETE = 0 
-        AND OPSCHEDDATE <= CAST(GETDATE() as DATETIME) + 30
-        GROUP BY OPCENTER) AS daily_goal, 
-      SUM(OPACCEPT) as daily_parts
-      
-      FROM RnopTable 
-      WHERE OPCENTER = '${wc}' AND OPCOMPDATE >= CAST(GETDATE() AS DATE);`)
+	(SELECT MAX(OPTOTAL) completed_jobs
+	FROM (
+		SELECT OPCENTER, 
+		ROW_NUMBER() OVER (PARTITION BY OPCENTER ORDER BY OPCENTER) OPTOTAL FROM RnopTable WHERE OPCOMPDATE >= CAST(GETDATE() AS DATE) AND OPCENTER = '${wc}'
+	)a GROUP BY OPCENTER) completed_jobs,
+	(SELECT MAX(DTOTAL) daily_goal
+	FROM (
+		SELECT OPCENTER,
+		ROW_NUMBER() OVER (PARTITION BY OPCENTER ORDER BY OPCENTER) DTOTAL FROM RnopTable WHERE OPCOMPLETE = 0 AND OPSCHEDDATE <= CAST(GETDATE() AS DATETIME) + 30 AND OPCENTER = '${wc}'
+	)b GROUP BY OPCENTER) daily_goal,
+	ISNULL(SUM(OPACCEPT), 0) as daily_parts  
+    FROM RnopTable 
+    WHERE OPCENTER = '${wc}' AND OPCOMPDATE >= CAST(GETDATE() AS DATE);`);
 
+	let data = result.recordset;
 
-    let data = result.recordset
-
-    return {
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: data
-    }
+	return {
+		headers: {
+			'content-type': 'application/json'
+		},
+		body: data
+	};
 }
-

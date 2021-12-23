@@ -1,6 +1,7 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { page } from '$app/stores';
+	import { api } from '$lib/db';
 	import SmallChart from '$lib/components/SmallChart.svelte';
 	import PartTable from '$lib/components/PartTable.svelte';
 	import Loader from '$lib/components/Loader.svelte';
@@ -18,16 +19,20 @@
 	let dates;
 	let dailyParts;
 
+	let dailyGoal;
+	let completedParts;
+	let completedJobs;
+
 	let reloadInterval;
 
 	async function loadData() {
 		try {
 			const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
 				[
-					fetch(`/api/stats/dept/${dept}`),
-					fetch(`/api/stats/${dept}`),
-					fetch(`/api/asdf/${dept}`),
-					fetch(`/api/dept/burndown/${dept}`),
+					fetch(`/api/dept/${dept}`),
+					fetch(`${api}/testing/dept/stats/${dept}`),
+					fetch(`/api/stats/employees/${dept}`),
+					fetch(`/dept/burndown/${dept}.json`),
 					fetch(`/api/wc/stats/linedata/${dept}`)
 				],
 				{
@@ -39,13 +44,27 @@
 				}
 			);
 
-			if (deptData.ok && goalData.ok && employeeData.ok && burndownData.ok && chartData.ok) {
+			if (
+				deptData.ok &&
+				goalData.ok &&
+				employeeData.ok &&
+				burndownData.ok &&
+				chartData.ok
+				// dailyGoalData.ok &&
+				// completedPartsData.ok &&
+				// completedJobsData.ok
+			) {
 				deptList = await deptData.json();
 				deptGoal = await goalData.json();
 				employeeList = await employeeData.json();
 				burndown = await burndownData.json();
 				chartStats = await chartData.json();
-				goal = parseInt(deptGoal[0].daily_goal / 34);
+				console.log(deptGoal);
+				// dailyGoal = await dailyGoalData.json();
+				// completedParts = await completedPartsData.json();
+				// completedJobs = await completedJobsData.json();
+
+				goal = parseInt(deptGoal.Goal / 34);
 				date = new Date(Date.now()).toDateString();
 				dates = chartStats.map((day) =>
 					new Date(day.DAY.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
@@ -93,13 +112,9 @@
 				<tr>
 					<td>{goal}</td>
 					<td>
-						{#if deptGoal[0].completed_jobs == null}
-							0
-						{:else}
-							{deptGoal[0].completed_jobs}
-						{/if}
+						{deptGoal.Job_Count}
 					</td>
-					<td>{deptGoal[0].daily_parts}</td>
+					<td>{deptGoal.Part_Count}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -130,10 +145,10 @@
 							<th>RUN</th>
 						</thead>
 						<tbody>
-							{#each burndown as { PART_NUMBER, RUN }}
+							{#each burndown as { Part_Num, Run }}
 								<tr>
-									<td>{PART_NUMBER}</td>
-									<td>{RUN}</td>
+									<td>{Part_Num}</td>
+									<td>{Run}</td>
 								</tr>
 							{/each}
 						</tbody>
