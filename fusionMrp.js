@@ -1,17 +1,49 @@
-// Full Parts List
+// Putting SQL statements as a placeholder until I figure out how to organize this shit
 
-async function getPartsList() {
-	// Putting SQL statements as a placeholder until I figure out how to organize this shit
-	// SELECT DISTINCT PARTREF, PARTNUM
-	//   FROM PartTable
-	//   INNER JOIN MrplTable ON MrplTable.MRP_PARTREF = PartTable.PARTREF
-	//   WHERE PAINACTIVE = 0 AND PAOBSOLETE = 0
-	//   ORDER BY PARTREF;
-	// -------------------------------------------------------------
-	// |         PARTREF           |             PARTNUM           |
-	// |-----------------------------------------------------------|
-	// |   .032TEFLONSHEETETCHED   |   .032 TEFLON SHEET ETCHED    |
-	// |-----------------------------------------------------------|
-	// |       00058695001         |           00058695-001        |
-	// |-----------------------------------------------------------|
-}
+// LOTS IN SYSTEM
+const getLots = (partNumber = false, remaining = false) => {
+	let query = `
+		SELECT LOTNUMBER, LOTUSERLOTID, LOTPARTREF, LOTADATE, LOTREMAININGQTY, LOTUNITCOST, LOTLOCATION
+		FROM LohdTable
+	`;
+	query += partNumber
+		? remaining
+			? `WHERE LOTPARTREF = '${partNumber}' AND LOTREMAININGQTY > 0`
+			: `WHERE LOTPARTREF = '${partNumber}'`
+		: remaining
+		? 'WHERE LOTREMAININGQTY > 0'
+		: null;
+
+	// ORDER BY LOTADATE
+
+	return query;
+};
+
+// console.log(getLots('', true));
+
+const mock_dept = [
+	{
+		Part_Num: '255T4694-6',
+		Run: 14,
+		Comments: null,
+		Priority: 2
+	},
+	{
+		Part_Num: '255T4694-6',
+		Run: 14,
+		Comments: 'BURNDOWN',
+		Priority: 2
+	},
+	{
+		Part_Num: '818-3789-010',
+		Run: 5,
+		Comments: null,
+		Priority: 5
+	},
+	{
+		Part_Num: '710Z7271-11',
+		Run: 124,
+		Comments: null,
+		Priority: 5
+	}
+];

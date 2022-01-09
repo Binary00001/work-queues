@@ -5,6 +5,7 @@
 	import SmallChart from '$lib/components/SmallChart.svelte';
 	import PartTable from '$lib/components/PartTable.svelte';
 	import Loader from '$lib/components/Loader.svelte';
+	import { convertTime } from '$lib/utils';
 
 	let dept = $page.params.slug;
 
@@ -18,6 +19,7 @@
 	let date;
 	let dates;
 	let dailyParts;
+	let current;
 
 	let dailyGoal;
 	let completedParts;
@@ -27,13 +29,21 @@
 
 	async function loadData() {
 		try {
-			const [deptData, goalData, employeeData, burndownData, chartData] = await Promise.all(
+			const [
+				deptData,
+				goalData,
+				employeeData,
+				burndownData,
+				chartData,
+				currentData
+			] = await Promise.all(
 				[
 					fetch(`/api/dept/${dept}`),
 					fetch(`${api}/testing/dept/stats/${dept}`),
 					fetch(`/api/stats/employees/${dept}`),
 					fetch(`/dept/burndown/${dept}.json`),
-					fetch(`/api/wc/stats/linedata/${dept}`)
+					fetch(`${api}/testing/stats/dept/weekly/${dept}`),
+					fetch(`${api}/testing/current?dept=${dept}`)
 				],
 				{
 					method: 'GET',
@@ -49,7 +59,8 @@
 				goalData.ok &&
 				employeeData.ok &&
 				burndownData.ok &&
-				chartData.ok
+				chartData.ok &&
+				currentData.ok
 				// dailyGoalData.ok &&
 				// completedPartsData.ok &&
 				// completedJobsData.ok
@@ -59,6 +70,7 @@
 				employeeList = await employeeData.json();
 				burndown = await burndownData.json();
 				chartStats = await chartData.json();
+				current = await currentData.json();
 				console.log(deptGoal);
 				// dailyGoal = await dailyGoalData.json();
 				// completedParts = await completedPartsData.json();
@@ -67,9 +79,9 @@
 				goal = parseInt(deptGoal.Goal / 34);
 				date = new Date(Date.now()).toDateString();
 				dates = chartStats.map((day) =>
-					new Date(day.DAY.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
+					new Date(day.Date.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
 				);
-				dailyParts = chartStats.map((parts) => parts.DAILY_JOBS);
+				dailyParts = chartStats.map((parts) => parts.Job_Count);
 			}
 		} catch (error) {
 			throw error;
@@ -170,6 +182,27 @@
 				<PartTable parts={deptList} />
 			{/if}
 		</div>
+		{#if current}
+			<h4>Current Logins</h4>
+			{#each current as login}
+				<div class="current" style={'display: flex; flex-direction: row; '}>
+					<div class="employee" style={'flex:1;'}>
+						<span><strong>Employee: </strong>{login.Last_Name + ' ' + login.First_Name}</span>
+					</div>
+					<div class="part-info" style={'flex: 1;'}>
+						<span
+							><strong>Part Number:</strong>
+							{login.Part_Num}
+							{' '}<strong>Run:</strong>
+							{login.Run}</span
+						>
+					</div>
+					<div class="login-info" style={'flex: 1;'}>
+						<span><strong>Time On Job:</strong> {convertTime(login.Time_On)}</span>
+					</div>
+				</div>
+			{/each}
+		{/if}
 	</div>
 {/if}
 

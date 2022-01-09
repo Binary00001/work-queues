@@ -26,8 +26,8 @@
 	//
 
 	const getData = async () => {
-		const res = await fetch('http://imaginetics193.imagineticsinc.local:4004/api/burndown', {
-			// const res = await fetch('/api/burndown', {
+		// const res = await fetch('http://imaginetics193.imagineticsinc.local:4004/api/burndown', {
+		const res = await fetch('/api/burndown', {
 			method: 'GET',
 			mode: 'cors',
 			headers: {

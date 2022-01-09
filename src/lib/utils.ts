@@ -14,7 +14,24 @@ export function convertTime(time: number): string {
 		return diff;
 	}
 
-	return `${mins} minutes`;
+	return mins === 0 ? `${mins} minute` : `${mins} minutes`;
+}
+
+export function handleFetch(url: string): [string] {
+	let data: [string];
+	fetch(url, {
+		method: 'GET',
+		mode: 'cors',
+		headers: { 'content-type': 'application/json' }
+	})
+		.then((res) => res.json())
+		.then((json) => {
+			data = json;
+		})
+		.catch((err) => err);
+
+	console.log(data);
+	return data;
 }
 
 // export function handleComments(method: string, part: any): string {

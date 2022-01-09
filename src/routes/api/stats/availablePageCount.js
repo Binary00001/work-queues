@@ -5,12 +5,9 @@ export async function get() {
 	await sql.connect(config);
 
 	const result = await sql.query(
-		`SELECT * 
-    FROM AVAIL_LOTS 
-    WHERE RTRIM(LOC) != 'MRB'
-    AND QOH >= QTY 
-		AND 
-    ORDER BY SCHED ASC;`
+		`SELECT COUNT(LOTPARTREF) ROWS FROM LohdTable
+     WHERE LOTREMAININGQTY > 0 AND LOTLOCATION NOT LIKE 'MRB'
+    `
 	);
 
 	// console.log(result)

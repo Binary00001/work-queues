@@ -1,0 +1,44 @@
+﻿OPREF                          OPNO        OPSHOP       OPCENTER     OPSETUP                                 OPUNIT                                  OPPICKOP OPCOMT                                                                                                                                                                                                                                                           OPSERVICE OPSERVPART                     OPQHRS                                  OPMHRS                                  OPSVCUNIT                               OPTOOLLIST                     OPFILLREF
+------------------------------ ----------- ------------ ------------ --------------------------------------- --------------------------------------- -------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --------- ------------------------------ --------------------------------------- --------------------------------------- --------------------------------------- ------------------------------ ------------------------------
+143A9485Y35                    10          01           0120         0.0000                                  0.0000                                  0                                                                                                                                                                                                                                                                         0                                        8.0000                                  0.0000                                  0.0000                                                                 NULL
+143A9485Y35                    20          01           0302         0.2500                                  0.0000                                  1                                                                                                                                                                                                                                                                         0                                        16.0000                                 0.0000                                  0.0000                                                                 NULL
+143A9485Y35                    30          01           2200         0.2500                                  0.0830                                  0        ASSEMBLY
+ASSEMBLE COMPLETE PER DRAWING
+++++++++++++++++++++++++++++++
+                                                                                                                                                                                        0                                        48.0000                                 0.0000                                  0.0000                                                                 NULL
+143A9485Y35                    40          01           2050         0.2500                                  0.0000                                  0        INSPECTION
+INSPECT ASSEMBLY
+                                                                                                                                                                                                                                   0                                        16.0000                                 0.0000                                  0.0000                                                                 NULL
+143A9485Y35                    50          01           2300         0.2500                                  0.0040                                  0        PART MARK / PACKAGE
+PARTMARK M PER BAC5307
+RUBBER STAMP/INK JET PART
+NUMBER USING .12 HIGH
+CHARACTERS AS BELOW:
+IF/AS NEEDED: NO SPACES
+.
+81205-ASSY-143A9485Y35
+MFR# 1Y7P0
+RUN ?  ??/??/??
+.
++++++++++++++++++++++++++++++
+LOCATION: OPTIONAL
+++++ 0                                        32.0000                                 0.0000                                  0.0000                                                                 NULL
+143A9485Y35                    60          01           2060         0.2500                                  0.0000                                  0        FINAL INSPECTION
+FINAL INSPECT
+++++++++++++++++++++++++++++++
+PERFORM IMAGINETICS DELEGATED
+SOURCE INSPECTION
+QUALIFIED PERSONNEL ONLY
+++++++++++++++++++++++++++++++
+REVIEW PARTS AND PACKAGING FOR
+FOD PRIOR TO COMPLETION
+++++++++++++++++++++++++++ 0                                        16.0000                                 0.0000                                  0.0000                                                                 NULL
+143A9485Y35                    70          01           2400         0.0830                                  0.0160                                  0        Package & protect parts in accordance with engineering, PO, and customer quality requirements.                                                                                                                                                                   0                                        16.0000                                 0.0000                                  0.0000                                                                 
+143A9485Y35                    80          01           0310         0.2500                                  0.0000                                  0        COMPLETE TO STOCK/PACKSLIP
+CLOSE MO AND ROUT TO STORES
+                                                                                                                                                                                                        0                                        24.0000                                 0.0000                                  0.0000                                                                 NULL
+
+(8 rows affected)
+
+
+Completion time: 2021-12-29T20:39:03.6939838-08:00

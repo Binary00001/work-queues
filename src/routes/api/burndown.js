@@ -19,10 +19,13 @@ export async function get() {
 			FROM AgcmTable
 				INNER JOIN RunsTable ON RUNRTNUM = AGPART and runno = AGRUN
 				INNER JOIN RnopTable ON RUNREF = OPREF and RUNNO = oprun and RUNOPCUR = OPNO
+				INNER JOIN RnalTable ON RUNREF = RAREF AND RARUN=RUNNO
+				INNER JOIN SohdTable ON SONUMBER=RASO 
 				INNER JOIN WcntTable ON OPCENTER = WCNREF
 				WHERE AGPMCOMMENTS LIKE '%burndown%' AND 
+				AGPO = SOPO AND AGITEM = RASOITEM AND
 				((RUNSTATUS <> 'CO' AND RUNSTATUS <> 'CL' AND runstatus <> 'CA') and runstatus is not null)
-			ORDER BY OPCENTER ASC	
+			ORDER BY OPCENTER ASC		
 		`);
 
 		let data = result.recordset;

@@ -1,5 +1,5 @@
 {
-	"name": "~TODO~",
+	"name": "imag_work_queues",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "svelte-kit dev",

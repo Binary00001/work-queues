@@ -5,6 +5,7 @@
 	import { convertTime } from '$lib/utils';
 	import Loader from '$lib/components/Loader.svelte';
 	import DailyChart from '$lib/components/DailyChart.svelte';
+	import { goto } from '$app/navigation';
 
 	const api = import.meta.env.VITE_API_URL;
 	let dept;
@@ -79,15 +80,8 @@
 	}
 
 	onMount(() => {
-		getData();
-		myInterval = setInterval(() => {
-			// location.reload();
-			getData();
-		}, 120000);
-	});
-
-	onDestroy(() => {
-		clearInterval(myInterval);
+		console.log(`redirected ${$page.params.slug}`);
+		goto(`/dept/${$page.params.slug}`);
 	});
 </script>
 

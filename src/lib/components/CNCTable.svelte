@@ -1,53 +1,32 @@
 <script>
 	import { convertTime } from '$lib/utils';
 
-	export let dept;
 	export let parts;
-	export let stats;
-
-	if (dept.trim() === 'SAW') {
-		console.log('this is the saw dept');
-	}
 </script>
 
 <div class="container">
-	<h2>{dept.toUpperCase()}</h2>
-	<table class="daily-table">
-		<thead>
-			<tr>
-				<th>Daily Job Goal</th>
-				<th>Jobs Completed</th>
-				<th>Parts Completed</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{parseInt(stats.Goal / 25)}</td>
-				<td>{stats.Job_Count}</td>
-				<td>{stats.Part_Count}</td>
-			</tr>
-		</tbody>
-	</table>
 	<table>
 		<thead>
+			<th>Work Center</th>
 			<th>Part Number</th>
 			<th>Run</th>
 			<th>Time In Queue</th>
 			<th>Quantity</th>
 			<th>Customer</th>
-			<th>Schedule Date</th>
+			<th>Cust Date</th>
 			<th>Priority</th>
 			<th>Comments</th>
 		</thead>
 
 		<tbody>
-			{#each parts as { Part_Num, Run, Queue_Diff, Qty, Customer, Cust_Date, Priority, Comments }}
+			{#each parts as { WC_Name, Part_Num, Run, Queue_Diff, Qty, Customer, Cust_Date, Priority, Comments, PO, Item }}
 				<tr>
-					<td>
-						<!-- <a href={`/part?po=${PO}&line=${Item}&run=${Run}&part=${Part_Num}`} target="_blank"> -->
-						{Part_Num}
-						<!-- </a> -->
-					</td>
+					<td>{WC_Name}</td>
+					<td
+						><a href={`/part?po=${PO}&line=${Item}&run=${Run}&part=${Part_Num}`} target="_blank"
+							>{Part_Num}</a
+						></td
+					>
 					<td>{Run}</td>
 					<td class:stagnant={Queue_Diff >= 4320}>{convertTime(Queue_Diff)}</td>
 					<td>{parseInt(Qty)}</td>
@@ -64,17 +43,7 @@
 <style>
 	.container {
 		font-weight: 400;
-		width: 45%;
-	}
-
-	h2 {
-		font-weight: 400;
-		margin: 5px;
-	}
-
-	.daily-table th,
-	.daily-table td {
-		border: none;
+		display: flex;
 	}
 
 	/*  */
@@ -98,13 +67,13 @@
 		background-color: rgba(0, 128, 128, 0.5);
 	}
 
-	table tr:hover {
+	table tbody tr:hover {
 		background-color: yellow;
 	}
 
 	table {
 		width: 100%;
-		margin: 10px;
+		/* margin: 10px auto; */
 	}
 	/*  */
 

@@ -74,7 +74,14 @@
 
 	<label for="comments"
 		>Comments:
-		<textarea id="comments" name="comments" rows="4" cols="50" bind:value={mutated.comments} />
+		<textarea
+			id="comments"
+			name="comments"
+			class="comments"
+			rows="4"
+			cols="50"
+			bind:value={mutated.comments}
+		/>
 	</label>
 
 	<div class="btn-group">
@@ -120,6 +127,8 @@
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
 			'Open Sans', 'Helvetica Neue', sans-serif;
 		background-color: #fff;
+		width: 95%;
+		margin: 0 auto;
 	}
 
 	.btn-danger {

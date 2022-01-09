@@ -1,23 +1,3 @@
-<!-- <script context="module">
-    export async function load({fetch}) {
-        const data = await fetch('/api/lots',
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'content-type': 'application/json'
-            }
-        })
-
-        if (data.ok) {
-            let availableLots = await data.json()
-
-            return {
-                props: { availableLots }
-            }
-        }
-    }
-</script> -->
 <script>
 	import { onMount, onDestroy } from 'svelte';
 
@@ -26,17 +6,30 @@
 	let availableLots = [];
 	let time;
 
-	async function getData() {
-		const data = await fetch('/api/lots', {
-			method: 'GET',
-			mode: 'cors',
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
+	let currentPage = 1;
+	let pageCount;
+	let pageNumber = 0;
 
-		if (data.ok) {
-			availableLots = await data.json();
+	async function getData() {
+		const [availableLotsData, pageCountData] = await Promise.all(
+			[
+				fetch(
+					`http://imaginetics193.imagineticsinc.local:4004/api/inv/available?page=${pageNumber}`
+				),
+				fetch('/api/stats/availablePageCount')
+			],
+			{
+				method: 'GET',
+				mode: 'cors',
+				headers: {
+					'content-type': 'application/json'
+				}
+			}
+		);
+
+		if (availableLotsData.ok && pageCountData.ok) {
+			availableLots = await availableLotsData.json();
+			pageCount = await pageCountData.json();
 			loading = false;
 			time = new Date(Date.now()).toLocaleString();
 		}
@@ -56,7 +49,10 @@
 	{#if loading}
 		<h1>Loading</h1>
 	{:else}
-		<h2>{time}</h2>
+		<h2>Updated: {time}</h2>
+		<div class="pagination">
+			<button>&le</button>
+		</div>
 		<table>
 			<thead>
 				<th>Location</th>
@@ -69,16 +65,16 @@
 				<th>Ship Date</th>
 			</thead>
 			<tbody>
-				{#each availableLots as { LOC, PART, LOT, CUST, SO, ITEM, SCHED, QTY, QOH }}
+				{#each availableLots as lot}
 					<tr>
-						<td>{LOC}</td>
-						<td>{PART}</td>
-						<td>{LOT}</td>
-						<td>{CUST}</td>
-						<td>{SO}-{ITEM}</td>
-						<td>{QTY}</td>
-						<td>{QOH}</td>
-						<td>{new Date(SCHED).toLocaleDateString()}</td>
+						<td>{lot.Loc}</td>
+						<td>{lot.Part_Number}</td>
+						<td>{lot.Lot}</td>
+						<td>{lot.Cust}</td>
+						<td>{lot.SO}-{lot.Item}</td>
+						<td>{lot.Int}</td>
+						<td>{lot.On_Hand}</td>
+						<td>{new Date(lot.Sched_Date).toLocaleDateString()}</td>
 					</tr>
 				{/each}
 			</tbody>
@@ -88,6 +84,10 @@
 
 <style>
 	.container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 		text-align: center;
 	}
 </style>

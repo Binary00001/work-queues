@@ -2,15 +2,14 @@ import sql from 'mssql';
 import { config } from '$lib/db';
 
 export async function get() {
-	await sql.connect(config);
+	sql.connect(config);
 
 	const result = await sql.query(
-		`SELECT * 
-    FROM AVAIL_LOTS 
-    WHERE RTRIM(LOC) != 'MRB'
-    AND QOH >= QTY 
-		AND 
-    ORDER BY SCHED ASC;`
+		`SELECT DISTINCT
+     SUBSTRING(LOTLOCATION, 1, 1) Ref
+     FROM LohdTable
+     ORDER BY Ref ASC
+    `
 	);
 
 	// console.log(result)

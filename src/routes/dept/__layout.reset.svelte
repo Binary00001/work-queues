@@ -7,7 +7,9 @@
 	<title>Imaginetics - WC Queue Lists</title>
 </svelte:head>
 
-<Nav />
+<div class="navigation">
+	<Nav />
+</div>
 
 <main>
 	<div class="container">
@@ -22,5 +24,11 @@
 
 	.container {
 		display: grid;
+	}
+
+	@media print {
+		.navigation {
+			display: none;
+		}
 	}
 </style>

@@ -1,67 +1,81 @@
-<script context="module">
-	export async function load({ fetch }) {
-		const res = await fetch('http://10.25.1.73:5000/api/dept/kyle', {
-			method: 'GET',
-			mode: 'cors',
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
-
-		if (res.ok) {
-			const data = await res.json();
-			// console.log(data)
-			return {
-				props: { data }
-			};
-		}
-
-		const { message } = await res.json();
-		return {
-			status: res.status,
-			error: new Error(message)
-		};
-	}
-</script>
-
 <script>
-	// import Dept from '$lib/Dept.svelte'
-	export let data = '';
-	// console.log(data)
+	import { onDestroy, onMount } from 'svelte';
+	import { page } from '$app/stores';
+
+	import { api } from '$lib/db';
+	import Loader from '$lib/components/Loader.svelte';
+	import DailyChart from '$lib/components/DailyChart.svelte';
+	import CNCTable from '$lib/components/CNCTable.svelte';
+	import Burndown from '$lib/components/Burndown.svelte';
+	import SmallTable from '$lib/components/SmallTable.svelte';
+
+	let dept;
+	let width;
+
+	let myInterval;
+	let loading = true;
+
+	async function getData() {
+		dept = $page.params.slug;
+		try {
+			const [deptData] = await Promise.all([fetch(`/cnc/cnc.json`)], {
+				method: 'GET',
+				mode: 'cors',
+				headers: {
+					'content-type': 'application/json'
+				}
+			});
+
+			if (deptData.ok) {
+				dept = await deptData.json();
+				console.log(dept);
+			}
+		} catch (err) {
+			throw new Error(err.message);
+		} finally {
+			loading = false;
+		}
+	}
+
+	onMount(() => {
+		getData();
+		myInterval = setInterval(() => {
+			// location.reload();
+			getData();
+		}, 600000);
+	});
+
+	onDestroy(() => {
+		clearInterval(myInterval);
+	});
 </script>
+
+<svelte:window bind:innerWidth={width} />
 
 <main>
-	<div class="table">
-		<h1 class="dept">Machine Shop</h1>
-		<table>
-			<thead>
-				<th>Work Center</th>
-				<th>Part Number</th>
-				<th>Run</th>
-				<th>Quantity</th>
-				<th>Set Up Time</th>
-				<th>Run Time</th>
-				<th>Priority</th>
-			</thead>
-			<tbody>
-				{#each data as part}
-					<tr class:hot={part.priority === 5}>
-						<td>{part.op_center}: {part.work_center}</td>
-						<td>{part.part_number}</td>
-						<td>{part.run}</td>
-						<td>{part.qty}</td>
-						<td>{part.setup_hours} hrs</td>
-						<td>{part.run_hours} hrs</td>
-						<td>{part.priority}</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
+	{#if loading}
+		<Loader />
+	{:else if dept === null || dept === 0}
+		<h1>No Jobs In Queue</h1>
+	{:else}
+		<h1 class="dept">
+			{'Machine Shop'}
+		</h1>
+		{#if width < 740}
+			<div class="table">
+				<SmallTable data={dept} />
+			</div>
+		{:else}
+			<div class="table">
+				<CNCTable parts={dept} />
+			</div>
+		{/if}
+	{/if}
 </main>
 
 <style>
 	main {
+		margin: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -69,12 +83,13 @@
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
 			'Open Sans', 'Helvetica Neue', sans-serif;
 		font-weight: 200;
+		width: 100%;
 	}
 
 	.dept {
 		text-transform: uppercase;
 		font-weight: 100;
-		text-align: center;
+		margin-top: 10px;
 	}
 
 	table,
@@ -85,17 +100,18 @@
 		padding: 5px;
 	}
 
-	thead {
-		background-color: skyblue;
+	td {
+		text-align: center;
 	}
 
-	tr:hover {
-		background-color: yellow;
+	thead {
+		background-color: rgba(0, 128, 128, 0.5);
 	}
 
 	.table {
-		margin: 10px;
-		width: 90%;
+		width: 95vw;
+		/* margin: auto 15px; */
+		margin: 15px auto;
 	}
 
 	table {
@@ -103,7 +119,35 @@
 		width: 100%;
 	}
 
-	.hot {
-		background-color: yellow;
+	.daily thead {
+		padding: 0;
+		margin: 0;
+		background-color: rgba(112, 128, 144, 0.5);
+	}
+
+	.daily thead,
+	.daily th,
+	.daily td {
+		border: none;
+	}
+
+	.chart {
+		width: 95%;
+	}
+
+	@media screen and (max-width: 640px) {
+		.table {
+			width: 100%;
+		}
+	}
+
+	@media print {
+		.no-print {
+			display: none;
+		}
+		main {
+			width: 100vw;
+			font-size: 0.75em;
+		}
 	}
 </style>

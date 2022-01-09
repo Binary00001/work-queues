@@ -1,35 +1,30 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { page } from '$app/stores';
+
+	import SmallTable from '$lib/components/SmallTable.svelte';
 	import DeptCard from '$lib/components/DeptCard.svelte';
 	import Loader from '$lib/components/Loader.svelte';
-
-	import { convertTime } from '$lib/utils';
 
 	let { dept1, dept2 } = $page.params;
 	const api = 'http://imaginetics193.imagineticsinc.local:4004/api';
 
 	let dept1Parts;
-	let dept1Burndown;
+	let dept1Stats;
 	let dept2Parts;
-	let dept2Burndown;
+	let dept2Stats;
 	let loading = true;
-	let burndown = [];
 	let myInterval;
+	let width;
 
 	async function getData() {
 		try {
-			const [
-				dept1PartsData,
-				dept1BurndownData,
-				dept2PartsData,
-				dept2BurndownData
-			] = await Promise.all(
+			const [dept1PartsData, dept1StatsData, dept2PartsData, dept2StatsData] = await Promise.all(
 				[
-					fetch(`${api}/dept/num/${dept1}`),
-					fetch(`${api}/dept/burndown/${dept1}`),
-					fetch(`${api}/dept/num/${dept2}`),
-					fetch(`${api}/dept/burndown/${dept2}`)
+					fetch(`${api}/testing/dept/${dept1}`),
+					fetch(`${api}/testing/dept/stats/${dept1}`),
+					fetch(`${api}/testing/dept/${dept2}`),
+					fetch(`${api}/testing/dept/stats/${dept2}`)
 				],
 				{
 					method: 'GET',
@@ -40,13 +35,13 @@
 				}
 			);
 
-			if (dept1PartsData.ok && dept1BurndownData.ok && dept2PartsData.ok && dept2BurndownData.ok) {
+			if (dept1PartsData.ok && dept1StatsData.ok && dept2PartsData.ok && dept2StatsData.ok) {
 				dept1Parts = await dept1PartsData.json();
-				dept1Burndown = await dept1BurndownData.json();
+				dept1Stats = await dept1StatsData.json();
 				dept2Parts = await dept2PartsData.json();
-				dept2Burndown = await dept2BurndownData.json();
-				burndown = [...dept1Burndown, ...dept2Burndown];
-				console.log(dept1PartsData);
+				dept2Stats = await dept2StatsData.json();
+				// burndown = [...dept1Burndown, ...dept2Burndown];
+				// console.log(dept1PartsData);
 			}
 		} catch (err) {
 			throw new Error(err.message);
@@ -59,13 +54,15 @@
 		getData();
 		myInterval = setInterval(() => {
 			getData();
-		}, 120000);
+		}, 300000);
 	});
 
 	onDestroy(() => {
 		clearInterval(myInterval);
 	});
 </script>
+
+<svelte:window bind:innerWidth={width} />
 
 {#if loading}
 	<div class="loader">
@@ -84,7 +81,7 @@
 			{/if}
 		</h1>
 		<!-- burndown table -->
-		<div class="burndown-table">
+		<!-- <div class="burndown-table">
 			{#if burndown.length == 0}
 				<p />
 			{:else}
@@ -113,17 +110,25 @@
 					</tbody>
 				</table>
 			{/if}
-		</div>
+		</div> -->
 
 		<!-- Department tables -->
-		<div class="card-view">
-			{#if dept1Parts.length > 0}
-				<DeptCard parts={dept1Parts} dept={dept1Parts[0].WC_Name} />
+		{#if dept1Parts.length > 0}{#if width < 740}
+				<div class="table">
+					<SmallTable data={dept1Parts} />
+					<SmallTable data={dept2Parts} />
+				</div>
+			{:else}
+				<div class="card-view">
+					{#if dept1Parts.length > 0}
+						<DeptCard parts={dept1Parts} dept={dept1Parts[0].WC_Name} stats={dept1Stats} />
+					{/if}
+					{#if dept2Parts.length > 0}
+						<DeptCard parts={dept2Parts} dept={dept2Parts[0].WC_Name} stats={dept2Stats} />
+					{/if}
+				</div>
 			{/if}
-			{#if dept2Parts.length > 0}
-				<DeptCard parts={dept2Parts} dept={dept2Parts[0].WC_Name} />
-			{/if}
-		</div>
+		{/if}
 	</div>
 {/if}
 
@@ -145,6 +150,15 @@
 	}
 
 	.finish-container {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+			'Open Sans', 'Helvetica Neue', sans-serif;
+		font-weight: 200;
+		width: 100%;
 		text-align: center;
 	}
 
@@ -156,7 +170,7 @@
 		padding: 5px;
 	}
 
-	h2 {
+	/* h2 {
 		font-weight: 400;
 		margin: 5px;
 	}
@@ -183,12 +197,23 @@
 
 	thead {
 		background-color: rgba(0, 128, 128, 0.5);
-	}
+	} */
 
 	.card-view {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-evenly;
 		align-items: flex-start;
+	}
+
+	@media screen and (max-width: 700px) {
+		.card-view {
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		.table {
+			width: 100%;
+		}
 	}
 </style>
