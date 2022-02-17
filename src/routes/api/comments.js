@@ -3,7 +3,7 @@ import { config } from '$lib/db';
 
 export async function post(req) {
 	let { part_number, run, po_num, item, comments, expedite } = await req.body;
-	await sql.connect(config);
+	sql.connect(config);
 
 	console.log(req.body);
 
@@ -25,7 +25,7 @@ export async function post(req) {
 
 export async function put(req) {
 	let { part_number, run, po_num, item, comments } = await req.body;
-	await sql.connect(config);
+	sql.connect(config);
 
 	console.log(req.body);
 
@@ -48,7 +48,7 @@ export async function put(req) {
 
 export async function del(req) {
 	let { part_number, run, po_num, item, comments, expedite } = await req.body;
-	await sql.connect(config);
+	sql.connect(config);
 
 	console.log(req.body);
 

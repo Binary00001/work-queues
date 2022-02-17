@@ -64,7 +64,6 @@
 				);
 				dailyParts = chartStats.map((parts) => parts.Job_Count);
 				goal = parseInt(stats.Goal / 34);
-				console.log(deptList);
 			}
 		} catch (err) {
 			throw new Error(err.message);

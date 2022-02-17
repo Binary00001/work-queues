@@ -6,6 +6,8 @@
 	let loading = true;
 	let reloadInterval;
 
+	let params = '';
+
 	function convertTime(time) {
 		let days = Math.floor(time / 1440);
 		let hours = Math.floor(time / 60);
@@ -22,6 +24,8 @@
 		}
 		return `${mins} minutes`;
 	}
+
+	const deptFilter = (dept) => data.filter((i) => i.WC_Name.includes(dept));
 
 	//
 
@@ -62,6 +66,12 @@
 		{:else}
 			<div class="table">
 				<h1 class="dept">BURNDOWN LIST</h1>
+				<!-- <input
+					type="text"
+					bind:value={params}
+					placeholder="Enter dept"
+					on:change={() => (data = deptFilter(params))}
+				/> -->
 				<table>
 					<thead>
 						<th>Work Center</th>

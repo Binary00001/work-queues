@@ -13,7 +13,7 @@ export async function get({ params }) {
     `
 	);
 
-	console.log(result);
+	// console.log(result);
 
 	return {
 		headers: {

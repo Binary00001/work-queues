@@ -36,7 +36,6 @@
 				<a href="/dept/0302" target="_parent">Assembly ID & Issue</a>
 				<a href="/dept/2200" target="_parent">Assembly</a>
 				<a href="/dept/2650" target="_parent">Assembly Countersink</a>
-				<a href="/dept/2300" target="_parent">Part Mark</a>
 				<a href="/dept/5075" target="_parent">Part Mark Overcoat</a>
 			</div>
 		</div>
@@ -98,11 +97,12 @@
 				<a href="/dept/0602" target="_parent">Mori Seki 3-Axis</a>
 				<a href="/dept/0632" target="_parent">Okuma MB 5000</a>
 				<a href="/dept/0642" target="_parent">Okuma 5-Axis</a>
+				<a sveltekit:prefetch href="/dept/0800">Manual Milling</a>
 			</div>
 		</div>
 		<!-- Paint Shop -->
 		<div class="dropdown">
-			<a href="/finish/paint" target="_parent" class="dropdown-btn">Building 2</a>
+			<a href="/dept/5045/5050" target="_parent" class="dropdown-btn">Building 2</a>
 			<div class="dropdown-menu">
 				<a sveltekit:prefetch href="/dept/5225/5010" target="_parent"
 					>Penetrant Inspect | Chemline</a
@@ -119,6 +119,7 @@
 		<div class="dropdown">
 			<a href="/dept/2400" target="_parent">Shipping</a>
 			<div class="dropdown-menu">
+				<a sveltekit:prefetch href="/dept/2300" target="_parent">Part Mark</a>
 				<a sveltekit:prefetch href="/dept/2400">Shipping</a>
 				<a sveltekit:prefetch href="/inv">Inventory Locations</a>
 				<a sveltekit:prefetch href="/shipping/available-ship">Available Ship</a>

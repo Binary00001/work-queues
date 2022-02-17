@@ -5,7 +5,7 @@ export async function get() {
 	sql.connect(config);
 
 	//get Top 20 jobs from dept(slug)
-	const result = await sql.query(`
+	let result = await sql.query(`
     SELECT DISTINCT TOP 20 
       RUNREF,
       RUNRTNUM Part_Num,

@@ -40,3 +40,16 @@ function loadData() {
 }
 
 loadData();
+
+const db = {
+	get: (params) => {
+		let data;
+		fetch(url, {
+			method: 'GET',
+			mode: 'cors',
+			headers: { 'content-type': 'application/json' }
+		})
+			.then((res) => (data = res.json()))
+			.catch((err) => err);
+	}
+};

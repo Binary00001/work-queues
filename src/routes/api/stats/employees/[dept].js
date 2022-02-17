@@ -13,8 +13,10 @@ export async function get({ params }) {
                 SELECT OPINSP,
                 ROW_NUMBER() OVER (PARTITION BY OPINSP ORDER BY OPINSP) AS OPTOTAL
                 FROM RnopTable 
+				JOIN RunsTable ON OPREF = RUNREF AND OPRUN = RUNNO
                     WHERE OPCOMPDATE >= CAST(GETDATE() AS DATE) 
-                    AND OPCENTER='${dept}')a 
+					AND RUNSTATUS <> 'CA'
+                    AND OPCENTER LIKE '${dept}')a 
                 GROUP BY OPINSP`
 	);
 

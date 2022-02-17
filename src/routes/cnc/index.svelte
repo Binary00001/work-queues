@@ -3,10 +3,10 @@
 	import { page } from '$app/stores';
 
 	import { api } from '$lib/db';
+
 	import Loader from '$lib/components/Loader.svelte';
 	import DailyChart from '$lib/components/DailyChart.svelte';
 	import CNCTable from '$lib/components/CNCTable.svelte';
-	import Burndown from '$lib/components/Burndown.svelte';
 	import SmallTable from '$lib/components/SmallTable.svelte';
 
 	let dept;
@@ -16,9 +16,9 @@
 	let loading = true;
 
 	async function getData() {
-		dept = $page.params.slug;
+		// dept = $page.params.slug;
 		try {
-			const [deptData] = await Promise.all([fetch(`/cnc/cnc.json`)], {
+			let [deptData] = await Promise.all([fetch(`/cnc/cnc.json`)], {
 				method: 'GET',
 				mode: 'cors',
 				headers: {
@@ -42,7 +42,7 @@
 		myInterval = setInterval(() => {
 			// location.reload();
 			getData();
-		}, 600000);
+		}, 60000);
 	});
 
 	onDestroy(() => {
@@ -92,47 +92,10 @@
 		margin-top: 10px;
 	}
 
-	table,
-	th,
-	td {
-		border: 1px solid black;
-		border-collapse: collapse;
-		padding: 5px;
-	}
-
-	td {
-		text-align: center;
-	}
-
-	thead {
-		background-color: rgba(0, 128, 128, 0.5);
-	}
-
 	.table {
 		width: 95vw;
 		/* margin: auto 15px; */
 		margin: 15px auto;
-	}
-
-	table {
-		margin-top: 10px;
-		width: 100%;
-	}
-
-	.daily thead {
-		padding: 0;
-		margin: 0;
-		background-color: rgba(112, 128, 144, 0.5);
-	}
-
-	.daily thead,
-	.daily th,
-	.daily td {
-		border: none;
-	}
-
-	.chart {
-		width: 95%;
 	}
 
 	@media screen and (max-width: 640px) {

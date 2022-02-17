@@ -22,7 +22,7 @@ export async function get() {
 				INNER JOIN RnalTable ON RUNREF = RAREF AND RARUN=RUNNO
 				INNER JOIN SohdTable ON SONUMBER=RASO 
 				INNER JOIN WcntTable ON OPCENTER = WCNREF
-				WHERE AGPMCOMMENTS LIKE '%burndown%' AND 
+				WHERE AGPMCOMMENTS LIKE '%etrac%' AND 
 				AGPO = SOPO AND AGITEM = RASOITEM AND
 				((RUNSTATUS <> 'CO' AND RUNSTATUS <> 'CL' AND runstatus <> 'CA') and runstatus is not null)
 			ORDER BY OPCENTER ASC		
