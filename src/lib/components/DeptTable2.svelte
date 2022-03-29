@@ -10,8 +10,7 @@
 			<th>Part Number</th>
 			<th>Run</th>
 			<th>Quantity</th>
-			<th>Cust Date</th>
-			<th>Time In Queue</th>
+			<th>Op Schedule Date</th>
 			<th>Comments</th>
 		</thead>
 
@@ -23,7 +22,6 @@
 					<td>{part.Run}</td>
 					<td>{parseInt(part.Qty)}</td>
 					<td>{new Date(part.Cust_Date).toLocaleDateString()}</td>
-					<td>{convertTime(part.Queue_Diff)}</td>
 					<td>{part.Comments}</td>
 				</tr>
 				<!-- {/if} -->
@@ -31,3 +29,31 @@
 		</tbody>
 	</table>
 </div>
+
+<style>
+	table {
+		margin: 10px;
+		width: 99%;
+	}
+
+	table,
+	th,
+	td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 0 2px;
+	}
+
+	th {
+		font-weight: 500;
+	}
+
+	td {
+		text-align: center;
+		padding: 5px;
+	}
+
+	thead {
+		background-color: rgba(0, 128, 128, 0.5);
+	}
+</style>

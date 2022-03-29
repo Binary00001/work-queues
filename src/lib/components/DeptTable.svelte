@@ -12,7 +12,7 @@
 			<th>Time In Queue</th>
 			<th>Quantity</th>
 			<th>Customer</th>
-			<th>Cust Date</th>
+			<th>Op Schedule Date</th>
 			<th>Priority</th>
 			<th>Comments</th>
 		</thead>

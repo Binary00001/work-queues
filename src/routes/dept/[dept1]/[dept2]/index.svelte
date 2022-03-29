@@ -4,6 +4,7 @@
 
 	import SmallTable from '$lib/components/SmallTable.svelte';
 	import DeptCard from '$lib/components/DeptCard.svelte';
+	import DeptTable2 from '$lib/components/DeptTable2.svelte';
 	import Loader from '$lib/components/Loader.svelte';
 
 	let { dept1, dept2 } = $page.params;
@@ -50,10 +51,42 @@
 		}
 	}
 
+	async function getThirdPartyData() {
+		try {
+			const [dept1InHouse, dept1ThirdParty, dept2InHouse, dept2ThirdParty] = await Promise.all(
+				[
+					fetch(`${api}/dept/num/${dept1}`),
+					fetch(`${api}/testing/f/${dept1}`),
+					fetch(`${api}/dept/num/${dept2}`),
+					fetch(`${api}/testing/f/${dept2}`)
+				],
+				{
+					method: 'GET',
+					mode: 'cors',
+					headers: {
+						'content-type': 'application/json'
+					}
+				}
+			);
+
+			if (dept1InHouse.ok && dept1ThirdParty.ok && dept2InHouse.ok && dept2ThirdParty.ok) {
+				dept1Parts = await dept1InHouse.json();
+				dept1Stats = await dept1ThirdParty.json();
+				dept2Parts = await dept2InHouse.json();
+				dept2Stats = await dept2ThirdParty.json();
+			}
+		} catch (err) {
+			throw new Error(err.message);
+		} finally {
+			loading = false;
+		}
+	}
+
 	onMount(() => {
-		getData();
+		const data = dept1 === '5030' ? getThirdPartyData() : getData();
+
 		myInterval = setInterval(() => {
-			getData();
+			data();
 		}, 300000);
 	});
 
@@ -121,10 +154,34 @@
 			{:else}
 				<div class="card-view">
 					{#if dept1Parts.length > 0}
-						<DeptCard parts={dept1Parts} dept={dept1Parts[0].WC_Name} stats={dept1Stats} />
+						{#if dept1 === '5030'}
+							<div class="double">
+								<DeptTable2 tableData={dept1Parts} />
+								{#if dept1Stats === null}
+									<div />
+								{:else}
+									<span>THIRD PARTY</span>
+									<DeptTable2 tableData={dept1Stats} />
+								{/if}
+							</div>
+						{:else}
+							<DeptCard parts={dept1Parts} dept={dept1Parts[0].WC_Name} stats={dept1Stats} />
+						{/if}
 					{/if}
 					{#if dept2Parts.length > 0}
-						<DeptCard parts={dept2Parts} dept={dept2Parts[0].WC_Name} stats={dept2Stats} />
+						{#if dept2 === '5035'}
+							<div class="double">
+								<DeptTable2 tableData={dept2Parts} />
+								{#if dept2Stats === null}
+									<div />
+								{:else}
+									<span>THIRD PARTY</span>
+									<DeptTable2 tableData={dept2Stats} />
+								{/if}
+							</div>
+						{:else}
+							<DeptCard parts={dept2Parts} dept={dept2Parts[0].WC_Name} stats={dept2Stats} />
+						{/if}
 					{/if}
 				</div>
 			{/if}
@@ -204,6 +261,10 @@
 		flex-direction: row;
 		justify-content: space-evenly;
 		align-items: flex-start;
+	}
+
+	.double {
+		width: 50%;
 	}
 
 	@media screen and (max-width: 700px) {
