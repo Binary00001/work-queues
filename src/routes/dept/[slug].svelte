@@ -5,14 +5,11 @@
 
 	import { api } from '$lib/db';
 	import Loader from '$lib/components/Loader.svelte';
-	import DailyChart from '$lib/components/DailyChart.svelte';
 	import DeptTable from '$lib/components/DeptTable.svelte';
-	// import Burndown from '$lib/components/Burndown.svelte';
 	import SmallTable from '$lib/components/SmallTable.svelte';
 
 	let dept;
 	let deptList;
-	// let burndown;
 	let chartStats;
 	let stats;
 	let goal;
@@ -29,13 +26,11 @@
 		try {
 			const [
 				deptData,
-				// burndownData,
 				chartData,
 				statsData
 			] = await Promise.all(
 				[
 					fetch(`${api}/testing/dept/${dept}`),
-					// fetch(`${api}/dept/burndown/${dept}`),
 					fetch(`${api}/testing/stats/dept/weekly/${dept}`),
 					fetch(`${api}/testing/dept/stats/${dept}`)
 				],
@@ -50,12 +45,10 @@
 
 			if (
 				deptData.ok &&
-				// burndownData.ok &&
 				chartData.ok &&
 				statsData.ok
 			) {
 				deptList = await deptData.json();
-				// burndown = await burndownData.json();
 				chartStats = await chartData.json();
 				stats = await statsData.json();
 
@@ -75,7 +68,6 @@
 	onMount(() => {
 		getData();
 		myInterval = setInterval(() => {
-			// location.reload();
 			getData();
 		}, 300000);
 	});
@@ -116,12 +108,6 @@
 				</table>
 			</div>
 
-			<!-- {#if burndown}
-				<div class="table no-print">
-					<Burndown data={burndown} />
-				</div>
-			{/if} -->
-
 			{#if width < 740}
 				<div class="table">
 					<SmallTable data={deptList} />
@@ -132,13 +118,6 @@
 				</div>
 			{/if}
 		{/if}
-		<div class="chart no-print">
-			<DailyChart
-				labels={dates}
-				data={dailyParts}
-				dailyGoal={[goal, goal, goal, goal, goal, goal, goal, goal]}
-			/>
-		</div>
 	{/if}
 </main>
 
@@ -198,10 +177,6 @@
 	.daily th,
 	.daily td {
 		border: none;
-	}
-
-	.chart {
-		width: 95%;
 	}
 
 	@media screen and (max-width: 640px) {

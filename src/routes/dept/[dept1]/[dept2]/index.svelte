@@ -8,7 +8,7 @@
 	import Loader from '$lib/components/Loader.svelte';
 
 	let { dept1, dept2 } = $page.params;
-	const api = 'http://imaginetics193.imagineticsinc.local:4004/api';
+	const api = 'http://imaginetics243.imagineticsinc.local:4004/api';
 
 	let dept1Parts;
 	let dept1Stats;

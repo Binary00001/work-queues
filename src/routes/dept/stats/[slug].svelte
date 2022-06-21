@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { page } from '$app/stores';
 	import { api } from '$lib/db';
-	import SmallChart from '$lib/components/SmallChart.svelte';
+	// import SmallChart from '$lib/components/SmallChart.svelte';
 	import PartTable from '$lib/components/PartTable.svelte';
 	import Loader from '$lib/components/Loader.svelte';
 	import { convertTime } from '$lib/utils';
@@ -21,9 +21,9 @@
 	let dailyParts;
 	let current;
 
-	let dailyGoal;
-	let completedParts;
-	let completedJobs;
+	// let dailyGoal;
+	// let completedParts;
+	// let completedJobs;
 
 	let reloadInterval;
 
@@ -34,7 +34,7 @@
 				goalData,
 				employeeData,
 				burndownData,
-				chartData,
+				// chartData,
 				currentData
 			] = await Promise.all(
 				[
@@ -42,7 +42,7 @@
 					fetch(`${api}/testing/dept/stats/${dept}`),
 					fetch(`/api/stats/employees/${dept}`),
 					fetch(`/dept/burndown/${dept}.json`),
-					fetch(`${api}/testing/stats/dept/weekly/${dept}`),
+					// fetch(`${api}/testing/stats/dept/weekly/${dept}`),
 					fetch(`${api}/testing/current?dept=${dept}`)
 				],
 				{
@@ -59,7 +59,7 @@
 				goalData.ok &&
 				employeeData.ok &&
 				burndownData.ok &&
-				chartData.ok &&
+				// chartData.ok &&
 				currentData.ok
 				// dailyGoalData.ok &&
 				// completedPartsData.ok &&
@@ -69,7 +69,7 @@
 				deptGoal = await goalData.json();
 				employeeList = await employeeData.json();
 				burndown = await burndownData.json();
-				chartStats = await chartData.json();
+				// chartStats = await chartData.json();
 				current = await currentData.json();
 				console.log(deptGoal);
 				// dailyGoal = await dailyGoalData.json();
@@ -78,10 +78,10 @@
 
 				goal = parseInt(deptGoal.Goal / 34);
 				date = new Date(Date.now()).toDateString();
-				dates = chartStats.map((day) =>
-					new Date(day.Date.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
-				);
-				dailyParts = chartStats.map((parts) => parts.Job_Count);
+				// dates = chartStats.map((day) =>
+				// 	new Date(day.Date.replace(/-/g, '/').replace(/T.+/, '')).toLocaleDateString()
+				// );
+				// dailyParts = chartStats.map((parts) => parts.Job_Count);
 			}
 		} catch (error) {
 			throw error;
@@ -167,11 +167,11 @@
 					</table>
 				{/if}
 
-				<SmallChart
+				<!-- <SmallChart
 					labels={dates}
 					data={dailyParts}
 					dailyGoal={[goal, goal, goal, goal, goal, goal, goal, goal]}
-				/>
+				/> -->
 			</div>
 
 			{#if deptList.length == 0}

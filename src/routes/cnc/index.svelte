@@ -5,7 +5,7 @@
 	import { api } from '$lib/db';
 
 	import Loader from '$lib/components/Loader.svelte';
-	import DailyChart from '$lib/components/DailyChart.svelte';
+	// import DailyChart from '$lib/components/DailyChart.svelte';
 	import CNCTable from '$lib/components/CNCTable.svelte';
 	import SmallTable from '$lib/components/SmallTable.svelte';
 
