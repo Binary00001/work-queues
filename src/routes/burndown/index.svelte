@@ -1,5 +1,7 @@
 <script>
 	import { onDestroy, onMount } from 'svelte';
+	import { api } from '$lib/db'
+
 	import Loader from '$lib/components/Loader.svelte';
 
 	let data = [];
@@ -30,8 +32,8 @@
 	//
 
 	const getData = async () => {
-		// const res = await fetch('http://imaginetics193.imagineticsinc.local:4004/api/burndown', {
-		const res = await fetch('/api/burndown', {
+		const res = await fetch(`${api}/burndown`, {
+		// const res = await fetch('/api/burndown', {
 			method: 'GET',
 			mode: 'cors',
 			headers: {
@@ -40,7 +42,8 @@
 		});
 
 		if (res.ok) {
-			data = await res.json();
+			data = await res.json()
+			console.log(data)
 			loading = false;
 		}
 	};
@@ -63,6 +66,8 @@
 			<div class="loading">
 				<Loader />
 			</div>
+		{:else if !data}
+			<p>NO ETRAC JOBS</p>
 		{:else}
 			<div class="table">
 				<h1 class="dept">BURNDOWN LIST</h1>

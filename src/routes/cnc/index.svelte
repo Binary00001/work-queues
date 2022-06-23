@@ -18,7 +18,7 @@
 	async function getData() {
 		// dept = $page.params.slug;
 		try {
-			let [deptData] = await Promise.all([fetch(`/cnc/cnc.json`)], {
+			let [deptData] = await Promise.all([fetch(`${api}/testing/cnc`)], {
 				method: 'GET',
 				mode: 'cors',
 				headers: {
@@ -105,9 +105,7 @@
 	}
 
 	@media print {
-		.no-print {
-			display: none;
-		}
+	
 		main {
 			width: 100vw;
 			font-size: 0.75em;

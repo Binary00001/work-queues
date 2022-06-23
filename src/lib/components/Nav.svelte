@@ -120,9 +120,9 @@
 			<a href="/dept/2400" target="_parent">Shipping</a>
 			<div class="dropdown-menu">
 				<a sveltekit:prefetch href="/dept/2300" target="_parent">Part Mark</a>
-				<a sveltekit:prefetch href="/dept/2400">Shipping</a>
-				<a sveltekit:prefetch href="/inv">Inventory Locations</a>
-				<a sveltekit:prefetch href="/shipping/available-ship">Available Ship</a>
+				<a sveltekit:prefetch href="/dept/2400" target="_parent">Shipping</a>
+				<!-- <a sveltekit:prefetch href="/inv">Inventory Locations</a>
+				<a sveltekit:prefetch href="/shipping/available-ship">Available Ship</a> -->
 			</div>
 		</div>
 	</div>

@@ -1,6 +1,7 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { page } from '$app/stores';
+	import { api } from '$lib/db'
 
 	import SmallTable from '$lib/components/SmallTable.svelte';
 	import DeptCard from '$lib/components/DeptCard.svelte';
@@ -8,7 +9,7 @@
 	import Loader from '$lib/components/Loader.svelte';
 
 	let { dept1, dept2 } = $page.params;
-	const api = 'http://imaginetics243.imagineticsinc.local:4004/api';
+	// const api = 'http://imaginetics243.imagineticsinc.local:4004/api';
 
 	let dept1Parts;
 	let dept1Stats;
@@ -99,7 +100,6 @@
 
 {#if loading}
 	<div class="loader">
-		<!-- <h1>{dept1Parts[0].WC_Name} | {dept2Parts[0].WC_Name}</h1> -->
 		<Loader />
 	</div>
 {:else}
@@ -113,38 +113,7 @@
 				{dept2Parts[0].WC_Name}
 			{/if}
 		</h1>
-		<!-- burndown table -->
-		<!-- <div class="burndown-table">
-			{#if burndown.length == 0}
-				<p />
-			{:else}
-				<h2>BURNDOWN</h2>
-				<table>
-					<thead>
-						<th>Part Number</th>
-						<th>Run</th>
-						<th>Days In Queue</th>
-						<th>Work Center</th>
-					</thead>
-					<tbody>
-						{#each burndown as { Part_Num, Run, Queue_Diff, WC_Name, PO, Item }}
-							<tr>
-								<td
-									><a
-										href={`/part?po=${PO}&line=${Item}&Run=${Run}&part=${Part_Num}`}
-										target="_blank">{Part_Num}</a
-									></td
-								>
-								<td>{Run}</td>
-								<td>{convertTime(Queue_Diff)}</td>
-								<td>{WC_Name.toUpperCase()}</td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			{/if}
-		</div> -->
-
+		
 		<!-- Department tables -->
 		{#if dept1Parts.length > 0}{#if width < 740}
 				<div class="table">

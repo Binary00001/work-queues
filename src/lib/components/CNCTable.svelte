@@ -19,14 +19,10 @@
 		</thead>
 
 		<tbody>
-			{#each parts as { WC_Name, Part_Num, Run, Queue_Diff, Qty, Customer, Cust_Date, Priority, Comments, PO, Item }}
+			{#each parts as { WC_Name, Part_Num, Run, Queue_Diff, Qty, Customer, Cust_Date, Priority, Comments}}
 				<tr>
 					<td>{WC_Name}</td>
-					<td
-						><a href={`/part?po=${PO}&line=${Item}&run=${Run}&part=${Part_Num}`} target="_blank"
-							>{Part_Num}</a
-						></td
-					>
+					<td>{Part_Num}</td>
 					<td>{Run}</td>
 					<td class:stagnant={Queue_Diff >= 4320}>{convertTime(Queue_Diff)}</td>
 					<td>{parseInt(Qty)}</td>
@@ -76,11 +72,6 @@
 		/* margin: 10px auto; */
 	}
 	/*  */
-
-	a {
-		text-decoration: none;
-		color: black;
-	}
 
 	.stagnant {
 		color: red;

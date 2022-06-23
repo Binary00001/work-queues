@@ -12,7 +12,7 @@
 	let deptList;
 	let deptGoal;
 	let employeeList;
-	let burndown;
+	// let burndown;
 	let chartStats;
 	let loading = true;
 	let goal;
@@ -33,15 +33,15 @@
 				deptData,
 				goalData,
 				employeeData,
-				burndownData,
+				// burndownData,
 				// chartData,
 				currentData
 			] = await Promise.all(
 				[
-					fetch(`/api/dept/${dept}`),
+					fetch(`${api}/testing/dept/${dept}`),
 					fetch(`${api}/testing/dept/stats/${dept}`),
-					fetch(`/api/stats/employees/${dept}`),
-					fetch(`/dept/burndown/${dept}.json`),
+					fetch(`${api}/stats/employees/${dept}`),
+					// fetch(`/dept/burndown/${dept}.json`),
 					// fetch(`${api}/testing/stats/dept/weekly/${dept}`),
 					fetch(`${api}/testing/current?dept=${dept}`)
 				],
@@ -58,7 +58,7 @@
 				deptData.ok &&
 				goalData.ok &&
 				employeeData.ok &&
-				burndownData.ok &&
+				// burndownData.ok &&
 				// chartData.ok &&
 				currentData.ok
 				// dailyGoalData.ok &&
@@ -68,7 +68,7 @@
 				deptList = await deptData.json();
 				deptGoal = await goalData.json();
 				employeeList = await employeeData.json();
-				burndown = await burndownData.json();
+				// burndown = await burndownData.json();
 				// chartStats = await chartData.json();
 				current = await currentData.json();
 				console.log(deptGoal);
@@ -139,17 +139,17 @@
 						<th>COMPLETED JOBS</th>
 					</thead>
 					<tbody>
-						{#each employeeList as { employee, jobs_completed }}
+						{#each employeeList as { employee, jobsCompleted }}
 							<tr>
 								<td>{employee}</td>
-								<td>{jobs_completed}</td>
+								<td>{jobsCompleted}</td>
 							</tr>
 						{/each}
 					</tbody>
 				</table>
 
 				<!-- BURNDOWN DATA -->
-				{#if burndown.length > 0}
+				<!-- {#if burndown.length > 0}
 					<h4>BURNDOWN JOBS</h4>
 					<table>
 						<thead>
@@ -165,7 +165,7 @@
 							{/each}
 						</tbody>
 					</table>
-				{/if}
+				{/if} -->
 
 				<!-- <SmallChart
 					labels={dates}
