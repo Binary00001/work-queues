@@ -1,13 +1,16 @@
 <script>
     import { goto } from '$app/navigation';
     import { partList, searching } from '$lib/sessionStore'
+    import { api } from '$lib/db'
     let part = ''
 
     async function getPart() {
         try {
+            part = part.replace(/[^a-z0-9]/gi, '')
+            console.log("part", part)
             goto('/', {replaceState: true})
             searching.set(true)
-            const data = await fetch(`/api/parts/${part}.json`, 
+            const data = await fetch(`${api}/part/${part}`, 
             {
                 method: 'GET',
                 mode: 'cors',
@@ -21,6 +24,7 @@
                 let parts = await data.json()
                 // console.log(data)
                 partList.set(parts)
+                console.log(parts)
             }
 
 

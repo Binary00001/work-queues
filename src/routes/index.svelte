@@ -20,16 +20,20 @@
             <th>Work Center</th>
         </thead>
         <tbody>
-        {#each $partList as {PART_NUMBER, RUN, PO, ITEM, WORK_CENTER}}
+        {#each $partList as {Part_Num, Run, PO, Item, WC_Name}}
             <tr>
-                <td><a href={`/part?po=${PO}&line=${ITEM}&run=${RUN}&part=${PART_NUMBER}`}>{PART_NUMBER}</a></td>
-                <td>{RUN}</td>
+                <td>
+                    <a href={`/part?po=${PO}&line=${Item}&run=${Run}&part=${Part_Num}`}>
+                        {Part_Num}
+                    </a>
+                </td>
+                <td>{Run}</td>
                 <td>{PO}</td>
-                <td>{ITEM}</td>
-                {#if !WORK_CENTER}
+                <td>{Item}</td>
+                {#if !WC_Name}
                 <td></td>
                 {:else}
-                <td>{WORK_CENTER.toUpperCase()}</td>
+                <td>{WC_Name.toUpperCase()}</td>
                 {/if}
             </tr>
         {/each}
